@@ -30,17 +30,6 @@ UserSchema.methods.setPassword = function(password){
     }
 }
 
-// UserSchema.method({
-//     setPassword : function(password){
-        
-//     }
-// })
-
-// UserSchema.method('setPassword', function(password){
-//     this.salt = crypto.randomBytes(32).toString('hex');
-//     this.hash = crypto.pbkdf2(password, this.salt, 10000, 512, 'sha512').toString('hex');
-// });
-
 UserSchema.methods.validatePassword = function(password){
     try{
         const hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512,'sha512').toString('hex');
@@ -57,10 +46,11 @@ UserSchema.methods.generateJWT = function(){
     expirationDate.getDate(today.getDate() + 60);
     const accessToken = jwt.sign({email : this.email, id : this._id, exp : parseInt(expirationDate.getTime()/1000,10)}, process.env.accessTokenSecret);
     const refreshToken = jwt.sign({email : this.email, id : this._id, exp : parseInt(expirationDate.getTime()/1000,10)}, process.env.refreshTokenSecret);
-
     const tokenBlock = new TokenBlock({accessToken, refreshToken});
+    this.tokenBlock = tokenBlock._id;
+    console.log(this);
     tokenBlock.save();
-    return {"accessToken" : tokenBlock.accessToken,refreshToken :  tokenBlock.refreshToken};
+    return tokenBlock;
 };
 
 UserSchema.methods.toAuthJSON = function(){
