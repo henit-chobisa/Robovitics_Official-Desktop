@@ -7,7 +7,7 @@ const UserSchema = new mongoose.Schema({
     email : String,
     hash : String,
     salt : String,
-
+    tokenBlock : {type : mongoose.Schema.Types.ObjectId, ref : "TokenBlock"}
 }, {collection : 'Users'});
 
 UserSchema.methods.show = function(){
@@ -48,7 +48,6 @@ UserSchema.methods.generateJWT = function(){
     const refreshToken = jwt.sign({email : this.email, id : this._id, exp : parseInt(expirationDate.getTime()/1000,10)}, process.env.refreshTokenSecret);
     const tokenBlock = new TokenBlock({accessToken, refreshToken});
     this.tokenBlock = tokenBlock._id;
-    console.log(this);
     tokenBlock.save();
     return tokenBlock;
 };

@@ -8,6 +8,7 @@ router.post('/', async (req , res) => {
     if (user == null){
         const user = User({email});
         await user.setPassword(password);
+        await user.generateJWT();
         user.save();
     }
     else {

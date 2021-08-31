@@ -5,13 +5,14 @@ const dotenv = require('dotenv')
 
 router.post('/', async (req, res) => {
     const { email, password } = req.body;
-    let user = await User.findOne({email});
+    let user = await User.findOne({email}).populate('tokenBlock').exec();
     if (user == null){
         res.send("Sorry, this user doesn't exist");
     }
     else {
         const validation = await user.validatePassword(password);
         if (validation == true){
+            
             res.json(user);
         }
         else {
