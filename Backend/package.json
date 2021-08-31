@@ -1,0 +1,14 @@
+{
+  "name": "robovitics_off_backend",
+  "version": "1.0.0",
+  "description": "Backend for robovitics_official",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Henit Chobisa",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
