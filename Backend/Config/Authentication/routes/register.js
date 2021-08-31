@@ -8,8 +8,10 @@ router.post('/', async (req , res) => {
     if (user == null){
         const user = User({email});
         await user.setPassword(password);
-        await user.generateJWT();
+        const tokenBlock = await user.generateJWT();
         user.save();
+        res.send("User successfully registered");
+        res.json(tokenBlock);
     }
     else {
         res.send("Sorry, user already exist, kindly log in");
