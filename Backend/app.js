@@ -1,14 +1,11 @@
-const express = require('express');
-const cors = require('cors')
+const express = require('express')
+const cors = require('cors');
 const app = express();
-const port = process.env.port || 8000
-app.use(cors);
+const port = process.env.PORT || 1000;
+app.use(express.json());
+app.use(cors());
 
+app.use('/verification', require('./Config/verification'))
 
-app.get('/', (req, res) => {
-    res.status(200);
-    res.send("Everything Good!")
-})
-
-app.listen(port, () => console.log(`Deployed on port ${port}`))
+app.listen(port, () => console.log(`Deployed on port ${port}`));
 
