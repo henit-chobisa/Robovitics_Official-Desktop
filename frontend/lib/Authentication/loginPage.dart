@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -9,8 +10,11 @@ class loginPage extends StatefulWidget {
 }
 
 class _loginPageState extends State<loginPage> {
+  TextEditingController acceddidController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool passwordObscuretext = true;
+  IconData passwordIcon = CupertinoIcons.lock;
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +30,11 @@ class _loginPageState extends State<loginPage> {
                 children: [
                   Image(
                     image: AssetImage('images/brandLogo.jpg'),
-                    height: 170.h,
+                    height: 160.h,
                     width: 200.w,
                   ),
                   Container(
-                    height: 500,
+                    height: 490,
                     width: 425,
                     margin: EdgeInsets.only(bottom: 6.0.h),
                     decoration: BoxDecoration(
@@ -45,7 +49,7 @@ class _loginPageState extends State<loginPage> {
                       ],
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(24.0),
+                      padding: const EdgeInsets.all(36.0),
                       child: Column(
                         children: [
                           Text(
@@ -59,24 +63,126 @@ class _loginPageState extends State<loginPage> {
                           Divider(
                             endIndent: 20.w,
                             indent: 20.w,
-                            thickness: 1,
+                            thickness: 0.2,
                             color: Colors.black,
                           ),
                           SizedBox(
-                            height: 20,
+                            height: 10,
                           ),
-                          roboTextFeild(
-                            obscuretext: false,
-                            placeholder: "Email registered with organisation",
-                            controller: emailController,
+                          Text(
+                            'Sign in to Robovitics Official',
+                            style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1),
+                          ),
+                          Divider(
+                            endIndent: 130.w,
+                            indent: 130.w,
+                            thickness: 0.3,
+                            color: Colors.black,
                           ),
                           SizedBox(
                             height: 10,
                           ),
                           roboTextFeild(
-                              obscuretext: true,
-                              placeholder: "Password for this email address",
-                              controller: passwordController)
+                            obscuretext: false,
+                            placeholder: "Organisation's Access ID",
+                            controller: acceddidController,
+                            type: TextInputType.number,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          roboTextFeild(
+                            obscuretext: false,
+                            placeholder: "Email registered with organisation",
+                            controller: emailController,
+                            type: TextInputType.emailAddress,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Stack(
+                            children: [
+                              roboTextFeild(
+                                obscuretext: passwordObscuretext,
+                                placeholder: "Password for this email address",
+                                controller: passwordController,
+                                type: TextInputType.visiblePassword,
+                              ),
+                              Row(
+                                children: [
+                                  Spacer(),
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 10),
+                                    child: TextButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          if (passwordObscuretext == true) {
+                                            passwordObscuretext = false;
+                                            passwordIcon =
+                                                CupertinoIcons.lock_open;
+                                          } else {
+                                            passwordObscuretext = true;
+                                            passwordIcon = CupertinoIcons.lock;
+                                          }
+                                        });
+                                      },
+                                      child: Icon(
+                                        passwordIcon,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                          Divider(
+                            endIndent: 120.w,
+                            indent: 120.w,
+                            thickness: 0.2,
+                            color: Colors.black,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              roboButtons(
+                                title: "Login",
+                                ontap: () {
+                                  print("Hello world");
+                                },
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left: 15, right: 15),
+                                child: Container(
+                                  height: 30,
+                                  width: 1,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              roboButtons(
+                                title: "Join Request",
+                                ontap: () {
+                                  print("Hello world");
+                                },
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Divider(
+                            endIndent: 120.w,
+                            indent: 120.w,
+                            thickness: 0.2,
+                            color: Colors.black,
+                          ),
+                          Text(
+                            'roboVITics 2021',
+                            style: TextStyle(color: Colors.grey, fontSize: 8),
+                          )
                         ],
                       ),
                     ),
@@ -89,15 +195,52 @@ class _loginPageState extends State<loginPage> {
   }
 }
 
+class roboButtons extends StatelessWidget {
+  const roboButtons({
+    Key? key,
+    required this.title,
+    this.ontap,
+  }) : super(key: key);
+
+  final String title;
+  final ontap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: ontap,
+      child: Container(
+        height: 50,
+        width: 150,
+        decoration: BoxDecoration(
+            color: Colors.indigo.shade600,
+            borderRadius: BorderRadius.circular(10)),
+        child: Center(
+          child: Text(
+            title,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 15,
+                fontFamily: "Futura",
+                letterSpacing: 2),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class roboTextFeild extends StatelessWidget {
   const roboTextFeild(
       {required this.obscuretext,
       required this.placeholder,
-      required this.controller});
+      required this.controller,
+      required this.type});
 
   final bool obscuretext;
   final String placeholder;
   final TextEditingController controller;
+  final TextInputType type;
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +258,7 @@ class roboTextFeild extends StatelessWidget {
           textAlign: TextAlign.center,
           cursorColor: Colors.white,
           obscureText: obscuretext,
-          keyboardType: TextInputType.emailAddress,
+          keyboardType: type,
           style: TextStyle(color: Colors.white, fontSize: 13),
           decoration: InputDecoration(
             hintText: placeholder,
