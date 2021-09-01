@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const TokenBlock = require('./tokens');
+const { userInfo } = require('os');
 
 const UserSchema = new mongoose.Schema({
     email: String,
@@ -67,7 +68,6 @@ UserSchema.methods.updatePassword = function (oldPassword, newPassword) {
     }
 };
 
-
 UserSchema.methods.validatePassword = function (password) {
     try {
         const hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
@@ -97,6 +97,21 @@ UserSchema.methods.toAuthJSON = function () {
         token: this.generateJWT(),
     };
 };
+
+UserSchema.methods.fetch = function(){
+    return {
+        _id : this.id,
+        email : this.email,
+        firstName: this.firstName,
+        lastName: this.lastName,
+        photoURL: this.photoURL,
+        department: this.department,
+        phoneNumber : this.phoneNumber,
+        role : this.role,
+        yearOfJoining : this.yearOfJoining,
+        tokenBlock : this.tokenBlock
+    };
+}
 
 const User = mongoose.model('User', UserSchema);
 module.exports = User;

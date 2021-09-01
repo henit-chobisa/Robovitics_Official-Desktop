@@ -10,8 +10,8 @@ router.post('/', async (req , res) => {
         await user.setPassword(password);
         await user.updatePhotoURL("https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-High-Quality-Image.png");
         const tokenBlock = await user.generateJWT();
-        user.save();
-        res.json(["User Successfully registered",tokenBlock]);
+        await user.save();
+        res.json(["User Successfully registered",{ "accessID" : accessID },tokenBlock]);
     }
     else {
         res.send("Sorry, user already exist, kindly log in");

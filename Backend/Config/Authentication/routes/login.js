@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
             await user.generateJWT();
             await user.save();
             user = await User.findOne({ email }).populate('tokenBlock').exec()
-            res.json(user);
+            res.json(user.fetch());
         }
         else {
             res.send("Sorry, password missmatch");

@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/base.dart';
+import 'dart:io' show Platform;
+import 'package:window_size/window_size.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    setWindowTitle("Robovitics Official");
+    setWindowMinSize(Size(1300, 750));
+  }
   runApp(RoboviticsOfficial());
 }
 
