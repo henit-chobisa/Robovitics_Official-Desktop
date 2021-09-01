@@ -27,7 +27,6 @@ router.post('/', async (req, res) => {
         currentUser.save();
         tokenBlock.remove();
         res.json(newTokenBlock);
-        res.send("New Token Generated");
     });
 });
 
