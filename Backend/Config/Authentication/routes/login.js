@@ -11,7 +11,6 @@ router.post('/', async (req, res) => {
     }
     else {
         const validation = await user.validatePassword(password);
-        console.log(validation);
         if (validation == true){
             const oldAccessToken = user.tokenBlock.accessToken;
             const oldTokenBlock = await TokenBlock.findOne({oldAccessToken});
