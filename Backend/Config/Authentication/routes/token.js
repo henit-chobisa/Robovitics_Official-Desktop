@@ -8,12 +8,12 @@ const jwt = require('jsonwebtoken');
 router.post('/', async (req, res) => {
     const { refreshToken } = req.body;
     if (!refreshToken){
-        return res.sendStatus(401).send("Token Doesn't exist");
+        return res.sendStatus(403).send("Token Doesn't exist");
     }
 
     const tokenBlock = await TokenBlock.findOne({ refreshToken});
     if (tokenBlock == null){
-        res.sendStatus(401).send("Sorry, this is an invali token");
+        res.sendStatus(403).send("Sorry, this is an invali token");
     }
 
     jwt.verify(refreshToken, process.env.refreshTokenSecret, async (err, user) => {
@@ -25,9 +25,10 @@ router.post('/', async (req, res) => {
         let currentUser = await User.findOne({email});
         let newTokenBlock = currentUser.generateJWT();
         currentUser.save();
+        tokenBlock.remove();
         res.json(newTokenBlock);
         res.send("New Token Generated");
     });
-})
+});
 
 module.exports = router;
