@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const TokenBlock = require('./tokens');
-const { userInfo } = require('os');
 
 const UserSchema = new mongoose.Schema({
     email: String,

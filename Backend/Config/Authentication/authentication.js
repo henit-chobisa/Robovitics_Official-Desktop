@@ -8,4 +8,4 @@ router.use('/registerRefUser', require('./routes/registerReferenceUser'));
 router.use('/addRefUser', require('./routes/addReferenceUser'));
 router.use('/getReferenceToken', require('./routes/referenceToken'));
 
-module.exports = router
+module.exports = router;

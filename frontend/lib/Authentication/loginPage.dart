@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:loading/indicator/ball_spin_fade_loader_indicator.dart';
 import 'package:loading/loading.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:loading/loading.dart';
+import 'package:cloudinary_sdk/cloudinary_sdk.dart';
+import 'package:file_selector/file_selector.dart';
 
 class loginPage extends StatefulWidget {
   const loginPage({Key? key}) : super(key: key);
@@ -27,31 +30,54 @@ class _loginPageState extends State<loginPage> {
   IconData passwordIcon = CupertinoIcons.lock;
   String imageURL = "nkdsnvlks";
   var pageHeight = 520;
-
-  TextEditingController clearEmailController() {
-    if (!emailController.text.isEmpty) {
-      emailController.text = "";
-      return emailController;
-    } else
-      return emailController;
-  }
-
-  TextEditingController clearPasswordController() {
-    if (!passwordController.text.isEmpty) {
-      passwordController.text = "";
-      return passwordController;
-    } else
-      return passwordController;
-  }
-
   var counter = 1;
   var user;
+
+  var file = null;
+  var imagePath = "";
+
+  final cloudinary =
+      Cloudinary("146921317957316", "dMy6eCEsZ0YpupA_FoMaR_z_sEo", "ddglxo0l3");
 
   void toLogin() {
     setState(() {
       pageHeight = 520;
       counter = 1;
     });
+  }
+
+  void tohome() {
+    setState(() {
+      counter = 1;
+    });
+  }
+
+  void toSubmission() {
+    if (firstName.text.isNotEmpty &&
+        lastName.text.isNotEmpty &&
+        department.text.isNotEmpty &&
+        phoneNumber.text.isNotEmpty &&
+        yearofJoining.text.isNotEmpty &&
+        designation.text.isNotEmpty &&
+        core.text.isNotEmpty) {
+      setState(() {
+        pageHeight = 520;
+        counter = 4;
+      });
+    }
+  }
+
+  void getFile() async {
+    final xtypegroup = XTypeGroup(label: 'image', extensions: ['jpeg', 'png']);
+    final imageFile = await openFile(acceptedTypeGroups: [xtypegroup]);
+    var data = await imageFile?.readAsBytes();
+    if (data != null) {
+      var completedFile = File.fromRawPath(data);
+      setState(() {
+        imagePath = imageFile!.path;
+        file = completedFile;
+      });
+    }
   }
 
   void toRegistration() {
@@ -86,13 +112,73 @@ class _loginPageState extends State<loginPage> {
     });
   }
 
+  Future<String?> uploadProfileImage() async {
+    if (file == null) {
+      return "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-High-Quality-Image.png";
+    } else {
+      final response = await cloudinary.uploadFile(
+          filePath: imagePath,
+          resourceType: CloudinaryResourceType.image,
+          folder: "ProfileImages");
+      if (response.isSuccessful) {
+        var imageURL = response.secureUrl;
+        return imageURL;
+      }
+    }
+  }
+
+  void SubmitReferenceUser() async {
+    setState(() {
+      counter = 0;
+    });
+    var imageURL = await uploadProfileImage();
+    var submitURI =
+        Uri.parse("http://127.0.0.1:1000/api/authentication/registerRefUser");
+    var body = {
+      "email": emailController.text,
+      "password": passwordController.text,
+      "phoneNumber": phoneNumber.text,
+      "photoURL": imageURL,
+      "firstName": firstName.text,
+      "lastName": lastName.text,
+      "department": department.text,
+      "yearOfJoining": yearofJoining.text,
+      "designation": designation.text,
+      "core": core.text
+    };
+    var headers = {"content-type": "application/json"};
+    var response =
+        await http.post(submitURI, body: jsonEncode(body), headers: headers);
+    if (response.statusCode == 200) {
+      setState(() {
+        counter = 5;
+      });
+    } else {
+      setState(() {
+        counter = 6;
+      });
+    }
+  }
+
+  ImageProvider getImage() {
+    if (file == null) {
+      return NetworkImage(
+          "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-High-Quality-Image.png");
+    } else {
+      return FileImage(File(imagePath));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var pages = [
       this.LoadingIndicatior(),
       this.firstpage(),
       UserInfoPage(),
-      registrationPage()
+      registrationPage(),
+      submissionPage(),
+      submissionDone(),
+      Center(child: Text("Error")),
     ];
     return Scaffold(
         backgroundColor: Colors.black,
@@ -125,15 +211,80 @@ class _loginPageState extends State<loginPage> {
                       ],
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(36.0),
-                      child: pages[counter],
-                    ),
+                        padding: const EdgeInsets.all(36.0),
+                        child: pages[counter]),
                   ),
                 ],
               ),
             ),
           ),
         ));
+  }
+
+  Column submissionDone() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Center(
+          child: Text(
+            "We have added a registration request for you, we will respond you through a token, you can use that token to signUp into the application.\n\nThank you!",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 15, fontFamily: "Futura"),
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        roboButtons(
+            ontap: () {
+              tohome();
+            },
+            title: "Back to home",
+            fillColor: Colors.white,
+            borderColor: Colors.blue.shade800,
+            textColor: Colors.black)
+      ],
+    );
+  }
+
+  Column submissionPage() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "Upload an Image",
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        TextButton(
+          onPressed: () {
+            getFile();
+          },
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(150),
+            child: Image(
+              image: getImage(),
+              height: 300,
+              width: 300,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        roboButtons(
+            ontap: () {
+              SubmitReferenceUser();
+            },
+            title: "Submit Appeal",
+            fillColor: Colors.white,
+            borderColor: Colors.blue.shade800,
+            textColor: Colors.black)
+      ],
+    );
   }
 
   Column registrationPage() {
@@ -235,6 +386,9 @@ class _loginPageState extends State<loginPage> {
               },
             ),
             roboButtons(
+              ontap: () {
+                toSubmission();
+              },
               fillColor: Colors.blue.shade800,
               borderColor: Colors.blue.shade800,
               textColor: Colors.white,
@@ -429,7 +583,7 @@ class _loginPageState extends State<loginPage> {
           width: double.parse("${340}"),
           title: "Confirm myself with token",
           ontap: () {
-            toRegistration();
+            getFile();
           },
         ),
         Divider(
