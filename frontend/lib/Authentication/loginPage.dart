@@ -16,15 +16,51 @@ class loginPage extends StatefulWidget {
 class _loginPageState extends State<loginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController firstName = TextEditingController();
+  TextEditingController lastName = TextEditingController();
+  TextEditingController department = TextEditingController();
+  TextEditingController phoneNumber = TextEditingController();
+  TextEditingController yearofJoining = TextEditingController();
+  TextEditingController designation = TextEditingController();
+  TextEditingController core = TextEditingController();
   bool passwordObscuretext = true;
   IconData passwordIcon = CupertinoIcons.lock;
-  String firstName = "0000";
-  String lastName = "0000";
   String imageURL = "nkdsnvlks";
-  String designation = "knvkldsnvks";
+  var pageHeight = 520;
+
+  TextEditingController clearEmailController() {
+    if (!emailController.text.isEmpty) {
+      emailController.text = "";
+      return emailController;
+    } else
+      return emailController;
+  }
+
+  TextEditingController clearPasswordController() {
+    if (!passwordController.text.isEmpty) {
+      passwordController.text = "";
+      return passwordController;
+    } else
+      return passwordController;
+  }
 
   var counter = 1;
   var user;
+
+  void toLogin() {
+    setState(() {
+      pageHeight = 520;
+      counter = 1;
+    });
+  }
+
+  void toRegistration() {
+    if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty)
+      setState(() {
+        pageHeight = 630;
+        counter = 3;
+      });
+  }
 
   Future<void> login() async {
     setState(() {
@@ -52,7 +88,12 @@ class _loginPageState extends State<loginPage> {
 
   @override
   Widget build(BuildContext context) {
-    var pages = [this.LoadingIndicatior(), this.firstpage(), UserInfoPage()];
+    var pages = [
+      this.LoadingIndicatior(),
+      this.firstpage(),
+      UserInfoPage(),
+      registrationPage()
+    ];
     return Scaffold(
         backgroundColor: Colors.black,
         body: SingleChildScrollView(
@@ -66,10 +107,10 @@ class _loginPageState extends State<loginPage> {
                   Image(
                     image: AssetImage('images/brandLogo.jpg'),
                     height: 160.h,
-                    width: 200.w,
+                    width: 160.w,
                   ),
                   Container(
-                    height: 490,
+                    height: double.parse("${pageHeight}"),
                     width: 425,
                     margin: EdgeInsets.only(bottom: 6.0.h),
                     decoration: BoxDecoration(
@@ -95,6 +136,127 @@ class _loginPageState extends State<loginPage> {
         ));
   }
 
+  Column registrationPage() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "Registration Request",
+          style: TextStyle(
+              fontWeight: FontWeight.bold, letterSpacing: 1, fontSize: 17),
+        ),
+        Divider(
+          indent: 150,
+          endIndent: 150,
+          color: Colors.grey.shade600,
+          thickness: 1,
+        ),
+        Text(
+          "Please enter your details below",
+          style: TextStyle(fontSize: 10),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        roboTextFeild(
+          obscuretext: false,
+          placeholder: "First Name",
+          controller: firstName,
+          type: TextInputType.text,
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        roboTextFeild(
+          obscuretext: false,
+          placeholder: "Last Name",
+          controller: lastName,
+          type: TextInputType.text,
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        roboTextFeild(
+          obscuretext: false,
+          placeholder: "Applying for department",
+          controller: department,
+          type: TextInputType.text,
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        roboTextFeild(
+          obscuretext: false,
+          placeholder: "Phone Number",
+          controller: phoneNumber,
+          type: TextInputType.phone,
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        roboTextFeild(
+          obscuretext: false,
+          placeholder: "Year",
+          controller: yearofJoining,
+          type: TextInputType.datetime,
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        roboTextFeild(
+          obscuretext: false,
+          placeholder: "Applying for designation",
+          controller: designation,
+          type: TextInputType.text,
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        roboTextFeild(
+          obscuretext: false,
+          placeholder: "Core",
+          controller: core,
+          type: TextInputType.text,
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            roboButtons(
+              fillColor: Colors.blue.shade800,
+              borderColor: Colors.blue.shade800,
+              textColor: Colors.white,
+              width: double.parse("${170}"),
+              title: "Prev",
+              ontap: () {
+                toLogin();
+              },
+            ),
+            roboButtons(
+              fillColor: Colors.blue.shade800,
+              borderColor: Colors.blue.shade800,
+              textColor: Colors.white,
+              width: double.parse("${170}"),
+              title: "Next",
+            )
+          ],
+        ),
+        Divider(
+          endIndent: 120.w,
+          indent: 120.w,
+          thickness: 0.2,
+          color: Colors.black,
+        ),
+        Text(
+          'roboVITics 2021',
+          style: TextStyle(color: Colors.grey, fontSize: 8),
+        )
+      ],
+    );
+  }
+
   Center UserInfoPage() {
     return Center(
         child: Column(
@@ -112,11 +274,11 @@ class _loginPageState extends State<loginPage> {
           height: 20,
         ),
         Text(
-          "${firstName} ${lastName}",
+          "vdslblksmbvfs",
           style: TextStyle(fontSize: 30, fontFamily: "futura"),
         ),
         Text(
-          designation,
+          "vdsklvmds",
           style: TextStyle(color: Colors.grey.shade600),
         )
       ],
@@ -221,7 +383,11 @@ class _loginPageState extends State<loginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             roboButtons(
+              fillColor: Colors.blue.shade800,
+              borderColor: Colors.blue.shade800,
+              textColor: Colors.white,
               title: "Log in",
+              width: double.parse("${160}"),
               ontap: () {
                 login();
               },
@@ -235,15 +401,36 @@ class _loginPageState extends State<loginPage> {
               ),
             ),
             roboButtons(
+              fillColor: Colors.blue.shade800,
+              borderColor: Colors.blue.shade800,
+              textColor: Colors.white,
+              width: double.parse("${160}"),
               title: "Join Request",
               ontap: () {
-                print("Hello world");
+                toRegistration();
               },
             ),
           ],
         ),
         SizedBox(
           height: 10,
+        ),
+        Text(
+          "OR",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        roboButtons(
+          fillColor: Colors.white,
+          borderColor: Colors.blue.shade800,
+          textColor: Colors.black,
+          width: double.parse("${340}"),
+          title: "Confirm myself with token",
+          ontap: () {
+            toRegistration();
+          },
         ),
         Divider(
           endIndent: 120.w,
@@ -262,13 +449,20 @@ class _loginPageState extends State<loginPage> {
 
 class roboButtons extends StatelessWidget {
   const roboButtons({
-    Key? key,
     required this.title,
+    required this.fillColor,
+    required this.borderColor,
     this.ontap,
-  }) : super(key: key);
+    this.width,
+    required this.textColor,
+  });
 
   final String title;
   final ontap;
+  final width;
+  final Color fillColor;
+  final Color borderColor;
+  final Color textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -276,15 +470,16 @@ class roboButtons extends StatelessWidget {
       onTap: ontap,
       child: Container(
         height: 50,
-        width: 150,
+        width: width,
         decoration: BoxDecoration(
-            color: Colors.indigo.shade600,
-            borderRadius: BorderRadius.circular(10)),
+            color: fillColor,
+            border: Border.all(color: borderColor, width: 2),
+            borderRadius: BorderRadius.circular(20)),
         child: Center(
           child: Text(
             title,
             style: TextStyle(
-                color: Colors.white,
+                color: textColor,
                 fontSize: 15,
                 fontFamily: "Futura",
                 letterSpacing: 2),

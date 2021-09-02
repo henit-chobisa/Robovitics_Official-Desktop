@@ -13,7 +13,6 @@ const UserSchema = new mongoose.Schema({
     photoURL: String,
     department: String,
     phoneNumber: { type: String, maxlength: 13, minlength: 13 },
-    role: String,
     core : String,
     designation : String,
     yearOfJoining: String,
@@ -40,8 +39,8 @@ UserSchema.methods.updatePhotoURL = function (photoURL) {
     }
 };
 
-UserSchema.methods.updateRole = function (role) {
-    try { this.role = role }
+UserSchema.methods.updateRole = function (designation) {
+    try { this.designation = designation }
     catch (e) { console.log(e) }
 };
 
@@ -110,7 +109,7 @@ UserSchema.methods.fetch = function(){
         photoURL: this.photoURL,
         department: this.department,
         phoneNumber : this.phoneNumber,
-        role : this.role,
+        designation : this.designation,
         yearOfJoining : this.yearOfJoining,
         tokenBlock : this.tokenBlock
     };

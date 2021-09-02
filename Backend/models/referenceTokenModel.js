@@ -7,7 +7,7 @@ const referenceTokenSchema = mongoose.Schema({
     referenceToken : String
 }, { collection : "ReferenceTokens"})
 
-referenceTokenSchema.methods.generateToken = function(userID, referenceUserID){
+referenceTokenSchema.methods.generateToken = async function(userID, referenceUserID){
     try {
         var currentUser = await User.findById(userID);
         var referUser = await ReferenceUser.findById(referenceUserID);

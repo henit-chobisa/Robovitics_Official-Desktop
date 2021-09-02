@@ -3,7 +3,9 @@ const express = require('express');
 const router = express.Router()
 
 router.use('/login', require('./routes/login'));
-router.use('/register', require('./routes/register'));
 router.use('/token', require('./routes/token'));
+router.use('/registerRefUser', require('./routes/registerReferenceUser'));
+router.use('/addRefUser', require('./routes/addReferenceUser'));
+router.use('/getReferenceToken', require('./routes/referenceToken'));
 
 module.exports = router
