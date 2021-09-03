@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:frontend/homeScreen.dart';
 import 'package:loading/indicator/ball_spin_fade_loader_indicator.dart';
 import 'package:loading/loading.dart';
 import 'package:flutter/cupertino.dart';
@@ -85,14 +86,22 @@ class _loginPageState extends State<loginPage> {
   }
 
   void getFile() async {
-    final xtypegroup = XTypeGroup(label: 'image', extensions: ['jpeg', 'png']);
-    final imageFile = await openFile(acceptedTypeGroups: [xtypegroup]);
-    var data = await imageFile?.readAsBytes();
-    if (data != null) {
-      var completedFile = File.fromRawPath(data);
+    try {
+      final xtypegroup =
+          XTypeGroup(label: 'image', extensions: ['jpeg', 'png']);
+      final imageFile = await openFile(acceptedTypeGroups: [xtypegroup]);
+      var data = await imageFile?.readAsBytes();
+      if (data != null) {
+        var completedFile = File.fromRawPath(data);
+        setState(() {
+          imagePath = imageFile!.path;
+          file = completedFile;
+        });
+      }
+    } catch (err) {
+      print(err);
       setState(() {
-        imagePath = imageFile!.path;
-        file = completedFile;
+        counter = 7;
       });
     }
   }
@@ -112,28 +121,46 @@ class _loginPageState extends State<loginPage> {
       });
   }
 
+  void toError() {
+    setState(() {
+      counter = 7;
+      pageHeight = 400;
+    });
+  }
+
   Future<void> login() async {
     setState(() {
       counter = 0;
     });
-    var URL = Uri.parse("http://127.0.0.1:1000/api/authentication/login");
-    var body = {
-      'email': emailController.text.toString(),
-      'password': passwordController.text.toString()
-    };
-    var header = {"content-type": "application/json"};
-    var bodyToPush = jsonEncode(body);
-    var response = await http.post(URL, headers: header, body: bodyToPush);
-    var values = await jsonDecode(response.body);
-    setState(() {
-      lastName = values['lastName'];
-      firstName = values['firstName'];
-
-      imageURL = values['photoURL'];
-      designation = values['department'];
-      counter = 1;
-      counter++;
-    });
+    try {
+      var URL = Uri.parse("http://127.0.0.1:1000/api/authentication/login");
+      var body = {
+        'email': emailController.text.toString(),
+        'password': passwordController.text.toString()
+      };
+      var header = {"content-type": "application/json"};
+      var bodyToPush = jsonEncode(body);
+      var response = await http.post(URL, headers: header, body: bodyToPush);
+      if (response.statusCode == 200) {
+        var values = await jsonDecode(response.body);
+        setState(() {
+          Name = values['firstName'];
+          ImageURL = values['photoURL'];
+          Designation = values['designation'];
+          pageHeight = 440;
+          counter = 8;
+        });
+      } else {
+        setState(() {
+          counter = 7;
+        });
+      }
+    } catch (err) {
+      print(err);
+      setState(() {
+        counter = 7;
+      });
+    }
   }
 
   Future<String?> uploadProfileImage() async {
@@ -147,6 +174,10 @@ class _loginPageState extends State<loginPage> {
       if (response.isSuccessful) {
         var imageURL = response.secureUrl;
         return imageURL;
+      } else {
+        setState(() {
+          counter = 7;
+        });
       }
     }
   }
@@ -180,7 +211,7 @@ class _loginPageState extends State<loginPage> {
       });
     } else {
       setState(() {
-        counter = 6;
+        counter = 7;
       });
     }
   }
@@ -194,18 +225,25 @@ class _loginPageState extends State<loginPage> {
     }
   }
 
+  String ImageURL =
+      "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-High-Quality-Image.png";
+  String Name = "No Name";
+  String Designation = "No Designation";
+
   @override
   Widget build(BuildContext context) {
     var pages = [
-      this.LoadingIndicatior(),
-      this.firstpage(),
+      LoadingIndicatior(),
+      firstpage(),
       UserInfoPage(),
       registrationPage(),
       submissionPage(),
       submissionDone(),
       TokenVerificationPage(),
-      Center(child: Text(status)),
+      ErrorPage(),
+      loginSuccessPage(context),
     ];
+    var currentPage = pages[counter];
     return Scaffold(
         backgroundColor: Colors.black,
         body: SingleChildScrollView(
@@ -220,6 +258,7 @@ class _loginPageState extends State<loginPage> {
                     image: AssetImage('images/brandLogo.jpg'),
                     height: 160.h,
                     width: 160.w,
+                    fit: BoxFit.cover,
                   ),
                   Container(
                     height: double.parse("${pageHeight}"),
@@ -238,7 +277,7 @@ class _loginPageState extends State<loginPage> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(36.0),
-                      child: pages[counter],
+                      child: currentPage,
                     ),
                   ),
                 ],
@@ -246,6 +285,76 @@ class _loginPageState extends State<loginPage> {
             ),
           ),
         ));
+  }
+
+  Column loginSuccessPage(BuildContext context) {
+    return Column(
+      children: [
+        Image(
+          image: NetworkImage(
+              "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-High-Quality-Image.png"),
+          height: 250,
+          width: 250,
+        ),
+        Text(
+          "Hello ${Name}",
+          style: TextStyle(fontSize: 20, fontFamily: "Futura"),
+        ),
+        Text(
+          "${Designation}",
+          style: TextStyle(fontFamily: "Futura", fontSize: 10),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        roboButtons(
+            title: "Take me => Workstation",
+            ontap: () {
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (_) => homePage()));
+            },
+            fillColor: Colors.white,
+            borderColor: Colors.blue.shade800,
+            textColor: Colors.black)
+      ],
+    );
+  }
+
+  Column ErrorPage() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "Crash!!!",
+          style: TextStyle(fontSize: 90),
+        ),
+        Divider(
+          thickness: 1,
+          indent: 50,
+          endIndent: 50,
+          height: 20,
+        ),
+        Text(
+          "I know it hurts, Par kya kare, sehe lo thoda!!!",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        roboButtons(
+            ontap: () {
+              tohome();
+            },
+            title: "Back to home",
+            fillColor: Colors.white,
+            borderColor: Colors.blue.shade800,
+            textColor: Colors.black)
+      ],
+    );
   }
 
   Column TokenVerificationPage() {

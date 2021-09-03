@@ -9,5 +9,4 @@ router.use('/addRefUser', require('./routes/addReferenceUser'));
 router.use('/getReferenceToken',authenticationmiddleware ,require('./routes/referenceToken'));
 router.use('/regUser', require('./routes/register'))
 
-
 module.exports = router;
