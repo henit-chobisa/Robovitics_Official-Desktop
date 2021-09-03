@@ -17,6 +17,7 @@ class loginPage extends StatefulWidget {
 }
 
 class _loginPageState extends State<loginPage> {
+  TextEditingController referenceTokenController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController firstName = TextEditingController();
@@ -35,22 +36,37 @@ class _loginPageState extends State<loginPage> {
 
   var file = null;
   var imagePath = "";
+  var status = "Error";
 
   final cloudinary =
       Cloudinary("146921317957316", "dMy6eCEsZ0YpupA_FoMaR_z_sEo", "ddglxo0l3");
-
-  void toLogin() {
-    setState(() {
-      pageHeight = 520;
-      counter = 1;
-    });
-  }
 
   void tohome() {
     setState(() {
       pageHeight = 520;
       counter = 1;
     });
+  }
+
+  void confirmToken() async {
+    setState(() {
+      counter == 0;
+    });
+    var url = Uri.parse("http://127.0.0.1:1000/api/authentication/addRefUser");
+    var body = {"referenceTokenID": referenceTokenController.text};
+    var headers = {"content-type": "application/json"};
+    var response =
+        await http.post(url, body: jsonEncode(body), headers: headers);
+
+    if (response.statusCode == 200) {
+      print("Token Accepted");
+    } else {
+      setState(() {
+        var body = jsonDecode(response.body);
+        status = body['status'];
+        counter = 7;
+      });
+    }
   }
 
   void toSubmission() {
@@ -79,6 +95,13 @@ class _loginPageState extends State<loginPage> {
         file = completedFile;
       });
     }
+  }
+
+  void toTokenRegistrationPage() {
+    setState(() {
+      counter = 6;
+      pageHeight = 320;
+    });
   }
 
   void toRegistration() {
@@ -180,7 +203,8 @@ class _loginPageState extends State<loginPage> {
       registrationPage(),
       submissionPage(),
       submissionDone(),
-      Center(child: Text("Error")),
+      TokenVerificationPage(),
+      Center(child: Text(status)),
     ];
     return Scaffold(
         backgroundColor: Colors.black,
@@ -213,14 +237,74 @@ class _loginPageState extends State<loginPage> {
                       ],
                     ),
                     child: Padding(
-                        padding: const EdgeInsets.all(36.0),
-                        child: pages[counter]),
+                      padding: const EdgeInsets.all(36.0),
+                      child: pages[counter],
+                    ),
                   ),
                 ],
               ),
             ),
           ),
         ));
+  }
+
+  Column TokenVerificationPage() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "Hii there, if you have registered earlier you may have recieved a reference token by robovitics via Email, please enter the token below, This is the final stage of your registration process. You can use this token only once, you have yo register one more time if you fail",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 12, fontFamily: "Futura"),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Divider(
+          indent: 50,
+          endIndent: 50,
+          color: Colors.black,
+          thickness: 1,
+        ),
+        roboTextFeild(
+            obscuretext: false,
+            placeholder: "Your Reference Token",
+            controller: referenceTokenController,
+            type: TextInputType.text),
+        SizedBox(
+          height: 10,
+        ),
+        Divider(
+          indent: 100,
+          endIndent: 100,
+          color: Colors.black,
+          thickness: 1,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            roboButtons(
+                ontap: () {
+                  tohome();
+                },
+                title: "Back home",
+                width: double.parse("${170}"),
+                fillColor: Colors.white,
+                borderColor: Colors.blue.shade800,
+                textColor: Colors.black),
+            roboButtons(
+                ontap: () {
+                  confirmToken();
+                },
+                title: "Confirm ",
+                width: double.parse("${170}"),
+                fillColor: Colors.blue.shade800,
+                borderColor: Colors.blue.shade800,
+                textColor: Colors.white),
+          ],
+        )
+      ],
+    );
   }
 
   Column submissionDone() {
@@ -384,7 +468,7 @@ class _loginPageState extends State<loginPage> {
               width: double.parse("${170}"),
               title: "Prev",
               ontap: () {
-                toLogin();
+                tohome();
               },
             ),
             roboButtons(
@@ -585,7 +669,7 @@ class _loginPageState extends State<loginPage> {
           width: double.parse("${340}"),
           title: "Confirm myself with token",
           ontap: () {
-            getFile();
+            toTokenRegistrationPage();
           },
         ),
         Divider(

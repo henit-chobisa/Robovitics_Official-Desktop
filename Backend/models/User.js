@@ -83,11 +83,12 @@ UserSchema.methods.generateJWT = function () {
     const today = new Date();
     const expirationDate = new Date(today);
     expirationDate.getDate(today.getTime() + 60);
-    const accessToken = jwt.sign({ email: this.email, id: this._id, exp: parseInt(expirationDate.getTime() / 1000, 10) }, process.env.accessTokenSecret);
-    const refreshToken = jwt.sign({ email: this.email, id: this._id, exp: parseInt(expirationDate.getTime() / 100, 10) }, process.env.refreshTokenSecret);
+    const accessToken = jwt.sign({ email: this.email, id: this._id, exp: parseInt(expirationDate.getTime() / 100, 10) }, process.env.accessTokenSecret);
+    const refreshToken = jwt.sign({ email: this.email, id: this._id, exp: parseInt(expirationDate.getTime() / 10, 10) }, process.env.refreshTokenSecret);
     const tokenBlock = new TokenBlock({ accessToken, refreshToken });
     this.tokenBlock = tokenBlock._id;
     tokenBlock.save();
+    console.log(expirationDate.getTime() / 10);
     return tokenBlock;
 };
 
