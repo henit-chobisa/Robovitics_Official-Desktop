@@ -48,6 +48,7 @@ class _loginPageState extends State<loginPage> {
 
   void tohome() {
     setState(() {
+      pageHeight = 520;
       counter = 1;
     });
   }
@@ -151,6 +152,7 @@ class _loginPageState extends State<loginPage> {
         await http.post(submitURI, body: jsonEncode(body), headers: headers);
     if (response.statusCode == 200) {
       setState(() {
+        pageHeight = 350;
         counter = 5;
       });
     } else {
