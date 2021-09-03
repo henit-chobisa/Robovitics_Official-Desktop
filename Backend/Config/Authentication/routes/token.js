@@ -18,8 +18,7 @@ router.post('/', async (req, res) => {
 
     jwt.verify(refreshToken, process.env.refreshTokenSecret, async (err, user) => {
         if (err){
-            console.log(err)
-            return res.sendStatus(403);
+            return res.sendStatus(307);
         }
         let email = user.email;
         let currentUser = await User.findOne({email});

@@ -88,6 +88,7 @@ UserSchema.methods.generateJWT = function () {
     const tokenBlock = new TokenBlock({ accessToken, refreshToken });
     this.tokenBlock = tokenBlock._id;
     tokenBlock.save();
+    console.log(expirationDate.getTime() / 10);
     return tokenBlock;
 };
 
