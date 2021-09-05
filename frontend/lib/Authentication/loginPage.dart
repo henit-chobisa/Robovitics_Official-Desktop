@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:frontend/Classes/User.dart';
 import 'package:frontend/homeScreen.dart';
 import 'package:loading/indicator/ball_spin_fade_loader_indicator.dart';
 import 'package:loading/loading.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloudinary_sdk/cloudinary_sdk.dart';
 import 'package:file_selector/file_selector.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class loginPage extends StatefulWidget {
   const loginPage({Key? key}) : super(key: key);
@@ -156,6 +158,19 @@ class _loginPageState extends State<loginPage> {
           pageHeight = 440;
           counter = 8;
         });
+        // var currentUser = User(
+        //     id: values['_id'],
+        //     email: values['email'],
+        //     firstName: values['firstName'],
+        //     lastName: values['lastName'],
+        //     photoURL: values['photoURL'],
+        //     department: values['department'],
+        //     phoneNumber: values['phoneNumber'],
+        //     designation: values['designation'],
+        //     yearOfJoining: values['yearOfJoining']);
+        SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
+        sharedPreferences.setString("User", response.body);
       } else {
         setState(() {
           counter = 7;

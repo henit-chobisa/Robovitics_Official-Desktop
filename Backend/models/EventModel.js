@@ -38,10 +38,6 @@ EventSchema.methods.addContributor = function(userID){
 EventSchema.methods.addRegistration = async function(attendeeName, contributor, platform){
     const eventID = this._id
     const registration = new registrationModel({eventID, attendeeName, contributor, platform});
-    var findContri = await this.contributors.includes(contributor);
-    if (findContri == false){
-        this.contributors.push(contributor);
-    }
     await registration.save();
     this.registrations.push(registration._id);
     this.totalRegistrations = this.registrations.length;
