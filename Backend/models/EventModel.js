@@ -15,30 +15,16 @@ const EventSchema = new mongoose.Schema({
     linkedInReach : Number,
     registrationTarget : Number,
     totalRegistrations : Number,
+    topContributor : { type : mongoose.Schema.Types.ObjectId, ref : "User"},
     eventLogo : String,
     eventImages : [String],
     platformLink : String,
-    registrations : [registrationModel.schema],
-    topContributor : { type : mongoose.Schema.Types.ObjectId, ref : "User"},
+    registrations : [{ type : mongoose.Schema.Types.ObjectId, ref : "registrationModel"}],
     contributors : [{ type : mongoose.Schema.Types.ObjectId, ref : "User"}],
 }, {collection : "Events"});
 
-EventSchema.methods.updateTopContributor = function(){
-    var currentTopContributor;
-    var count;
-    const maxCount = 0;
-    for (let i = 0; i < this.registrations.length; i++) {
-        count = 1;
-        for (let j = i+1; j < this.registrations.length; j++) {
-            if (this.registrations[j].contributor == this.registrations[i].contributor){
-                count++;
-                if(count > maxCount){
-                    currentTopContributor = this.registrations[j].contributor;
-                }
-            }            
-        }
-    }
-    this.topContributor = currentTopContributor;
+EventSchema.methods.addTopContributor = function(topContributor){
+    this.topContributor = topContributor;
 }
 
 EventSchema.methods.addEventImages = function(link){

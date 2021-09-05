@@ -5,7 +5,7 @@ const registrationModelSchema = new mongoose.Schema({
     attendeeName : String,
     contributor : {type : mongoose.Schema.Types.ObjectId, ref : "User"},
     Platform : String,
-});
+}, {collection : "Registrations"});
 
 const registrationModel = mongoose.model('registrationModel', registrationModelSchema);
 

@@ -24,6 +24,6 @@ router.post('/', async (req, res) => {
             res.send("Sorry, password missmatch");
         }
     }
-})
+});
 
 module.exports = router;
