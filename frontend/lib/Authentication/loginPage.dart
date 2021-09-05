@@ -7,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
-import 'package:loading/loading.dart';
 import 'package:cloudinary_sdk/cloudinary_sdk.dart';
 import 'package:file_selector/file_selector.dart';
 
@@ -51,7 +50,7 @@ class _loginPageState extends State<loginPage> {
 
   void confirmToken() async {
     setState(() {
-      counter == 0;
+      counter = 0;
     });
     var url = Uri.parse("http://127.0.0.1:1000/api/authentication/addRefUser");
     var body = {"referenceTokenID": referenceTokenController.text};
@@ -60,7 +59,14 @@ class _loginPageState extends State<loginPage> {
         await http.post(url, body: jsonEncode(body), headers: headers);
 
     if (response.statusCode == 200) {
-      print("Token Accepted");
+      setState(() {
+        var values = jsonDecode(response.body);
+        Name = values['firstName'];
+        ImageURL = values['photoURL'];
+        Designation = values['designation'];
+        pageHeight = 440;
+        counter = 8;
+      });
     } else {
       setState(() {
         var body = jsonDecode(response.body);

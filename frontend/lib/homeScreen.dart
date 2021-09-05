@@ -9,8 +9,32 @@ class homePage extends StatefulWidget {
 }
 
 class _homePageState extends State<homePage> {
+  var columnFlex = 25;
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      body: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: TextButton(
+              onPressed: () {
+                setState(() {
+                  columnFlex = 10;
+                });
+              },
+              child: Container(
+                color: Colors.blue,
+              ),
+            ),
+          ),
+          Expanded(
+              flex: columnFlex,
+              child: Container(
+                color: Colors.black,
+              )),
+        ],
+      ),
+    );
   }
 }
