@@ -12,7 +12,11 @@ app.use(cors());
 db();
 
 app.use('/api/verification', require('./Config/Verification/verification'));
+
 app.use('/api/authentication', require('./Config/Authentication/authentication'));
+
+app.use('/api/events', require('./routes/Event'));
+
 
 app.listen(port, () => console.log(`Deployed on port ${port}`));
 

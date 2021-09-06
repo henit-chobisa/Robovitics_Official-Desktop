@@ -37,7 +37,7 @@ router.post('/', async(req, res) => {
             await user.save();
             await getterReferenceToken.remove();
             await referenceUser.remove();
-            res.json({"Status" : `${firstName} ${lastName},Welcome to robovitics`});
+            res.json(user.fetch());
         })
     }
 })

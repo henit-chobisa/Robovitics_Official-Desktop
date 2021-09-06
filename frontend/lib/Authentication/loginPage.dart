@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:frontend/Classes/User.dart';
 import 'package:frontend/homeScreen.dart';
 import 'package:loading/indicator/ball_spin_fade_loader_indicator.dart';
 import 'package:loading/loading.dart';
@@ -7,9 +8,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
-import 'package:loading/loading.dart';
 import 'package:cloudinary_sdk/cloudinary_sdk.dart';
 import 'package:file_selector/file_selector.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class loginPage extends StatefulWidget {
   const loginPage({Key? key}) : super(key: key);
@@ -51,7 +52,7 @@ class _loginPageState extends State<loginPage> {
 
   void confirmToken() async {
     setState(() {
-      counter == 0;
+      counter = 0;
     });
     var url = Uri.parse("http://127.0.0.1:1000/api/authentication/addRefUser");
     var body = {"referenceTokenID": referenceTokenController.text};
@@ -60,7 +61,14 @@ class _loginPageState extends State<loginPage> {
         await http.post(url, body: jsonEncode(body), headers: headers);
 
     if (response.statusCode == 200) {
-      print("Token Accepted");
+      setState(() {
+        var values = jsonDecode(response.body);
+        Name = values['firstName'];
+        ImageURL = values['photoURL'];
+        Designation = values['designation'];
+        pageHeight = 440;
+        counter = 8;
+      });
     } else {
       setState(() {
         var body = jsonDecode(response.body);
@@ -150,6 +158,19 @@ class _loginPageState extends State<loginPage> {
           pageHeight = 440;
           counter = 8;
         });
+        // var currentUser = User(
+        //     id: values['_id'],
+        //     email: values['email'],
+        //     firstName: values['firstName'],
+        //     lastName: values['lastName'],
+        //     photoURL: values['photoURL'],
+        //     department: values['department'],
+        //     phoneNumber: values['phoneNumber'],
+        //     designation: values['designation'],
+        //     yearOfJoining: values['yearOfJoining']);
+        SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
+        sharedPreferences.setString("User", response.body);
       } else {
         setState(() {
           counter = 7;
