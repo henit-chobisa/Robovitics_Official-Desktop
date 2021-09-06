@@ -6,6 +6,10 @@ const db = require('./Config/Database');
 const app = express();
 const User = require('./models/User');
 const mongoose = require('mongoose');
+const Instagram = require('instagram-web-api')
+const username = "bug_sigabrt";
+const password = "111.Dinesh";
+const client = new Instagram({ username, password })
 const port = process.env.PORT || 1000;
 app.use(express.json());
 app.use(cors());
@@ -15,7 +19,15 @@ app.use('/api/verification', require('./Config/Verification/verification'));
 
 app.use('/api/authentication', require('./Config/Authentication/authentication'));
 
-app.use('/api/events', require('./routes/Event'));
+// app.use('/api/events', require('./routes/Event'));
+
+app.use('/api/user', require('./routes/User/user'));
+
+app.get('/api/getinsta', async (req, res) => {
+    await client.login();
+    const profile = await client.getMediaByShortcode({shortcode : "CTejndyP7GrwAR54WM7gmn0rI45gleZ-lTvsZo0"});
+    res.json(profile);
+});
 
 
 app.listen(port, () => console.log(`Deployed on port ${port}`));

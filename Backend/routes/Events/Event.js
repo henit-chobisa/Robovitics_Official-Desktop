@@ -1,9 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-router.use('/allEvents',require('./Events/getallevents'));
+
+// Post Routes...
 router.use('/createEvent', require('./Events/createEvent'));
-router.use('/addImage', require('./Events/addimage'));
+router.use('/addImage', require('./Routes/addimage'));
 router.use('/addContribution', require('./Events/addContribution'));
+
+// Get events ..
+router.use('/allEvents',require('./Routes/getallevents'));
+router.use('/getEvent', require('./Events/getAnEvent'));
 
 module.exports = router;
