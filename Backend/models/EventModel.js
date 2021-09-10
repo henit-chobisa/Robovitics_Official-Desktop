@@ -52,7 +52,7 @@ EventSchema.methods.addEventImages = function(link){
 
 // Adding top contributor
 EventSchema.methods.addContributor = function(userID){
-    top.contributors.push(userID);
+    this.contributors.push(userID);
 }
 
 
@@ -62,8 +62,10 @@ EventSchema.methods.addInstapost = async function(shortCode){
     await client.login();
     const media = await client.getMediaByShortcode({shortcode : shortCode});
     const photoURL = media['display_url']
-    const likes = media['edge_media_preview_like']['count'];
-    const post = new instaPost({shortCode, photoURL, likes});
+    const likesCount = media['edge_media_preview_like']['count'];
+    
+    console.log(likesCount);
+    const post = new instaPost({shortCode, photoURL, likesCount});
     this.instagramPosts.push(post);
 }
 
@@ -74,13 +76,18 @@ EventSchema.methods.addRegistration = async function(attendeeName, contributor, 
     const registration = new registrationModel({eventID, attendeeName, contributor, platform});
     await registration.save();
     const registrationID = registration._id;
-    let contribution = new contributionModel({eventID,contributor,points, registrationID});
     const user = await User.findById(contributor);
+    const points = user.points;
+    console.log(points);
+    let contribution = new contributionModel({eventID,contributor, points, registrationID});
+    console.log(user.contributions);
     const totalpoints = user.points + this.registrationPoints;
     await contribution.save();
     user.updatePoints(totalpoints);
-    user.contributions.push(contribution._id);
+    user.addContribution(contribution._id);
+    console.log(user.contributions);
     await user.save();
+    console.log(user.contributions);
     this.registrations.push(registration._id);
     this.totalRegistrations = this.registrations.length;
 }

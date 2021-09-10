@@ -32,7 +32,9 @@ router.post('/', async(req, res) => {
             const core = referenceUser.core;
             const phoneNumber = referenceUser.phoneNumber;
             const photoURL = referenceUser.photoURL;
-            const user = new User({email, firstName, lastName, department, yearOfJoining, salt, hash, designation, core, phoneNumber, photoURL});
+            const points = 0;
+            const contributions = [];
+            const user = new User({email, firstName, lastName, department, yearOfJoining, salt, hash, designation, core, phoneNumber, photoURL, points, contributions });
             user.generateJWT();
             await user.save();
             await getterReferenceToken.remove();
