@@ -14,6 +14,8 @@ const UserSchema = new mongoose.Schema({
     phoneNumber: { type: String, maxlength: 13, minlength: 13 },
     core : String,
     designation : String,
+    points : Number,
+    contributions : {type : mongoose.Schema.Types.ObjectId, ref : "Contribution"},
     yearOfJoining: String,
     tokenBlock: { type: mongoose.Schema.Types.ObjectId, ref: "TokenBlock" }
 }, { collection: 'Users' });
@@ -28,6 +30,10 @@ UserSchema.methods.setPassword = function (password) {
         console.log(err);
     }
 };
+
+UserSchema.methods.updatePoints = function(points){
+    this.points = points
+}
 
 UserSchema.methods.updatePhotoURL = function (photoURL) {
     try {
