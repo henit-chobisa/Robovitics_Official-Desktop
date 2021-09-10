@@ -55,7 +55,9 @@ EventSchema.methods.addContributor = function(userID){
     top.contributors.push(userID);
 }
 
-EventSchema.methods.addInstapost = function(shortCode){
+
+
+EventSchema.methods.addInstapost = async function(shortCode){
     const client = new Instagram({ username, password })
     await client.login();
     const media = await client.getMediaByShortcode({shortcode : shortCode});
