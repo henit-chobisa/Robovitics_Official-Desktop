@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 
 const contributionModelSchema = new mongoose.Schema({
+    eventID : {type : mongoose.Schema.Types.ObjectId, ref : "Event"},
     contributorID : {type : mongoose.Schema.Types.ObjectId, ref : "User"},
-    contributions : Number,
+    points : Number,
     registrationDetails : [{type : mongoose.Schema.Types.ObjectId, ref : "registrationModel"}],
 }, {collection : "Contributions"});
 
