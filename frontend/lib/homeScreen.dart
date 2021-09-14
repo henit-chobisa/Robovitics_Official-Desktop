@@ -2,11 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/Classes/activityAlert.dart';
 import 'package:frontend/Classes/radioButton.dart';
 import 'package:frontend/Pages/EventPage.dart';
 import 'package:frontend/Pages/landingPage.dart';
+import 'package:keyboard_shortcuts/keyboard_shortcuts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class homePage extends StatefulWidget {
@@ -18,7 +20,7 @@ class homePage extends StatefulWidget {
 
 class _homePageState extends State<homePage> {
   var columnFlex = 25;
-  bool menuVisible = false;
+  bool menuVisible = true;
 
   Future<String?> getUser() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -126,128 +128,139 @@ class _homePageState extends State<homePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.grey.shade900,
-        body: Row(
-          children: [
-            Visibility(
-              visible: true,
-              child: Padding(
-                padding: EdgeInsets.only(top: 5.h, left: 5.w, bottom: 5.h),
-                child: Container(
-                  height: double.maxFinite,
-                  width: 190,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.r),
-                  ),
-                  child: Column(
-                    children: [
-                      Image(
-                        image: AssetImage('images/brandLogoBlack.png'),
-                        height: 120,
-                      ),
-                      Text(
-                        "User",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18.sp),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: 10.w, right: 10.w, top: 10.h, bottom: 20.h),
-                        child: Container(
-                          height: 50.h,
-                          decoration: BoxDecoration(
+    return KeyBoardShortcuts(
+      keysToPress: {LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.keyM},
+      onKeysPressed: () {
+        setState(() {
+          menuVisible = !menuVisible;
+        });
+      },
+      child: Scaffold(
+          backgroundColor: Colors.grey.shade900,
+          body: Row(
+            children: [
+              Visibility(
+                visible: menuVisible,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 5.h, left: 5.w, bottom: 5.h),
+                  child: Container(
+                    height: double.maxFinite,
+                    width: 190,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
+                    child: Column(
+                      children: [
+                        Image(
+                          image: AssetImage('images/brandLogoBlack.png'),
+                          height: 120,
+                        ),
+                        Text(
+                          "User",
+                          style: TextStyle(
                               color: Colors.black,
-                              borderRadius: BorderRadius.circular(10.r)),
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 15.w),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(15.r),
-                                  child: Image(
-                                    image: NetworkImage(
-                                      user['photoURL'],
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.sp),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: 10.w, right: 10.w, top: 10.h, bottom: 20.h),
+                          child: Container(
+                            height: 50.h,
+                            decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(10.r)),
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 15.w),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(15.r),
+                                    child: Image(
+                                      image: NetworkImage(
+                                        user['photoURL'],
+                                      ),
+                                      height: 30.h,
+                                      width: 30.w,
                                     ),
-                                    height: 30.h,
-                                    width: 30.w,
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 10.w,
-                                ),
-                                Text(
-                                  "${user['firstName']} ${user['lastName']}",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 12.sp),
-                                )
-                              ],
+                                  SizedBox(
+                                    width: 10.w,
+                                  ),
+                                  Text(
+                                    "${user['firstName']} ${user['lastName']}",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 12.sp),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Text(
-                        "Menu",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18.sp),
-                      ),
-                      SizedBox(
-                        height: 20.h,
-                      ),
-                      ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: radioButtons.length,
-                          itemBuilder: (_, index) {
-                            return MenuButtons(
-                              heading: radioButtons[index].title,
-                              icon: radioButtons[index].icon,
-                              isPressed: getPressedStatus(index),
-                              associatedPage: landingPage(),
-                              ontap: () {
-                                setState(() {
-                                  currentPageIndex = index;
-                                });
-                              },
-                            );
-                          }),
-                      MenuButtons(
-                        icon: CupertinoIcons.xmark,
-                        heading: "LogOut",
-                        isPressed: false,
-                        associatedPage: landingPage(),
-                        ontap: () {
-                          print("Hello World");
-                        },
-                      ),
-                      Spacer(),
-                      Divider(
-                        thickness: 1,
-                        color: Colors.grey,
-                        indent: 50,
-                        endIndent: 50,
-                      ),
-                      Text(
-                        "roboVITics 2021",
-                        style: TextStyle(color: Colors.grey, fontSize: 10.sp),
-                      ),
-                      SizedBox(
-                        height: 20.h,
-                      )
-                    ],
+                        Text(
+                          "Menu",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.sp),
+                        ),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: radioButtons.length,
+                            itemBuilder: (_, index) {
+                              return MenuButtons(
+                                heading: radioButtons[index].title,
+                                icon: radioButtons[index].icon,
+                                isPressed: getPressedStatus(index),
+                                associatedPage: landingPage(),
+                                ontap: () {
+                                  setState(() {
+                                    currentPageIndex = index;
+                                  });
+                                },
+                              );
+                            }),
+                        MenuButtons(
+                          icon: CupertinoIcons.xmark,
+                          heading: "LogOut",
+                          isPressed: false,
+                          associatedPage: landingPage(),
+                          ontap: () {
+                            print("Hello World");
+                          },
+                        ),
+                        Spacer(),
+                        Divider(
+                          thickness: 1,
+                          color: Colors.grey,
+                          indent: 50,
+                          endIndent: 50,
+                        ),
+                        Text(
+                          "roboVITics 2021",
+                          style: TextStyle(color: Colors.grey, fontSize: 10.sp),
+                        ),
+                        SizedBox(
+                          height: 20.h,
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            pages[currentPageIndex],
-          ],
-        ));
+              pages[currentPageIndex],
+              // KeyBoardShortcuts(
+              //
+              // )
+            ],
+          )),
+    );
   }
 }
 

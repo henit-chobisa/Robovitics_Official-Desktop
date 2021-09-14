@@ -37,6 +37,7 @@ dependencies:
   cloudinary_sdk:
   sqflite:
   path_provider:
+  keyboard_shortcuts: ^0.1.4
   window_size:
     git:
       url: git://github.com/google/flutter-desktop-embedding.git

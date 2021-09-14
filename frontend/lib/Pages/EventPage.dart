@@ -13,7 +13,19 @@ class _eventPageState extends State<eventPage> {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        color: Colors.amberAccent,
+        child: Padding(
+          padding: EdgeInsets.only(left: 40.w, top: 40.h),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                "E v e n t s",
+                style: TextStyle(color: Colors.white, fontSize: 50.sp),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
