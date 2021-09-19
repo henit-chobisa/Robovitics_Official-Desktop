@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/Classes/Event.dart';
+import 'package:http/http.dart' as http;
 
 class eventPage extends StatefulWidget {
   const eventPage({Key? key}) : super(key: key);
@@ -9,8 +13,17 @@ class eventPage extends StatefulWidget {
 }
 
 class _eventPageState extends State<eventPage> {
+  Future<void> getEvent() async {
+    var response =
+        await http.get(Uri.parse("http://127.0.0.1:1000/api/events/allEvents"));
+    List<dynamic> data = await jsonDecode(response.body);
+    List<Event> events = data.map((data) => Event.fromJson(data)).toList();
+    print(events.length);
+  }
+
   @override
   Widget build(BuildContext context) {
+    getEvent();
     return Expanded(
       child: Container(
         child: Padding(
