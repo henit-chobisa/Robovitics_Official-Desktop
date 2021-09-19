@@ -17,7 +17,7 @@ router.post('/', async (req, res) => {
         
         await event.addTopContributor(topContributor);
         await event.addRegistration(attendeeName, contributor, platform);
-        await event.save();
+        await event.save();c
         res.send(event);
     }
 })
