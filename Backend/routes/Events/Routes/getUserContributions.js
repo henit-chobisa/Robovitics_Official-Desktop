@@ -6,8 +6,9 @@ const User = require("../../../models/User")
 router.post('/', async(req, res) => { 
     const {userID} = req.body;
     var user = await User.findById(userID).populate('contributions').exec();
-    console.log(user)
-    res.json(user);
+    await user.populate('contributions.eventID');
+    await user.populate('contributions.registrationDetails');
+    res.json(user['contributions']);
 });
 
 module.exports = router;

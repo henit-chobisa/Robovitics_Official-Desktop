@@ -13,7 +13,6 @@ router.post('/', async(req, res) => {
         await event.save();
         res.send("Instagram Post Added");
     }
-})
-
+});
 
 module.exports = router;

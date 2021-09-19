@@ -10,8 +10,7 @@ router.get('/', async (req, res) => {
     }
     else {
         res.json(event);
-    }
-    
+    }  
 })
 
 module.exports = router

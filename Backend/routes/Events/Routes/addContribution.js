@@ -10,14 +10,14 @@ router.post('/', async (req, res) => {
     }
     else {
         
-        const topContributor = findTopContributor(event.registrations);
+        const topContributor = await findTopContributor(event.registrations);
         if (!event.contributors.includes(contributor)){
             event.addContributor(contributor);
         }
         
         await event.addTopContributor(topContributor);
         await event.addRegistration(attendeeName, contributor, platform);
-        await event.save();c
+        await event.save();
         res.send(event);
     }
 })
