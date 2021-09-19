@@ -7,6 +7,7 @@ router.use('/createEvent', require('./Routes/createEvent'));
 router.use('/addImage', require('./Routes/addimage'));
 router.use('/addContribution', require('./Routes/addContribution'));
 router.use('/addInstagramPost', require('./Routes/addInstagramPost'));
+router.use('/getUserContributions', require('./Routes/getUserContributions'));
 
 
 // Get events ..
