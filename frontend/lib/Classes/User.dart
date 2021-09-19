@@ -1,5 +1,8 @@
 import 'package:frontend/Classes/contributionModel.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'User.g.dart';
 
+@JsonSerializable()
 class User {
   User(
       {required this.id,
@@ -14,6 +17,9 @@ class User {
       required this.core,
       required this.points,
       required this.contributions});
+
+  factory User.fromJson(Map<String, dynamic> data) => _$UserFromJson(data);
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 
   final String id;
   final String email;
