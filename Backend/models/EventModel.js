@@ -4,7 +4,8 @@ const contributionModel = require('./contributionModel');
 const instaPost = require('./postModel');
 const registrationModel = require('./registrationModel');
 const User = require('./User');
-const Instagram = require('instagram-web-api')
+const Instagram = require('instagram-web-api');
+const goal = require('./goalModel');
 const username = "bug_sigabrt";
 const password = "111.Dinesh";
 
@@ -34,6 +35,8 @@ const EventSchema = new mongoose.Schema({
     registrationPoints : Number,
     registrationTarget : Number,
     totalRegistrations : Number,
+
+    goals : [goal.schema],
     topContributor : { type : mongoose.Schema.Types.ObjectId, ref : "User"},
     registrations : [{ type : mongoose.Schema.Types.ObjectId, ref : "registrationModel"}],
     contributors : [{ type : mongoose.Schema.Types.ObjectId, ref : "User"}],
@@ -75,11 +78,11 @@ EventSchema.methods.addRegistration = async function(attendeeName, contributor, 
     const eventID = this._id
     const registration = new registrationModel({eventID, attendeeName, contributor, platform});
     await registration.save();
-    const registrationID = registration._id;
+    const registrationDetails = registration._id;
     const user = await User.findById(contributor);
     const points = user.points;
     console.log(points);
-    let contribution = new contributionModel({eventID,contributor, points, registrationID});
+    let contribution = new contributionModel({eventID,contributor, points, registrationDetails});
     console.log(user.contributions);
     const totalpoints = user.points + this.registrationPoints;
     await contribution.save();

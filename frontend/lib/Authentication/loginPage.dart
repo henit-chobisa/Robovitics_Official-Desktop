@@ -31,7 +31,8 @@ class _loginPageState extends State<loginPage> {
   TextEditingController core = TextEditingController();
   bool passwordObscuretext = true;
   IconData passwordIcon = CupertinoIcons.lock;
-  String imageURL = "nkdsnvlks";
+  String imageURL =
+      "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-High-Quality-Image.png";
   var pageHeight = 520;
   var counter = 1;
   var user;
@@ -312,8 +313,7 @@ class _loginPageState extends State<loginPage> {
     return Column(
       children: [
         Image(
-          image: NetworkImage(
-              "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-High-Quality-Image.png"),
+          image: NetworkImage(ImageURL),
           height: 250,
           width: 250,
         ),

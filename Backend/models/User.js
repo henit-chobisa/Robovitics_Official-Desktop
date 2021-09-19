@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema({
     core : String,
     designation : String,
     points : Number,
-    contributions : [{type : mongoose.Schema.Types.ObjectId, ref : "Contribution"}],
+    contributions : [{type : mongoose.Schema.Types.ObjectId, ref : "contributionModel"}],
     yearOfJoining: String,
     tokenBlock: { type: mongoose.Schema.Types.ObjectId, ref: "TokenBlock" }
 }, { collection: 'Users' });

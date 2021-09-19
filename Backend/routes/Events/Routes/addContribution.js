@@ -10,7 +10,7 @@ router.post('/', async (req, res) => {
     }
     else {
         
-        const topContributor = findTopContributor(event.registrations);
+        const topContributor = await findTopContributor(event.registrations);
         if (!event.contributors.includes(contributor)){
             event.addContributor(contributor);
         }

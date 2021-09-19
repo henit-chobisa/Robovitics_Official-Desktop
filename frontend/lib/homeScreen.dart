@@ -2,8 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/Classes/activityAlert.dart';
+import 'package:frontend/Classes/radioButton.dart';
+import 'package:frontend/Pages/EventPage.dart';
+import 'package:frontend/Pages/landingPage.dart';
+import 'package:keyboard_shortcuts/keyboard_shortcuts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class homePage extends StatefulWidget {
@@ -15,6 +20,7 @@ class homePage extends StatefulWidget {
 
 class _homePageState extends State<homePage> {
   var columnFlex = 25;
+  bool menuVisible = true;
 
   Future<String?> getUser() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -48,13 +54,69 @@ class _homePageState extends State<homePage> {
         buttonTwoTitle: "Can't attend"),
   ];
 
+  List<RadioButton> radioButtons = [
+    RadioButton(
+        title: "Updates",
+        icon: CupertinoIcons.antenna_radiowaves_left_right,
+        isPressed: true,
+        associatedPage: landingPage()),
+    RadioButton(
+        title: "Tasks",
+        icon: CupertinoIcons.timer,
+        isPressed: false,
+        associatedPage: landingPage()),
+    RadioButton(
+        title: "Meetings",
+        icon: CupertinoIcons.desktopcomputer,
+        isPressed: false,
+        associatedPage: landingPage()),
+    RadioButton(
+        title: "Events",
+        icon: CupertinoIcons.calendar_badge_minus,
+        isPressed: false,
+        associatedPage: landingPage()),
+    RadioButton(
+        title: "Appliers",
+        icon: CupertinoIcons.person_add,
+        isPressed: false,
+        associatedPage: landingPage()),
+    RadioButton(
+        title: "Notices",
+        icon: CupertinoIcons.chat_bubble_text,
+        isPressed: false,
+        associatedPage: landingPage()),
+    RadioButton(
+        title: "Core",
+        icon: Icons.people_alt_outlined,
+        isPressed: false,
+        associatedPage: landingPage())
+  ];
+
   var user;
+  var currentPageIndex = 0;
+  List<Widget> pages = [
+    landingPage(),
+    eventPage(),
+    landingPage(),
+    eventPage(),
+    landingPage(),
+    eventPage(),
+    landingPage()
+  ];
 
   void connectUser() async {
     var userData = await getUser();
     setState(() {
       user = jsonDecode(userData!);
     });
+  }
+
+  bool getPressedStatus(int index) {
+    if (currentPageIndex == index) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override
@@ -66,240 +128,139 @@ class _homePageState extends State<homePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(top: 5.h, left: 5.w, bottom: 5.h),
-              child: Container(
-                height: double.maxFinite,
-                width: 190,
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(10.r),
-                ),
-                child: Column(
-                  children: [
-                    Image(
-                      image: AssetImage('images/brandLogo.jpg'),
-                      height: 120,
+    return KeyBoardShortcuts(
+      keysToPress: {LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.keyM},
+      onKeysPressed: () {
+        setState(() {
+          menuVisible = !menuVisible;
+        });
+      },
+      child: Scaffold(
+          backgroundColor: Colors.grey.shade900,
+          body: Row(
+            children: [
+              Visibility(
+                visible: menuVisible,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 5.h, left: 5.w, bottom: 5.h),
+                  child: Container(
+                    height: double.maxFinite,
+                    width: 190,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.r),
                     ),
-                    Text(
-                      "User",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18.sp),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          left: 10.w, right: 10.w, top: 10.h, bottom: 20.h),
-                      child: Container(
-                        height: 50.h,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10.r)),
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 15.w),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(15.r),
-                                child: Image(
-                                  image: NetworkImage(
-                                    user['photoURL'],
-                                  ),
-                                  height: 30.h,
-                                  width: 30.w,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 10.w,
-                              ),
-                              Text(
-                                "${user['firstName']} ${user['lastName']}",
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 12.sp),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Text(
-                      "Menu",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18.sp),
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    MenuButtons(
-                      icon: CupertinoIcons.antenna_radiowaves_left_right,
-                      heading: "Updates",
-                      selectionColor: Colors.blue.shade800,
-                    ),
-                    MenuButtons(
-                      icon: CupertinoIcons.timer,
-                      heading: "Tasks",
-                      selectionColor: Colors.black,
-                    ),
-                    MenuButtons(
-                      icon: CupertinoIcons.desktopcomputer,
-                      heading: "Meetings",
-                      selectionColor: Colors.black,
-                    ),
-                    MenuButtons(
-                      icon: CupertinoIcons.calendar_badge_minus,
-                      heading: "Events",
-                      selectionColor: Colors.black,
-                    ),
-                    MenuButtons(
-                      icon: CupertinoIcons.person_add,
-                      heading: "Appliers",
-                      selectionColor: Colors.black,
-                    ),
-                    MenuButtons(
-                      icon: CupertinoIcons.chat_bubble_text,
-                      heading: "Messages",
-                      selectionColor: Colors.black,
-                    ),
-                    MenuButtons(
-                      icon: Icons.people_alt_outlined,
-                      heading: "Core",
-                      selectionColor: Colors.black,
-                    ),
-                    MenuButtons(
-                      icon: CupertinoIcons.xmark,
-                      heading: "LogOut",
-                      selectionColor: Colors.black,
-                    ),
-                    Spacer(),
-                    Divider(
-                      thickness: 1,
-                      color: Colors.grey,
-                      indent: 50,
-                      endIndent: 50,
-                    ),
-                    Text(
-                      "roboVITics 2021",
-                      style: TextStyle(color: Colors.grey, fontSize: 10.sp),
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                  left: 20.w, right: 10.w, top: 5.h, bottom: 5.h),
-              child: Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 30.h,
-                    ),
-                    Row(
+                    child: Column(
                       children: [
+                        Image(
+                          image: AssetImage('images/brandLogoBlack.png'),
+                          height: 120,
+                        ),
                         Text(
-                          "Greetings, ${user['firstName']} ${user['lastName']}...",
+                          "User",
                           style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 30.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.sp),
                         ),
-                        SizedBox(
-                          width: 700.w,
-                        ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(25.r),
-                          child: Image(
-                            image: NetworkImage(user['photoURL']),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: 10.w, right: 10.w, top: 10.h, bottom: 20.h),
+                          child: Container(
                             height: 50.h,
-                            width: 50.w,
+                            decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(10.r)),
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 15.w),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(15.r),
+                                    child: Image(
+                                      image: NetworkImage(
+                                        user['photoURL'],
+                                      ),
+                                      height: 30.h,
+                                      width: 30.w,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10.w,
+                                  ),
+                                  Text(
+                                    "${user['firstName']} ${user['lastName']}",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 12.sp),
+                                  )
+                                ],
+                              ),
+                            ),
                           ),
                         ),
-                      ],
-                    ),
-                    Container(
-                      height: 1,
-                      color: Colors.black,
-                      width: 700.w,
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    Text(
-                      "For you Today!!!",
-                      style: TextStyle(fontSize: 20.sp),
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    Container(
-                      width: 1150.w,
-                      height: 300.h,
-                      child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: 4,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (_, index) {
-                            return ActivityBox(
-                                heading: activities[index].heading,
-                                message: activities[index].message,
-                                ButtonOneTitle:
-                                    activities[index].buttonOneTitle,
-                                ButtonTwoTitle:
-                                    activities[index].buttonTwoTitle);
-                          }),
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    Row(
-                      children: [
+                        Text(
+                          "Menu",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.sp),
+                        ),
                         SizedBox(
                           height: 20.h,
                         ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Task Assigned to you...",
-                              style: TextStyle(fontSize: 20.sp),
-                            ),
-                            SizedBox(
-                              height: 10.h,
-                            ),
-                            Container(
-                              height: 40.h,
-                              width: 400.w,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20.r),
-                                  border: Border.all(
-                                      color: Colors.black, width: 2.w)),
-                              child: Center(
-                                  child: Text(
-                                      "Complete the like target given to you")),
-                            )
-                          ],
+                        ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: radioButtons.length,
+                            itemBuilder: (_, index) {
+                              return MenuButtons(
+                                heading: radioButtons[index].title,
+                                icon: radioButtons[index].icon,
+                                isPressed: getPressedStatus(index),
+                                associatedPage: landingPage(),
+                                ontap: () {
+                                  setState(() {
+                                    currentPageIndex = index;
+                                  });
+                                },
+                              );
+                            }),
+                        MenuButtons(
+                          icon: CupertinoIcons.xmark,
+                          heading: "LogOut",
+                          isPressed: false,
+                          associatedPage: landingPage(),
+                          ontap: () {
+                            print("Hello World");
+                          },
+                        ),
+                        Spacer(),
+                        Divider(
+                          thickness: 1,
+                          color: Colors.grey,
+                          indent: 50,
+                          endIndent: 50,
+                        ),
+                        Text(
+                          "roboVITics 2021",
+                          style: TextStyle(color: Colors.grey, fontSize: 10.sp),
+                        ),
+                        SizedBox(
+                          height: 20.h,
                         )
                       ],
-                    )
-                  ],
+                    ),
+                  ),
                 ),
               ),
-            )
-          ],
-        ));
+              pages[currentPageIndex],
+              // KeyBoardShortcuts(
+              //
+              // )
+            ],
+          )),
+    );
   }
 }
 
@@ -395,38 +356,62 @@ class MenuButtons extends StatelessWidget {
   const MenuButtons(
       {required this.heading,
       required this.icon,
-      required this.selectionColor});
+      required this.isPressed,
+      required this.associatedPage,
+      required this.ontap});
 
   final IconData icon;
   final String heading;
-  final Color selectionColor;
+  final bool isPressed;
+  final Widget associatedPage;
+  final ontap;
+
+  Color backgroundColor() {
+    if (isPressed == true) {
+      return Colors.blue.shade800;
+    } else {
+      return Colors.white;
+    }
+  }
+
+  Color getTextColor() {
+    if (isPressed == true) {
+      return Colors.white;
+    } else {
+      return Colors.black;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(left: 10.w, right: 10.w, top: 5.h, bottom: 5.h),
-      child: Container(
-        height: 50.h,
-        decoration: BoxDecoration(
-            color: selectionColor, borderRadius: BorderRadius.circular(10.r)),
-        child: Padding(
-          padding: EdgeInsets.only(left: 15.w),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Icon(
-                icon,
-                size: 30.sp,
-                color: Colors.white,
-              ),
-              SizedBox(
-                width: 10.w,
-              ),
-              Text(
-                heading,
-                style: TextStyle(color: Colors.white, fontSize: 15.sp),
-              )
-            ],
+      child: GestureDetector(
+        onTap: ontap,
+        child: Container(
+          height: 50.h,
+          decoration: BoxDecoration(
+              color: backgroundColor(),
+              borderRadius: BorderRadius.circular(10.r)),
+          child: Padding(
+            padding: EdgeInsets.only(left: 15.w),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  icon,
+                  size: 30.sp,
+                  color: getTextColor(),
+                ),
+                SizedBox(
+                  width: 10.w,
+                ),
+                Text(
+                  heading,
+                  style: TextStyle(color: getTextColor(), fontSize: 15.sp),
+                )
+              ],
+            ),
           ),
         ),
       ),
