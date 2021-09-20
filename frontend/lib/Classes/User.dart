@@ -1,5 +1,8 @@
 import 'package:frontend/Classes/contributionModel.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'User.g.dart';
 
+@JsonSerializable()
 class User {
   User(
       {required this.id,
@@ -15,6 +18,9 @@ class User {
       required this.points,
       required this.contributions});
 
+  factory User.fromJson(Map<String, dynamic> data) => _$UserFromJson(data);
+  Map<String, dynamic> toJson() => _$UserToJson(this);
+
   final String id;
   final String email;
   final String firstName;
@@ -27,4 +33,12 @@ class User {
   final int points;
   final List<ContributionModel> contributions;
   final String yearOfJoining;
+
+  static void getUserName(String userID) {
+    print('return userID of the user');
+  }
+
+  static void getUserImage(String userID) {
+    print('return image');
+  }
 }

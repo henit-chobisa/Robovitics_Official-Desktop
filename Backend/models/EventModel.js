@@ -74,15 +74,21 @@ EventSchema.methods.addInstapost = async function(shortCode){
 
 // Adding new registration detail
 // will create a registration, will create a contribution -> contribution will update user points and add a contribution, registration is one-one to the event.
-EventSchema.methods.addRegistration = async function(attendeeName, contributor, platform){
+EventSchema.methods.addRegistration = async function(attendeeName, contributor, platform, type){
     const eventID = this._id
-    const registration = new registrationModel({eventID, attendeeName, contributor, platform});
+    const user = await User.findById(contributor);
+    const contributorName = user.firstName + " " +user.lastName;
+    const contributorImage = user.photoURL;
+    const contributorCore = user.core;
+    const contributorYOJ = user.yearOfJoining;
+    const registration = new registrationModel({eventID, attendeeName, contributor, platform, contributorName, contributorImage, contributorCore, contributorYOJ});
     await registration.save();
     const registrationDetails = registration._id;
-    const user = await User.findById(contributor);
-    const points = user.points;
-    console.log(points);
-    let contribution = new contributionModel({eventID,contributor, points, registrationDetails});
+    const points = this.registrationPoints;
+    const eventName = this.eventTitle;
+    const eventDescription = this.eventDescription;
+    const eventLogo = this.eventLogo;
+    let contribution = new contributionModel({eventName, eventDescription, eventLogo, type,eventID,contributor, points, registrationDetails});
     console.log(user.contributions);
     const totalpoints = user.points + this.registrationPoints;
     await contribution.save();
