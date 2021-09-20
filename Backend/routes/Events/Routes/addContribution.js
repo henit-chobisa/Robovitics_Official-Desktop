@@ -3,7 +3,7 @@ const roboEvent = require('../../../models/EventModel');
 const router = express.Router();
 
 router.post('/', async (req, res) => {
-    const {eventID, attendeeName, contributor, platform} = req.body;
+    const {eventID, attendeeName, contributor, platform, type} = req.body;
     const event = await roboEvent.findById(eventID).populate(['registrations']);
     if (event == null){
         res.sendStatus(404);
@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
         }
         
         await event.addTopContributor(topContributor);
-        await event.addRegistration(attendeeName, contributor, platform);
+        await event.addRegistration(attendeeName, contributor, platform, type);
         await event.save();
         res.send(event);
     }

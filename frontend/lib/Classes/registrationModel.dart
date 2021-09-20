@@ -5,14 +5,25 @@ part 'registrationModel.g.dart';
 @JsonSerializable()
 class registrationModel {
   registrationModel(
-      this.EventID, this.attendeeName, this.contributor, this.Platform);
+      this.EventID,
+      this.attendeeName,
+      this.contributor,
+      this.Platform,
+      this.contributorName,
+      this.contributorImage,
+      this.contributorCore,
+      this.contributorYOJ);
 
   factory registrationModel.fromJson(Map<String, dynamic> data) =>
       _$registrationModelFromJson(data);
   Map<String, dynamic> toJson() => _$registrationModelToJson(this);
 
+  final String contributorName;
+  final String contributorImage;
+  final String contributorCore;
+  final String contributorYOJ;
   final String EventID;
   final String attendeeName;
-  final User contributor;
+  final String contributor;
   final String Platform;
 }

@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const contributionModelSchema = new mongoose.Schema({
+    eventName : String,
+    eventDescription : String,
+    eventLogo : String,
+    type : String,
     eventID : {type : mongoose.Schema.Types.ObjectId, ref : "roboEvent"},
     contributorID : {type : mongoose.Schema.Types.ObjectId, ref : "User"},
     points : Number,

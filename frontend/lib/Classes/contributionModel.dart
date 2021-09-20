@@ -6,14 +6,25 @@ part 'contributionModel.g.dart';
 @JsonSerializable()
 class ContributionModel {
   ContributionModel(
-      this.eventID, this.contributorID, this.points, this.registrationDetails);
+      this.eventID,
+      this.contributorID,
+      this.points,
+      this.registrationDetails,
+      this.eventName,
+      this.eventDescription,
+      this.eventLogo,
+      this.type);
 
   factory ContributionModel.fromJson(Map<String, dynamic> data) =>
       _$ContributionModelFromJson(data);
   Map<String, dynamic> toJson() => _$ContributionModelToJson(this);
 
-  final Event eventID;
+  final String eventName;
+  final String eventDescription;
+  final String eventLogo;
+  final String type;
+  final String eventID;
   final String contributorID;
   final int points;
-  final List<registrationModel> registrationDetails;
+  final String registrationDetails;
 }

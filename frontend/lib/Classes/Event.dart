@@ -7,29 +7,32 @@ part 'Event.g.dart';
 @JsonSerializable()
 class Event {
   Event(
-      this.eventTitle,
-      this.eventDescription,
-      this.eventTime,
-      this.eventLogo,
-      this.eventImages,
-      this.platformLink,
-      this.instagramReach,
-      this.instagramTarget,
-      this.instagramPosts,
-      this.facebookReach,
-      this.facebookTarget,
-      this.linkedInReach,
-      this.linkedInTarget,
-      this.registrationPoints,
-      this.registrationTarget,
-      this.totalRegistrations,
-      this.topContributor,
-      this.registrations,
-      this.contributors);
+    this.id,
+    this.eventTitle,
+    this.eventDescription,
+    this.eventTime,
+    this.eventLogo,
+    this.eventImages,
+    this.platformLink,
+    this.instagramReach,
+    this.instagramTarget,
+    this.instagramPosts,
+    this.facebookReach,
+    this.facebookTarget,
+    this.linkedInReach,
+    this.linkedInTarget,
+    this.registrationPoints,
+    this.registrationTarget,
+    this.totalRegistrations,
+    this.topContributor,
+    this.registrations,
+    this.contributors,
+  );
   factory Event.fromJson(Map<String, dynamic> data) => _$EventFromJson(data);
   Map<String, dynamic> toJson() => _$EventToJson(this);
 
   //Event Details
+  final String id;
   final String eventTitle;
   final String eventDescription;
   final DateTime eventTime;
@@ -55,4 +58,16 @@ class Event {
   final User topContributor;
   final List<registrationModel> registrations;
   final List<User> contributors;
+
+  static void getEventName(String eventID) {
+    print('return event ID');
+  }
+
+  static void getEventDescription(String eventID) {
+    print('return event Description');
+  }
+
+  static void getEventLogo(String eventID) {
+    print('return event logo url');
+  }
 }

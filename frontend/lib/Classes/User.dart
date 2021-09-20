@@ -33,4 +33,12 @@ class User {
   final int points;
   final List<ContributionModel> contributions;
   final String yearOfJoining;
+
+  static void getUserName(String userID) {
+    print('return userID of the user');
+  }
+
+  static void getUserImage(String userID) {
+    print('return image');
+  }
 }
