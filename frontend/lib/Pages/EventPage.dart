@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/Classes/Event.dart';
 import 'package:frontend/Classes/contributionModel.dart';
+import 'package:frontend/Classes/registrationModel.dart';
 import 'package:http/http.dart' as http;
+import 'package:loading/indicator/ball_spin_fade_loader_indicator.dart';
+import 'package:loading/loading.dart';
 
 class eventPage extends StatefulWidget {
   const eventPage({Key? key}) : super(key: key);
@@ -14,19 +17,18 @@ class eventPage extends StatefulWidget {
 }
 
 class _eventPageState extends State<eventPage> {
-  Future<void> getEvent() async {
+  Future<List<ContributionModel>> getUserContributions() async {
     var response = await http.get(Uri.parse(
         "http://127.0.0.1:1000/api/events/getUserContributions?userID=61471e22ef7cc52173e32dc4"));
     List<dynamic> data = await jsonDecode(response.body);
     // print(data.elementAt(0)['contributors']);
     List<ContributionModel> contributions =
         data.map((data) => ContributionModel.fromJson(data)).toList();
-    print(contributions.elementAt(0).points);
+    return contributions;
   }
 
   @override
   Widget build(BuildContext context) {
-    getEvent();
     return Expanded(
       child: Container(
         child: Padding(
@@ -52,7 +54,48 @@ class _eventPageState extends State<eventPage> {
               SizedBox(
                 height: 10,
               ),
-              FutureBuilder(builder: builder)
+              FutureBuilder(
+                  future: getUserContributions(),
+                  builder:
+                      (_, AsyncSnapshot<List<ContributionModel>> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: Loading(
+                          indicator: BallSpinFadeLoaderIndicator(),
+                          size: 30.sp,
+                        ),
+                      );
+                    } else {
+                      return Container(
+                        height: 200.h,
+                        width: double.maxFinite,
+                        child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (_, index) {
+                              return ContributionTile(
+                                  snapshot.data!.elementAt(index));
+                            }),
+                      );
+                    }
+                  }),
+              SizedBox(
+                height: 20.h,
+              ),
+              Text(
+                "Events",
+                style: TextStyle(color: Colors.white, fontSize: 30.sp),
+              ),
+              SizedBox(
+                height: 20.h,
+              ),
+              Container(
+                height: 300.h,
+                width: double.maxFinite,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20.r)),
+              )
             ],
           ),
         ),
@@ -62,111 +105,142 @@ class _eventPageState extends State<eventPage> {
 }
 
 class ContributionTile extends StatelessWidget {
-  const ContributionTile({
-    Key? key,
-  }) : super(key: key);
+  ContributionTile(this._contributionModel);
+
+  final ContributionModel _contributionModel;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 200.h,
-      width: 400.w,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20.r),
-        color: Colors.white,
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(30.0),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Column(
-                  children: [
-                    Text(
-                      'Vortex 360',
-                      style: TextStyle(color: Colors.black, fontSize: 25.sp),
-                    ),
-                    SizedBox(
-                      height: 4.h,
-                    ),
-                    Container(
-                      width: 80.w,
-                      height: 1.h,
-                      color: Colors.black,
-                    )
-                  ],
-                ),
-                SizedBox(
-                  width: 170.w,
-                ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(18.r),
-                  child: Image(
-                    image: NetworkImage(
-                        'https://res.cloudinary.com/ddglxo0l3/image/upload/v1630584083/ProfileImages/nopx6nmt8fs70qhlgxsp.png'),
-                    height: 36.h,
-                    width: 36.w,
-                    fit: BoxFit.cover,
+    Future<registrationModel> getRegistrationDetails(
+        String registrationID) async {
+      var response = await http.get(Uri.parse(
+          "http://127.0.0.1:1000/api/events/getRegistrationDetail?registrationID=${registrationID}"));
+      dynamic data = await jsonDecode(response.body);
+      registrationModel registration = registrationModel.fromJson(data);
+      return registration;
+    }
+
+    getRegistrationDetails("61486149554297508b64c5d0");
+    return Padding(
+      padding: EdgeInsets.only(left: 8.w, right: 8.w),
+      child: Container(
+        height: 200.h,
+        width: 400.w,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.r),
+          color: Colors.white,
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(30.0),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        _contributionModel.eventName,
+                        style: TextStyle(color: Colors.black, fontSize: 25.sp),
+                      ),
+                      SizedBox(
+                        height: 4.h,
+                      ),
+                      Container(
+                        width: 80.w,
+                        height: 1.h,
+                        color: Colors.black,
+                      )
+                    ],
                   ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20.sp,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '+5',
-                  style:
-                      TextStyle(color: Colors.green.shade800, fontSize: 70.sp),
-                ),
-                SizedBox(
-                  width: 20.w,
-                ),
-                Container(
-                  width: 2.w,
-                  height: 50.h,
-                  color: Colors.black,
-                ),
-                SizedBox(
-                  width: 20.w,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Registration Contribution',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 15.sp,
-                          fontWeight: FontWeight.bold),
+                  Spacer(),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(18.r),
+                    child: Image(
+                      image: NetworkImage(_contributionModel.eventLogo),
+                      height: 36.h,
+                      width: 36.w,
+                      fit: BoxFit.cover,
                     ),
-                    SizedBox(
-                      height: 7.h,
-                    ),
-                    Text(
-                      'Aman Bansal',
-                      style: TextStyle(
-                          color: Colors.blue.shade800,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15.sp),
-                    ),
-                    Text(
-                      '@Instagram',
-                      style: TextStyle(
-                          color: Colors.pink.shade800,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15.sp,
-                          letterSpacing: 2),
-                    ),
-                  ],
-                )
-              ],
-            )
-          ],
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 20.sp,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '+${_contributionModel.points}',
+                    style: TextStyle(
+                        color: Colors.green.shade800, fontSize: 70.sp),
+                  ),
+                  SizedBox(
+                    width: 20.w,
+                  ),
+                  Container(
+                    width: 2.w,
+                    height: 50.h,
+                    color: Colors.black,
+                  ),
+                  SizedBox(
+                    width: 20.w,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        _contributionModel.type,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 7.h,
+                      ),
+                      FutureBuilder(
+                          future: getRegistrationDetails(
+                              _contributionModel.registrationDetails),
+                          builder:
+                              (_, AsyncSnapshot<registrationModel> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Center(
+                                child: Loading(
+                                  indicator: BallSpinFadeLoaderIndicator(),
+                                  size: 30.sp,
+                                  color: Colors.black,
+                                ),
+                              );
+                            } else {
+                              return Column(
+                                children: [
+                                  Text(
+                                    snapshot.data!.attendeeName,
+                                    style: TextStyle(
+                                        color: Colors.blue.shade800,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15.sp),
+                                  ),
+                                  Text(
+                                    snapshot.data!.platform,
+                                    style: TextStyle(
+                                        color: Colors.pink.shade800,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15.sp,
+                                        letterSpacing: 2),
+                                  ),
+                                ],
+                              );
+                            }
+                          })
+                    ],
+                  )
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

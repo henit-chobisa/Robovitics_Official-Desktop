@@ -8,7 +8,7 @@ class registrationModel {
       this.EventID,
       this.attendeeName,
       this.contributor,
-      this.Platform,
+      this.platform,
       this.contributorName,
       this.contributorImage,
       this.contributorCore,
@@ -25,5 +25,5 @@ class registrationModel {
   final String EventID;
   final String attendeeName;
   final String contributor;
-  final String Platform;
+  final String platform;
 }
