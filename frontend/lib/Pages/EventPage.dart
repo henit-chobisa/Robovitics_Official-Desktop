@@ -95,6 +95,33 @@ class _eventPageState extends State<eventPage> {
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20.r)),
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(20.r),
+                            child: Image(
+                              image: AssetImage('images/brandLogo.jpg'),
+                              height: 40.h,
+                              width: 40.w,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10.w,
+                          ),
+                          Text(
+                            'Equinox',
+                            style: TextStyle(
+                                fontSize: 30.sp, fontFamily: 'Futura'),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
               )
             ],
           ),
