@@ -1,18 +1,23 @@
-const { json } = require("express");
 
-const sockets = function(io){
+const express = require('express');
+module.exports = function(io){
+    const router = express.Router();
+    // var io = router.get('socketio');
     io.on('connection', function(socket){
         console.log('connected');
+        console.log(socket.id)
+        socket.on('broadcast', function(socket){
+            io.emit('message', "hello hello")
+        });
         socket.on('message', function(message){
-            console.log(message['Name']);
             const data = {
                 "Name" : "Robo Official",
                 "Date" : "September 24th"
             }
-            // socket.send("hey client I am ATC");
-            socket.emit("message",data);
-        })
+            console.log(message);
+            io.emit('broadcast', "I am ATC");
+        });
+        
     })
-}
-
-module.exports = sockets;
+    return router;
+};
