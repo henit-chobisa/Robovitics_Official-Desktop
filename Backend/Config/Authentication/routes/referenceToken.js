@@ -1,5 +1,5 @@
 const express = require('express');
-const ReferenceToken = require('../../../models/referenceTokenModel');
+const ReferenceToken = require('../../../models/Authentication/referenceTokenModel');
 const router = express.Router();
 
 router.post('/', async(req, res) => {

@@ -1,6 +1,6 @@
 
 const mongoose = require('mongoose');
-const contributionModel = require('./contributionModel');
+const contributionModel = require('./Events/contributionModel');
 const instaPost = require('./postModel');
 const registrationModel = require('./registrationModel');
 const User = require('./User');
