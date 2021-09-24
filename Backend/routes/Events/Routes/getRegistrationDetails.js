@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
     }
     else {
         console.log(registration);
-        res.send(registration);
+        res.json(registration);
     }
 })
 
