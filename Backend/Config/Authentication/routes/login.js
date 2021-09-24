@@ -1,6 +1,6 @@
 const express = require('express');
-const TokenBlock = require('../../../models/tokens');
-const User = require('../../../models/User');
+const TokenBlock = require('../../../models/Authentication/tokens');
+const User = require('../../../models/Authentication/User');
 const router = express.Router();
 
 router.post('/', async (req, res) => {

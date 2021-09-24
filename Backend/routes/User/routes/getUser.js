@@ -1,5 +1,5 @@
 const express = require("express");
-const User = require("../../../models/User");
+const User = require("../../../models/Authentication/User");
 const router = express.Router();
 
 router.get('/', async (req, res) => {

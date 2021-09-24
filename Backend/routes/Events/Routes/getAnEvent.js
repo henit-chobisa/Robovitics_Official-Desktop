@@ -1,5 +1,5 @@
 const express = require('express');
-const roboEvent = require('../../../models/EventModel');
+const roboEvent = require('../../../models/Events/EventModel');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
