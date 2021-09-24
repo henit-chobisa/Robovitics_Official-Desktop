@@ -1,5 +1,5 @@
 const express = require('express');
-const registrationModel = require('../../../models/registrationModel');
+const registrationModel = require('../../../models/Events/registrationModel');
 const router = express.Router();
 const url = require('url');
 
@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
     }
     else {
         console.log(registration);
-        res.send(registration);
+        res.json(registration);
     }
 })
 

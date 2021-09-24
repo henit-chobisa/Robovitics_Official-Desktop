@@ -2,7 +2,7 @@ const User = require('../../../models/User')
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const ReferenceToken = require('../../../models/referenceTokenModel');
+const ReferenceToken = require('../../../models/Authentication/referenceTokenModel');
 const ReferenceUser = require('../../../models/referenceUserModel');
 
 router.post('/', async(req, res) => {
