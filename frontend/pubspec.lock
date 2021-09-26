@@ -316,7 +316,7 @@ packages:
       name: intl
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.17.0"
+    version: "0.15.8"
   io:
     dependency: transitive
     description:
@@ -387,6 +387,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  moment:
+    dependency: "direct main"
+    description:
+      name: moment
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1"
   package_config:
     dependency: transitive
     description:
@@ -629,21 +636,14 @@ packages:
       name: syncfusion_flutter_pdf
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "19.2.62-beta"
+    version: "19.1.69-beta"
   syncfusion_flutter_pdfviewer:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_pdfviewer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "19.2.62-beta"
-  syncfusion_flutter_pdfviewer_macos:
-    dependency: transitive
-    description:
-      name: syncfusion_flutter_pdfviewer_macos
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "19.2.62-beta"
+    version: "19.1.69-beta"
   syncfusion_flutter_pdfviewer_platform_interface:
     dependency: transitive
     description:
