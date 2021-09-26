@@ -1,9 +1,9 @@
-const User = require('../../../models/User')
+const User = require('../../../models/Authentication/User')
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const ReferenceToken = require('../../../models/Authentication/referenceTokenModel');
-const ReferenceUser = require('../../../models/referenceUserModel');
+const ReferenceUser = require('../../../models/Authentication/referenceUserModel');
 
 router.post('/', async(req, res) => {
     const { referenceTokenID } = req.body

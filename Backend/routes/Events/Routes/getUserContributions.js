@@ -1,8 +1,8 @@
 const express = require("express");
-const roboEvent = require("../../../models/EventModel");
+const roboEvent = require("../../../models/Events/EventModel");
 const router = express.Router();
 const url = require('url');
-const User = require("../../../models/User")
+const User = require("../../../models/Authentication/User")
 
 router.get('/', async(req, res) => { 
     var url_parts = url.parse(req.url, true);

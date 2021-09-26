@@ -1,5 +1,5 @@
 const express = require('express');
-const User = require('../../../models/User');
+const User = require('../../../models/Authentication/User');
 const router = express.Router();
 
 router.post('/', async (req , res) => {
@@ -20,4 +20,4 @@ router.post('/', async (req , res) => {
     }
 })
 
-module.exports = router
+module.exports = router;

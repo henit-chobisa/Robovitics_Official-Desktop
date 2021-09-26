@@ -21,6 +21,8 @@ app.use('/api/events', require('./routes/Events/Event'));
 
 app.use('/api/user', require('./routes/User/user'));
 
+app.use('/api/notice', require('./routes/Notice/Notice'));
+
 app.use(require('./routes/Websockets')(io));
 
 server.listen(port, () => { console.log(`Deployed on port ${port}`)});

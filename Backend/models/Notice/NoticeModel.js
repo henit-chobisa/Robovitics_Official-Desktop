@@ -8,14 +8,15 @@ const NoticeModel = new mongoose.Schema({
     title : String,
     description : String,
     docLink : String,
-    date : moment().toString(),
+    timeStamp : String,
     AcknowledgeBy : [userB.schema],
     Discussions : [{type : mongoose.Schema.Types.ObjectId, ref : "DiscussionModel"}]
 }, {collection : 'Notices'})
 
 NoticeModel.methods.addDiscussion = async function(userBID, payload, messageType) {
     const userInfo = await userBasicSchema.findById(userBID);
-    const discussion = new DiscussionModel({userInfo, payload, messageType});
+    const timeStamp = moment().toString();
+    const discussion = new DiscussionModel({userInfo, payload, messageType, timeStamp});
     this.Discussions.push(discussion);
     discussion.save();
 }

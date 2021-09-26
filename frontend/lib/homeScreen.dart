@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/Classes/activityAlert.dart';
 import 'package:frontend/Classes/radioButton.dart';
 import 'package:frontend/Pages/EventPage.dart';
+import 'package:frontend/Pages/NoticePage.dart';
 import 'package:frontend/Pages/landingPage.dart';
 import 'package:keyboard_shortcuts/keyboard_shortcuts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -100,7 +101,7 @@ class _homePageState extends State<homePage> {
     landingPage(),
     eventPage(),
     landingPage(),
-    eventPage(),
+    NoticePage(),
     landingPage()
   ];
 

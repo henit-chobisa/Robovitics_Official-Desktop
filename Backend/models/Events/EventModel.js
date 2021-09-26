@@ -1,9 +1,9 @@
 
 const mongoose = require('mongoose');
-const contributionModel = require('./Events/contributionModel');
+const contributionModel = require('./contributionModel');
 const instaPost = require('./postModel');
 const registrationModel = require('./registrationModel');
-const User = require('./User');
+const User = require('../Authentication/User');
 const Instagram = require('instagram-web-api');
 const goal = require('./goalModel');
 const username = "bug_sigabrt";

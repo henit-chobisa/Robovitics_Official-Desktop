@@ -1,8 +1,8 @@
 const express = require('express');
-const User = require('../../../models/User');
+const User = require('../../../models/Authentication/User');
 const router = express.Router();
 const dotenv = require('dotenv');
-const TokenBlock = require('../../../models/tokens');
+const TokenBlock = require('../../../models/Authentication/tokens');
 const jwt = require('jsonwebtoken');
 
 router.post('/', async (req, res) => {

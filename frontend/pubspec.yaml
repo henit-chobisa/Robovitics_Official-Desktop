@@ -39,6 +39,7 @@ dependencies:
   path_provider:
   keyboard_shortcuts: ^0.1.4
   json_annotation:
+  syncfusion_flutter_pdfviewer:
   window_size:
     git:
       url: git://github.com/google/flutter-desktop-embedding.git
