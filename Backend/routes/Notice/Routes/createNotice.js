@@ -6,7 +6,7 @@ const moment = require("moment");
 router.post('/', async (req, res) => {
     const {title, description, docLink} = req.body;
     var notice = await NoticeModel.findOne({docLink});
-    const timeStamp = moment().toDate();
+    const timeStamp = moment().format();
     if (notice == null){
         notice = new NoticeModel({title, description, docLink, timeStamp});
         notice.save();

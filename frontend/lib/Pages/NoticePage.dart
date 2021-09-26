@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/Classes/NoticeModel.dart';
+import 'package:loading/indicator/ball_spin_fade_loader_indicator.dart';
+import 'package:loading/loading.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:http/http.dart' as http;
 
@@ -11,6 +16,16 @@ class NoticePage extends StatefulWidget {
 }
 
 class _NoticePageState extends State<NoticePage> {
+  Future<List<NoticeModel>> getNotices() async {
+    var response = await http
+        .get(Uri.parse("http://127.0.0.1:1000/api/notice/getAllNotices"));
+    var body = response.body;
+    List<dynamic> jsonConvertible = await jsonDecode(body);
+    List<NoticeModel> notices =
+        jsonConvertible.map((data) => NoticeModel.fromJson(data)).toList();
+    return notices;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -36,81 +51,124 @@ class _NoticePageState extends State<NoticePage> {
             SizedBox(
               height: 20.h,
             ),
-            Container(
-              height: 750.h,
-              width: 450.w,
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey, width: 0.5),
-                  borderRadius: BorderRadius.circular(10.r)),
-              child: Padding(
-                padding: EdgeInsets.all(20.sp),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Title',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20.sp,
-                          letterSpacing: 2),
-                    ),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    Text(
-                      "When you’re looking for ways to get to know the “true you,” meditation is a powerful practice of mindfulness you can try to help you along your path to self-discovery. In general, meditation promotes self-discovery by letting you focus all your attention inwards and ",
-                      style: TextStyle(color: Colors.grey, fontSize: 12.sp),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      height: 550,
-                      width: 500,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10.r),
-                        child: SfPdfViewer.network(
-                            'http://www.africau.edu/images/default/sample.pdf'),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            FutureBuilder(
+                future: getNotices(),
+                builder: (_, AsyncSnapshot<List<NoticeModel>> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        NoticeButton(
-                          buttonColor: Colors.red,
-                          buttonTitle: "Raise Concent",
-                          titleColor: Colors.white,
-                          onTap: () {
-                            print("Hello red");
-                          },
-                        ),
-                        NoticeButton(
-                          buttonTitle: "Discussions",
-                          buttonColor: Colors.yellow,
-                          titleColor: Colors.black,
-                          onTap: () => print("Hello Discussions"),
-                        ),
-                        NoticeButton(
-                          buttonTitle: "Acknowledge",
-                          buttonColor: Colors.green,
-                          titleColor: Colors.white,
-                          onTap: () {
-                            print("Acknowledged");
-                          },
-                        )
+                        Center(
+                            child: Text(
+                          "Loading...",
+                          style:
+                              TextStyle(color: Colors.white, fontSize: 20.sp),
+                        )),
                       ],
-                    )
-                  ],
-                ),
-              ),
-            )
+                    );
+                  } else {
+                    return Container(
+                      height: 750.h,
+                      width: double.maxFinite,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (_, index) {
+                            return NoticeBox(
+                              model: snapshot.data!.elementAt(index),
+                            );
+                          }),
+                    );
+                  }
+                })
           ],
         )),
       ),
     ));
+  }
+}
+
+class NoticeBox extends StatelessWidget {
+  NoticeBox({required this.model});
+
+  NoticeModel model;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(right: 16.w),
+      child: Container(
+        height: 750.h,
+        width: 450.w,
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey, width: 0.5),
+            borderRadius: BorderRadius.circular(10.r)),
+        child: Padding(
+          padding: EdgeInsets.all(20.sp),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                model.title,
+                style: TextStyle(
+                    color: Colors.white, fontSize: 20.sp, letterSpacing: 2),
+              ),
+              SizedBox(
+                height: 5.h,
+              ),
+              Expanded(
+                child: Text(
+                  model.description,
+                  style: TextStyle(color: Colors.grey, fontSize: 12.sp),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                height: 550.h,
+                width: 500.w,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.r),
+                  child: SfPdfViewer.network(model.docLink),
+                ),
+              ),
+              SizedBox(
+                height: 15.h,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  NoticeButton(
+                    buttonColor: Colors.red,
+                    buttonTitle: "Raise Concent",
+                    titleColor: Colors.white,
+                    onTap: () {
+                      print("Hello red");
+                    },
+                  ),
+                  NoticeButton(
+                    buttonTitle: "Discussions",
+                    buttonColor: Colors.yellow,
+                    titleColor: Colors.black,
+                    onTap: () => print("Hello Discussions"),
+                  ),
+                  NoticeButton(
+                    buttonTitle: "Acknowledge",
+                    buttonColor: Colors.green,
+                    titleColor: Colors.white,
+                    onTap: () {
+                      print("Acknowledged");
+                    },
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 

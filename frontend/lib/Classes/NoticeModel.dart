@@ -1,5 +1,6 @@
 import 'package:frontend/Classes/DiscussionModel.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:moment/moment.dart';
 import 'UserB.dart';
 part 'NoticeModel.g.dart';
 

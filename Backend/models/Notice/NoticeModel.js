@@ -15,7 +15,7 @@ const NoticeModel = new mongoose.Schema({
 
 NoticeModel.methods.addDiscussion = async function(userBID, payload, messageType) {
     const userInfo = await userBasicSchema.findById(userBID);
-    const timeStamp = moment().toString();
+    const timeStamp = moment().format();
     const discussion = new DiscussionModel({userInfo, payload, messageType, timeStamp});
     this.Discussions.push(discussion);
     discussion.save();
