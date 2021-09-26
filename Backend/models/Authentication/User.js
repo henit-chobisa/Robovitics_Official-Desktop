@@ -95,7 +95,7 @@ UserSchema.methods.generateJWT = function () {
     expirationDate.getDate(today.getTime() + 60);
     const accessToken = jwt.sign({ email: this.email, id: this._id, exp: parseInt(expirationDate.getTime() / 1000, 10) }, process.env.accessTokenSecret);
     const refreshToken = jwt.sign({ email: this.email, id: this._id, exp: parseInt(expirationDate.getTime() / 100, 10) }, process.env.refreshTokenSecret);
-    const tokenBlock = new TokenBlock({ accessToken, refreshToken });
+    var tokenBlock = new TokenBlock({accessToken, refreshToken})
     this.tokenBlock = tokenBlock._id;
     tokenBlock.save();
     console.log(expirationDate.getTime() / 10);
