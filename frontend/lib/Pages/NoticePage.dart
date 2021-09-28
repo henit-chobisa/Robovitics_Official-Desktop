@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/Classes/NoticeModel.dart';
-import 'package:loading/indicator/ball_spin_fade_loader_indicator.dart';
-import 'package:loading/loading.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:http/http.dart' as http;
 
@@ -131,7 +129,9 @@ class NoticeBox extends StatelessWidget {
                 width: 500.w,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10.r),
-                  child: SfPdfViewer.network(model.docLink),
+                  child: SfPdfViewer.network(
+                      "http://www.africau.edu/images/default/sample.pdf"),
+                  // child: PdfViewer.openAsset(model.docLink),
                 ),
               ),
               SizedBox(
