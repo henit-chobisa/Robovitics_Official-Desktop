@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/Classes/NoticeModel.dart';
@@ -91,6 +92,15 @@ class _NoticePageState extends State<NoticePage> {
 class NoticeBox extends StatelessWidget {
   NoticeBox({required this.model});
 
+  Color acknowledgement = Colors.white;
+  Color acknowledgementBorder = Colors.blue;
+
+  Future<PDFDocument> getPdf() async {
+    var document = await PDFDocument.fromURL(
+        'http://www.africau.edu/images/default/sample.pdf');
+    return document;
+  }
+
   NoticeModel model;
   @override
   Widget build(BuildContext context) {
@@ -128,11 +138,11 @@ class NoticeBox extends StatelessWidget {
                 height: 550.h,
                 width: 500.w,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.r),
-                  child: SfPdfViewer.network(
-                      "http://www.africau.edu/images/default/sample.pdf"),
-                  // child: PdfViewer.openAsset(model.docLink),
-                ),
+                    borderRadius: BorderRadius.circular(10.r),
+                    child: SfPdfViewer.network(
+                        "http://www.africau.edu/images/default/sample.pdf")
+                    // child: PdfViewer.openAsset(model.docLink),
+                    ),
               ),
               SizedBox(
                 height: 15.h,
@@ -183,6 +193,7 @@ class NoticeButton extends StatelessWidget {
   final Color buttonColor;
   final Color titleColor;
   final onTap;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

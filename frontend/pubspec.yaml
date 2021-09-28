@@ -39,6 +39,8 @@ dependencies:
   path_provider:
   keyboard_shortcuts: ^0.1.4
   json_annotation:
+  advance_pdf_viewer:
+  syncfusion_flutter_core:
   syncfusion_flutter_pdfviewer:
   window_size:
     git:
