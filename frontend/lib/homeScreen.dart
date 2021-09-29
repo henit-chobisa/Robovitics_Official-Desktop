@@ -12,6 +12,8 @@ import 'package:frontend/Pages/landingPage.dart';
 import 'package:keyboard_shortcuts/keyboard_shortcuts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'Classes/User.dart';
+
 class homePage extends StatefulWidget {
   const homePage({Key? key}) : super(key: key);
 
@@ -108,7 +110,7 @@ class _homePageState extends State<homePage> {
   void connectUser() async {
     var userData = await getUser();
     setState(() {
-      user = jsonDecode(userData!);
+      user = jsonDecode(userData!.toString());
     });
   }
 
@@ -129,6 +131,7 @@ class _homePageState extends State<homePage> {
 
   @override
   Widget build(BuildContext context) {
+    connectUser();
     return KeyBoardShortcuts(
       keysToPress: {LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.keyM},
       onKeysPressed: () {

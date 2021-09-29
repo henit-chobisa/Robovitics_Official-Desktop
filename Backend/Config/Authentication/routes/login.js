@@ -1,6 +1,7 @@
 const express = require('express');
 const TokenBlock = require('../../../models/Authentication/tokens');
 const User = require('../../../models/Authentication/User');
+const userBasicSchema = require('../../../models/UserBasicModel');
 const router = express.Router();
 
 router.post('/', async (req, res) => {
@@ -18,8 +19,9 @@ router.post('/', async (req, res) => {
             oldTokenBlock.remove();
             await user.generateJWT();
             await user.save();
-            user = await User.findOne({ email }).populate('tokenBlock').exec()
-            res.json(user.fetch());
+            user = await User.findOne({ email }).populate('tokenBlock contributions').exec()
+            const UserB = await userBasicSchema.findOne({email})
+            res.json([user, UserB]);
         }
         else {
             res.send("Sorry, password missmatch");

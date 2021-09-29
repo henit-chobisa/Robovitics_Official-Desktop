@@ -8,7 +8,7 @@ part of 'Event.dart';
 
 Event _$EventFromJson(Map<String, dynamic> json) {
   return Event(
-    json['id'] as String,
+    json['_id'] as String,
     json['eventTitle'] as String,
     json['eventDescription'] as String,
     DateTime.parse(json['eventTime'] as String),

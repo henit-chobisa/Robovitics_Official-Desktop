@@ -8,7 +8,7 @@ part of 'NoticeModel.dart';
 
 NoticeModel _$NoticeModelFromJson(Map<String, dynamic> json) {
   return NoticeModel(
-    id: json['id'] as String,
+    id: json['_id'] as String,
     title: json['title'] as String,
     description: json['description'] as String,
     docLink: json['docLink'] as String,
