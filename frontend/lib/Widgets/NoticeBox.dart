@@ -142,7 +142,8 @@ class _NoticeBoxState extends State<NoticeBox> {
                   width: 500.w,
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.r),
-                      child: SfPdfViewer.network("${widget.model.docLink}")),
+                      child: SfPdfViewer.network(
+                          "http://www.pdf995.com/samples/pdf.pdf")),
                 ),
               ),
               SizedBox(
