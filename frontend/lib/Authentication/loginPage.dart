@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:frontend/Classes/User.dart';
+import 'package:frontend/Classes/UserB.dart';
 import 'package:frontend/homeScreen.dart';
 import 'package:loading/indicator/ball_spin_fade_loader_indicator.dart';
 import 'package:loading/loading.dart';
@@ -36,7 +37,6 @@ class _loginPageState extends State<loginPage> {
   var pageHeight = 520;
   var counter = 1;
   var user;
-
   var file = null;
   var imagePath = "";
   var status = "Error";
@@ -68,6 +68,7 @@ class _loginPageState extends State<loginPage> {
         ImageURL = values['photoURL'];
         Designation = values['designation'];
         pageHeight = 440;
+        user = response.body;
         counter = 8;
       });
     } else {
@@ -153,25 +154,27 @@ class _loginPageState extends State<loginPage> {
       if (response.statusCode == 200) {
         var values = await jsonDecode(response.body);
         setState(() {
-          Name = values['firstName'];
-          ImageURL = values['photoURL'];
-          Designation = values['designation'];
+          Name = values[0]['firstName'];
+          ImageURL = values[0]['photoURL'];
+          Designation = values[0]['designation'];
           pageHeight = 440;
           counter = 8;
         });
-        // var currentUser = User(
-        //     id: values['_id'],
-        //     email: values['email'],
-        //     firstName: values['firstName'],
-        //     lastName: values['lastName'],
-        //     photoURL: values['photoURL'],
-        //     department: values['department'],
-        //     phoneNumber: values['phoneNumber'],
-        //     designation: values['designation'],
-        //     yearOfJoining: values['yearOfJoining']);
+
         SharedPreferences sharedPreferences =
             await SharedPreferences.getInstance();
-        sharedPreferences.setString("User", response.body);
+        sharedPreferences.setString(
+            "User", jsonEncode(User.fromJson(values[0])));
+        sharedPreferences.remove("UserB");
+        sharedPreferences.setString(
+            "UserB",
+            jsonEncode(UserB(
+                id: values[1]['_id'],
+                userID: values[1]["userID"],
+                userName: values[1]["userName"],
+                email: values[1]["email"],
+                photoURL: values[1]["photoURL"],
+                core: values[1]["core"])));
       } else {
         setState(() {
           counter = 7;

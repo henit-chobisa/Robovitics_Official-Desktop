@@ -4,6 +4,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const ReferenceToken = require('../../../models/Authentication/referenceTokenModel');
 const ReferenceUser = require('../../../models/Authentication/referenceUserModel');
+const userBasicSchema = require('../../../models/UserBasicModel');
 
 router.post('/', async(req, res) => {
     const { referenceTokenID } = req.body
@@ -35,6 +36,10 @@ router.post('/', async(req, res) => {
             const points = 0;
             const contributions = [];
             const user = new User({email, firstName, lastName, department, yearOfJoining, salt, hash, designation, core, phoneNumber, photoURL, points, contributions });
+            const userID = user.id;
+            const userName = `${firstName} ${lastName}`;
+            const userB = new userBasicSchema({userID, email,userName, photoURL,core})
+            await userB.save();
             user.generateJWT();
             await user.save();
             await getterReferenceToken.remove();
