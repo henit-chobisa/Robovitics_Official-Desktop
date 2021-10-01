@@ -64,13 +64,12 @@ class _NoticeDiscussionState extends State<NoticeDiscussion> {
   }
 
   void sendMessage() {
-    socket.emit("message", "Hello there");
+    socket.emit("text", "Hello there");
   }
 
   @override
   Widget build(BuildContext context) {
     TextEditingController messageController = TextEditingController();
-    Connect();
     return FutureBuilder(
         future: getCurrentUser(),
         builder: (context, AsyncSnapshot<UserB> snapshot) {
