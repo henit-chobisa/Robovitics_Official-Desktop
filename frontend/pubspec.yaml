@@ -48,6 +48,7 @@ dependencies:
       path: plugins/window_size
       ref: 927f8cbc09b35d85245c095f2db8df9b186f6618
   socket_io_client: ^1.0.1
+  intl:
 
 dev_dependencies:
   flutter_test:
