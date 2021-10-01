@@ -9,7 +9,7 @@ module.exports = function(io){
         socket.join(currentRoom);
         socket.on('text', function(message){
             socket.in(currentRoom).emit('text', message)
-        })
+        });
         
     })
     return router;
