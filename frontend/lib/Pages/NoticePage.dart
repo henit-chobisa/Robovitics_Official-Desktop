@@ -30,7 +30,6 @@ class _NoticePageState extends State<NoticePage> {
   Future<UserB> getCurrentUser() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var user = sharedPreferences.get("UserB");
-    print(user);
     var userJson = jsonDecode(user.toString());
     UserB currentUser = UserB.fromJson(userJson);
     return currentUser;

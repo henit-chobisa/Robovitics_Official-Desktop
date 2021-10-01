@@ -26,4 +26,4 @@ app.use('/api/notice', require('./routes/Notice/Notice'));
 
 app.use(require('./routes/Websockets')(io));
 
-server.listen(port, () => { console.log(`Deployed on port ${port}`)});
+server.listen(port,"0.0.0.0",() => { console.log(`Deployed on port ${port}`)});

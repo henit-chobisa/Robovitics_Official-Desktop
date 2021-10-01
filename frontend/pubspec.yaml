@@ -40,11 +40,14 @@ dependencies:
   json_annotation:
   syncfusion_flutter_core:
   syncfusion_flutter_pdfviewer:
+  flutter_socket_io:
+  scoped_model:
   window_size:
     git:
       url: git://github.com/google/flutter-desktop-embedding.git
       path: plugins/window_size
       ref: 927f8cbc09b35d85245c095f2db8df9b186f6618
+  socket_io_client: ^1.0.1
 
 dev_dependencies:
   flutter_test:

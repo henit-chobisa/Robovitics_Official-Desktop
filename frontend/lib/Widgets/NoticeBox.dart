@@ -60,9 +60,6 @@ class _NoticeBoxState extends State<NoticeBox> {
     }
 
     void ConfirmAcknowledgement() async {
-      print(widget.model.id);
-      print(widget.currentUser.id);
-      print(widget.currentUser.userName);
       var body = {
         "noticeID": widget.model.id,
         "userBID": widget.currentUser.id
@@ -94,7 +91,6 @@ class _NoticeBoxState extends State<NoticeBox> {
 
     getAcknowStatus();
     String link = widget.model.docLink;
-    print(link);
     return Padding(
       padding: EdgeInsets.only(right: 16.w),
       child: Container(
@@ -141,9 +137,11 @@ class _NoticeBoxState extends State<NoticeBox> {
                   height: 550.h,
                   width: 500.w,
                   child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.r),
-                      child: SfPdfViewer.network(
-                          "http://www.pdf995.com/samples/pdf.pdf")),
+                    borderRadius: BorderRadius.circular(10.r),
+                    // child: SfPdfViewer.network(
+                    //     "http://www.pdf995.com/samples/pdf.pdf")),
+                    child: Text("Loading"),
+                  ),
                 ),
               ),
               SizedBox(

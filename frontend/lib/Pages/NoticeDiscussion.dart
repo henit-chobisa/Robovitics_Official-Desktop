@@ -1,7 +1,10 @@
 import 'dart:convert';
-
+import 'package:scoped_model/scoped_model.dart';
+import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter_socket_io/flutter_socket_io.dart';
+import 'package:flutter_socket_io/socket_io_manager.dart';
 import 'package:frontend/Classes/NoticeModel.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/Classes/UserB.dart';
@@ -13,6 +16,7 @@ class NoticeDiscussion extends StatefulWidget {
   NoticeDiscussion({required this.model});
 
   NoticeModel model;
+
   @override
   _NoticeDiscussionState createState() => _NoticeDiscussionState();
 }
@@ -27,10 +31,45 @@ class _NoticeDiscussionState extends State<NoticeDiscussion> {
     return currentUser;
   }
 
+  late io.Socket socket;
+
+  @override
+  void initState() {
+    Connect();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    socket.disconnect();
+    socket.dispose();
+    super.dispose();
+  }
+
+  void Connect() {
+    String message;
+    socket = io.io(
+        "http://127.0.0.1:1000/?roomID=${widget.model.id}", <String, dynamic>{
+      "transports": ["websocket"],
+      "autoConnect": false,
+    });
+    socket.connect();
+    socket.on('connect', (data) => print("connected"));
+    socket.onConnect((data) {
+      socket.on('text', (data) {
+        print(data);
+      });
+    });
+  }
+
+  void sendMessage() {
+    socket.emit("text", "Hello there");
+  }
+
   @override
   Widget build(BuildContext context) {
     TextEditingController messageController = TextEditingController();
-
     return FutureBuilder(
         future: getCurrentUser(),
         builder: (context, AsyncSnapshot<UserB> snapshot) {
@@ -103,103 +142,12 @@ class _NoticeDiscussionState extends State<NoticeDiscussion> {
                                 ),
                                 SenderBlock(),
                                 RecievedBlock(),
-                                Container(
-                                  height: 50.h,
-                                  width: double.maxFinite,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(20.r),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                color: Colors.black,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        20.r)),
-                                            child: Center(
-                                              child: TextField(
-                                                controller: messageController,
-                                                cursorColor: Colors.white,
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 12.sp),
-                                                decoration: InputDecoration(
-                                                    hintText:
-                                                        "Type your Snadesh here ...",
-                                                    hintStyle: TextStyle(
-                                                        color: Colors.grey,
-                                                        fontSize: 12.sp),
-                                                    focusedBorder:
-                                                        InputBorder.none,
-                                                    errorBorder:
-                                                        InputBorder.none),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 10.w,
-                                        ),
-                                        Container(
-                                          height: 50.h,
-                                          width: 100.w,
-                                          decoration: BoxDecoration(
-                                              color: Colors.blueAccent.shade700,
-                                              borderRadius:
-                                                  BorderRadius.circular(20.r)),
-                                          child: Center(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons.send,
-                                                  color: Colors.white,
-                                                  size: 13.sp,
-                                                ),
-                                                SizedBox(
-                                                  width: 5.w,
-                                                ),
-                                                Text(
-                                                  "Send",
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 15.sp),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 10.w,
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              left: 10.w, right: 5.w),
-                                          child: Icon(
-                                            Icons.image,
-                                            color: Colors.black,
-                                            size: 20.sp,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              left: 5.w, right: 10.w),
-                                          child: Icon(
-                                            Icons.file_copy,
-                                            color: Colors.black,
-                                            size: 20.sp,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                )
+                                TextButton(
+                                    onPressed: sendMessage,
+                                    child: Text(
+                                      "Press Me",
+                                      style: TextStyle(color: Colors.white),
+                                    ))
                               ],
                             ),
                           ),
@@ -212,6 +160,107 @@ class _NoticeDiscussionState extends State<NoticeDiscussion> {
             ),
           );
         });
+  }
+}
+
+class sendingTab extends StatelessWidget {
+  const sendingTab({
+    Key? key,
+    required this.messageController,
+  }) : super(key: key);
+
+  final TextEditingController messageController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 50.h,
+      width: double.maxFinite,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20.r),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(20.r)),
+                child: Padding(
+                  padding: EdgeInsets.all(10.sp),
+                  child: Center(
+                    child: TextField(
+                      controller: messageController,
+                      cursorColor: Colors.white,
+                      style: TextStyle(color: Colors.white, fontSize: 12.sp),
+                      decoration: InputDecoration(
+                          hintText: "Type your Snadesh here ...",
+                          hintStyle:
+                              TextStyle(color: Colors.grey, fontSize: 12.sp),
+                          focusedErrorBorder: InputBorder.none,
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          errorBorder: InputBorder.none),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 10.w,
+            ),
+            Container(
+              height: 50.h,
+              width: 100.w,
+              decoration: BoxDecoration(
+                  color: Colors.blueAccent.shade700,
+                  borderRadius: BorderRadius.circular(20.r)),
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.send,
+                      color: Colors.white,
+                      size: 13.sp,
+                    ),
+                    SizedBox(
+                      width: 5.w,
+                    ),
+                    Text(
+                      "Send",
+                      style: TextStyle(color: Colors.white, fontSize: 15.sp),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 10.w,
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 10.w, right: 5.w),
+              child: Icon(
+                Icons.image,
+                color: Colors.black,
+                size: 20.sp,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 5.w, right: 10.w),
+              child: Icon(
+                Icons.file_copy,
+                color: Colors.black,
+                size: 20.sp,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
 
