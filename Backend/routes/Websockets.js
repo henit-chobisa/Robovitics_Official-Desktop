@@ -5,18 +5,18 @@ module.exports = function(io){
     // var io = router.get('socketio');
     io.on('connection', function(socket){
         console.log('connected');
-        console.log(socket.id)
-        socket.on('broadcast', function(socket){
-            io.emit('message', "hello hello")
-        });
-        socket.on('message', function(message){
-            const data = {
-                "Name" : "Robo Official",
-                "Date" : "September 24th"
-            }
+        var currentRoom = socket.handshake.query.roomID;
+        console.log(currentRoom);
+        socket.join(currentRoom);
+        socket.on('sendMessage', message => {
+            socket.emit('text', message)
+        })
+        socket.on('text', function(message){
             console.log(message);
-            io.emit('broadcast', "I am ATC");
-        });
+        })
+        socket.on('message', (msg)=>{
+            socket.in(currentRoom).emit('text', msg);
+        })
         
     })
     return router;
