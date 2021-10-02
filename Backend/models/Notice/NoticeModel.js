@@ -10,7 +10,7 @@ const NoticeModel = new mongoose.Schema({
     docLink : String,
     timeStamp : String,
     AcknowledgeBy : [userB.schema],
-    Discussions : [{type : mongoose.Schema.Types.ObjectId, ref : "DiscussionModel"}]
+    Discussions : [DiscussionModel.schema]
 }, {collection : 'Notices'})
 
 NoticeModel.methods.addDiscussion = async function(userBID, payload, messageType) {

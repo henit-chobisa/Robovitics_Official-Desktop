@@ -100,6 +100,8 @@ class _NoticePageState extends State<NoticePage> {
                                     return NoticeBox(
                                       currentUser: currentUser,
                                       model: snapshot.data!.elementAt(index),
+                                      isRowVisible: true,
+                                      preLoadedFilePath: "",
                                       docLink: snapshot.data!
                                           .elementAt(index)
                                           .docLink,

@@ -7,5 +7,5 @@ const discussionModel = mongoose.Schema({
     messageType : String,
     timeStamp : String
 });
-
-module.exports = mongoose.model("DiscussionModel", discussionModel);
+const Model = mongoose.model("DiscussionModel", discussionModel)
+module.exports = Model;

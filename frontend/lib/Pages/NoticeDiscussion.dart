@@ -1,23 +1,22 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:frontend/Classes/DiscussionModel.dart';
 import 'package:intl/intl.dart';
-import 'package:scoped_model/scoped_model.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:flutter_socket_io/flutter_socket_io.dart';
-import 'package:flutter_socket_io/socket_io_manager.dart';
 import 'package:frontend/Classes/NoticeModel.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/Classes/UserB.dart';
 import 'package:frontend/Widgets/NoticeBox.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:syncfusion_flutter_core/core.dart';
+import 'package:http/http.dart' as http;
 
 class NoticeDiscussion extends StatefulWidget {
-  NoticeDiscussion({required this.model});
+  NoticeDiscussion({required this.model, required this.filePath});
 
   NoticeModel model;
+  String filePath;
 
   @override
   _NoticeDiscussionState createState() => _NoticeDiscussionState();
@@ -39,12 +38,28 @@ class _NoticeDiscussionState extends State<NoticeDiscussion> {
 
   @override
   void initState() {
+    print(widget.filePath);
+    LoadPreviousDiscussion();
     Connect();
     super.initState();
   }
 
+  void LoadPreviousDiscussion() async {
+    var response = await http.get(Uri.parse(
+        "http://127.0.0.1:1000/api/notice/getDiscussions?noticeID=${widget.model.id}"));
+    var decoded = jsonDecode(response.body) as List<dynamic>;
+    var decodedDiscussions =
+        decoded.map((e) => DiscussionModel.fromJson(e)).toList();
+    decodedDiscussions.forEach((element) {
+      setState(() {
+        discussions.add(element);
+      });
+    });
+  }
+
   @override
   void dispose() {
+    widget.filePath = "";
     socket.disconnect();
     socket.dispose();
     super.dispose();
@@ -68,8 +83,9 @@ class _NoticeDiscussionState extends State<NoticeDiscussion> {
         setState(() {
           discussions.add(discussion);
           sortDiscussions();
-          scrollController.animateTo(scrollController.position.maxScrollExtent,
-              duration: Duration(milliseconds: 10), curve: Curves.easeInOut);
+          Timer(Duration(milliseconds: 1000), () {
+            scrollController.jumpTo(scrollController.position.maxScrollExtent);
+          });
         });
       });
     });
@@ -91,7 +107,10 @@ class _NoticeDiscussionState extends State<NoticeDiscussion> {
       discussions.add(discussion);
     });
     socket.emit('text', data);
-    scrollController.jumpTo(scrollController.position.maxScrollExtent);
+    sortDiscussions();
+    Timer(Duration(milliseconds: 500), () {
+      scrollController.jumpTo(scrollController.position.maxScrollExtent);
+    });
   }
 
   @override
@@ -129,9 +148,12 @@ class _NoticeDiscussionState extends State<NoticeDiscussion> {
                   Row(
                     children: [
                       NoticeBox(
-                          model: widget.model,
-                          currentUser: snapshot.data!,
-                          docLink: widget.model.docLink),
+                        model: widget.model,
+                        currentUser: snapshot.data!,
+                        docLink: widget.model.docLink,
+                        isRowVisible: false,
+                        preLoadedFilePath: widget.filePath,
+                      ),
                       Expanded(
                         child: Container(
                           height: 750.h,
