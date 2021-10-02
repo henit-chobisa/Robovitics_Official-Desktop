@@ -1,11 +1,15 @@
+import 'dart:async';
 import 'dart:convert';
-
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/Classes/NoticeModel.dart';
 import 'package:frontend/Classes/UserB.dart';
 import 'package:frontend/Pages/NoticeDiscussion.dart';
+import 'package:loading/indicator/ball_grid_pulse_indicator.dart';
+import 'package:loading/loading.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:http/http.dart' as http;
@@ -14,11 +18,17 @@ import 'NoticeButton.dart';
 
 class NoticeBox extends StatefulWidget {
   NoticeBox(
-      {required this.model, required this.currentUser, required this.docLink});
+      {required this.model,
+      required this.currentUser,
+      required this.docLink,
+      required this.isRowVisible,
+      required this.preLoadedFilePath});
 
   UserB currentUser;
   NoticeModel model;
   String docLink;
+  bool isRowVisible;
+  String preLoadedFilePath;
 
   @override
   _NoticeBoxState createState() => _NoticeBoxState();
@@ -30,6 +40,29 @@ class _NoticeBoxState extends State<NoticeBox> {
   bool isAcknowledged = false;
   // bool _isLoading = true;
   // late PDFDocument document;
+  String file = "";
+
+  Future<String> loadPDF() async {
+    var response = await http.get(Uri.parse(widget.docLink));
+    var dir = await getTemporaryDirectory();
+    File file = new File(dir.path + "/${widget.model.id}.pdf");
+    await file.writeAsBytes(response.bodyBytes, flush: true);
+    return file.path;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    if (widget.preLoadedFilePath == "") {
+      loadPDF().then((value) => {
+            setState(() {
+              widget.preLoadedFilePath = value;
+            })
+          });
+    }
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,21 +109,7 @@ class _NoticeBoxState extends State<NoticeBox> {
       }
     }
 
-    // getDocLink() async {
-    //   document = await PDFDocument.fromURL(widget.model.docLink.toString());
-    //   setState(() {
-    //     _isLoading = false;
-    //   });
-    // }
-
-    // @override
-    // void initState() {
-    //   super.initState();
-    //   getDocLink();
-    // }
-
     getAcknowStatus();
-    String link = widget.model.docLink;
     return Padding(
       padding: EdgeInsets.only(right: 16.w),
       child: Container(
@@ -137,46 +156,54 @@ class _NoticeBoxState extends State<NoticeBox> {
                   height: 550.h,
                   width: 500.w,
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.r),
-                    // child: SfPdfViewer.network(
-                    //     "http://www.pdf995.com/samples/pdf.pdf")),
-                    child: Text("Loading"),
-                  ),
+                      borderRadius: BorderRadius.circular(10.r),
+                      child: widget.preLoadedFilePath != ""
+                          ? SfPdfViewer.asset(widget.preLoadedFilePath)
+                          : Center(
+                              child: Text("Loading",
+                                  style: TextStyle(
+                                      fontStyle: FontStyle.italic,
+                                      fontSize: 12.sp)))),
                 ),
               ),
               SizedBox(
                 height: 15.h,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  NoticeButton(
-                    buttonColor: Colors.red,
-                    buttonTitle: "Raise Concent",
-                    titleColor: Colors.white,
-                    onTap: () {
-                      print("Hello red");
-                    },
-                  ),
-                  NoticeButton(
-                    buttonTitle: "Discussions",
-                    buttonColor: Colors.yellow.shade700,
-                    titleColor: Colors.black,
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) =>
-                                NoticeDiscussion(model: widget.model))),
-                  ),
-                  NoticeButton(
-                    buttonTitle: getAcknowString(),
-                    buttonColor: getAcknowledgementBgColor(),
-                    titleColor: Colors.white,
-                    onTap: () {
-                      ConfirmAcknowledgement();
-                    },
-                  )
-                ],
+              Visibility(
+                visible: widget.isRowVisible,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    NoticeButton(
+                      buttonColor: Colors.red,
+                      buttonTitle: "Raise Concent",
+                      titleColor: Colors.white,
+                      onTap: () {
+                        print("Hello red");
+                      },
+                    ),
+                    NoticeButton(
+                      buttonTitle: "Discussions",
+                      buttonColor: Colors.yellow.shade700,
+                      titleColor: Colors.black,
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => NoticeDiscussion(
+                                    model: widget.model,
+                                    filePath: widget.preLoadedFilePath,
+                                  ))),
+                    ),
+                    NoticeButton(
+                      buttonTitle: getAcknowString(),
+                      buttonColor: getAcknowledgementBgColor(),
+                      titleColor: Colors.white,
+                      onTap: () {
+                        ConfirmAcknowledgement();
+                      },
+                    )
+                  ],
+                ),
               )
             ],
           ),

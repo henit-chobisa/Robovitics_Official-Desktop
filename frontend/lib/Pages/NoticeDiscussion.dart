@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:frontend/Classes/DiscussionModel.dart';
 import 'package:intl/intl.dart';
@@ -15,9 +16,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_core/core.dart';
 
 class NoticeDiscussion extends StatefulWidget {
-  NoticeDiscussion({required this.model});
+  NoticeDiscussion({required this.model, required this.filePath});
 
   NoticeModel model;
+  String filePath;
 
   @override
   _NoticeDiscussionState createState() => _NoticeDiscussionState();
@@ -39,12 +41,14 @@ class _NoticeDiscussionState extends State<NoticeDiscussion> {
 
   @override
   void initState() {
+    print(widget.filePath);
     Connect();
     super.initState();
   }
 
   @override
   void dispose() {
+    widget.filePath = "";
     socket.disconnect();
     socket.dispose();
     super.dispose();
@@ -68,8 +72,9 @@ class _NoticeDiscussionState extends State<NoticeDiscussion> {
         setState(() {
           discussions.add(discussion);
           sortDiscussions();
-          scrollController.animateTo(scrollController.position.maxScrollExtent,
-              duration: Duration(milliseconds: 10), curve: Curves.easeInOut);
+          Timer(Duration(milliseconds: 1000), () {
+            scrollController.jumpTo(scrollController.position.maxScrollExtent);
+          });
         });
       });
     });
@@ -91,7 +96,10 @@ class _NoticeDiscussionState extends State<NoticeDiscussion> {
       discussions.add(discussion);
     });
     socket.emit('text', data);
-    scrollController.jumpTo(scrollController.position.maxScrollExtent);
+    sortDiscussions();
+    Timer(Duration(milliseconds: 500), () {
+      scrollController.jumpTo(scrollController.position.maxScrollExtent);
+    });
   }
 
   @override
@@ -129,9 +137,12 @@ class _NoticeDiscussionState extends State<NoticeDiscussion> {
                   Row(
                     children: [
                       NoticeBox(
-                          model: widget.model,
-                          currentUser: snapshot.data!,
-                          docLink: widget.model.docLink),
+                        model: widget.model,
+                        currentUser: snapshot.data!,
+                        docLink: widget.model.docLink,
+                        isRowVisible: false,
+                        preLoadedFilePath: widget.filePath,
+                      ),
                       Expanded(
                         child: Container(
                           height: 750.h,

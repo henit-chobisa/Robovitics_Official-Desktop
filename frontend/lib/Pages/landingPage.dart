@@ -26,11 +26,6 @@ class _landingPageState extends State<landingPage> {
                     "Greetings, Henit Chobisa",
                     style: TextStyle(color: Colors.white, fontSize: 30.sp),
                   ),
-                  Spacer(),
-                  Text(
-                    "Greetings, Henit Chobisa",
-                    style: TextStyle(color: Colors.white, fontSize: 30.sp),
-                  ),
                 ],
               )
             ],

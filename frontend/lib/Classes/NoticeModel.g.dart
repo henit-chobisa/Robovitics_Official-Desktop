@@ -24,7 +24,7 @@ NoticeModel _$NoticeModelFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$NoticeModelToJson(NoticeModel instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      '-id': instance.id,
       'title': instance.title,
       'description': instance.description,
       'docLink': instance.docLink,
