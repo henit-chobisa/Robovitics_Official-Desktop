@@ -8,7 +8,7 @@ part of 'DiscussionModel.dart';
 
 DiscussionModel _$DiscussionModelFromJson(Map<String, dynamic> json) {
   return DiscussionModel(
-    id: json['_id'] as String,
+    id: json['id'] as String,
     userInfo: UserB.fromJson(json['userInfo'] as Map<String, dynamic>),
     payload: json['payload'] as String,
     messageType: json['messageType'] as String,
@@ -18,7 +18,7 @@ DiscussionModel _$DiscussionModelFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$DiscussionModelToJson(DiscussionModel instance) =>
     <String, dynamic>{
-      '_id': instance.id,
+      'id': instance.id,
       'userInfo': instance.userInfo,
       'payload': instance.payload,
       'messageType': instance.messageType,
