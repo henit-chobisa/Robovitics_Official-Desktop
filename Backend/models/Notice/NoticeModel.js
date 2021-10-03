@@ -3,6 +3,7 @@ const moment = require("moment")
 const userB = require('../UserBasicModel');
 const userBasicSchema = require('../UserBasicModel');
 const DiscussionModel = require('./DiscussionModel');
+const Concent = require('./ConcentModel');
 
 const NoticeModel = new mongoose.Schema({
     title : String,
@@ -10,7 +11,8 @@ const NoticeModel = new mongoose.Schema({
     docLink : String,
     timeStamp : String,
     AcknowledgeBy : [userB.schema],
-    Discussions : [DiscussionModel.schema]
+    Discussions : [DiscussionModel.schema],
+    Concents : [Concent.schema],
 }, {collection : 'Notices'})
 
 NoticeModel.methods.addDiscussion = async function(userBID, payload, messageType) {
