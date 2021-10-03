@@ -4,10 +4,10 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
     const { noticeID, userBID } = req.body;
+    console.log(noticeID);
     console.log(userBID);
     const notice = await NoticeModel.findById(noticeID);
-    console.log(notice);
-    await notice.addAcknowledgement(userBID);
+    notice.addAcknowledgement(userBID);
     await notice.save();
     res.send("Added");
     

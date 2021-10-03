@@ -8,7 +8,7 @@ part of 'ConcentModel.dart';
 
 ConcentModel _$ConcentModelFromJson(Map<String, dynamic> json) {
   return ConcentModel(
-    id: json['id'] as String,
+    id: json['_id'] as String,
     Concent: json['Concent'] as String,
     Upvotes: json['Upvotes'] as int,
     Downvotes: json['Downvotes'] as int,
@@ -18,7 +18,7 @@ ConcentModel _$ConcentModelFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$ConcentModelToJson(ConcentModel instance) =>
     <String, dynamic>{
       'Concent': instance.Concent,
-      'id': instance.id,
+      '_id': instance.id,
       'Upvotes': instance.Upvotes,
       'Downvotes': instance.Downvotes,
     };

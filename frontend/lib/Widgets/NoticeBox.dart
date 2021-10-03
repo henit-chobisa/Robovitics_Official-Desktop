@@ -6,11 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/Classes/NoticeModel.dart';
 import 'package:frontend/Classes/UserB.dart';
+import 'package:frontend/Pages/ConsentPage.dart';
 import 'package:frontend/Pages/NoticeDiscussion.dart';
-import 'package:loading/indicator/ball_grid_pulse_indicator.dart';
-import 'package:loading/loading.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:http/http.dart' as http;
 
@@ -179,7 +177,13 @@ class _NoticeBoxState extends State<NoticeBox> {
                       buttonTitle: "Raise Concent",
                       titleColor: Colors.white,
                       onTap: () {
-                        print("Hello red");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => NoticeConsentPage(
+                                      model: widget.model,
+                                      filePath: widget.preLoadedFilePath,
+                                    )));
                       },
                     ),
                     NoticeButton(
