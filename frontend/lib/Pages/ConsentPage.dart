@@ -98,6 +98,20 @@ class _NoticeConsentPageState extends State<NoticeConsentPage> {
                           isRowVisible: false,
                           preLoadedFilePath: widget.filePath,
                         ),
+                        Expanded(
+                          child: Container(
+                            height: 750.h,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20.r)),
+                            child: Container(
+                              height: 100,
+                              width: 300,
+                              decoration:
+                                  BoxDecoration(color: Colors.grey.shade800),
+                            ),
+                          ),
+                        ),
                       ],
                     )
                   ],
