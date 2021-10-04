@@ -36,6 +36,7 @@ class _NoticeConsentPageState extends State<NoticeConsentPage> {
   }
 
   void LoadPreviousConcents() async {
+    print(widget.model.id);
     var response = await http.get(Uri.parse(
         "http://127.0.0.1:1000/api/notice/getConcents?noticeID=${widget.model.id}"));
     var decoded = jsonDecode(response.body) as List<dynamic>;

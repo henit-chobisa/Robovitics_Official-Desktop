@@ -12,13 +12,19 @@ ConcentModel _$ConcentModelFromJson(Map<String, dynamic> json) {
     Concent: json['Concent'] as String,
     Upvotes: json['Upvotes'] as int,
     Downvotes: json['Downvotes'] as int,
+    DownvotedBy:
+        (json['DownvotedBy'] as List<dynamic>).map((e) => e as String).toList(),
+    UpvotedBy:
+        (json['UpvotedBy'] as List<dynamic>).map((e) => e as String).toList(),
   );
 }
 
 Map<String, dynamic> _$ConcentModelToJson(ConcentModel instance) =>
     <String, dynamic>{
       'Concent': instance.Concent,
-      '_id': instance.id,
+      'UpvotedBy': instance.UpvotedBy,
+      'DownvotedBy': instance.DownvotedBy,
+      'id': instance.id,
       'Upvotes': instance.Upvotes,
       'Downvotes': instance.Downvotes,
     };
