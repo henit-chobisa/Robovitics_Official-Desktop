@@ -10,6 +10,7 @@ Router.post('/', async(req, res) => {
     const Downvotes = 0;
     const conc = new Concent({ Concent : concent, Upvotes : Upvotes, Downvotes : Downvotes});
     notice.Concents.push(conc);
+    await conc.save();
     await notice.save();
     res.send("Concent Added");
 })

@@ -36,6 +36,7 @@ class _NoticeConsentPageState extends State<NoticeConsentPage> {
   }
 
   void LoadPreviousConcents() async {
+    print(widget.model.id);
     var response = await http.get(Uri.parse(
         "http://127.0.0.1:1000/api/notice/getConcents?noticeID=${widget.model.id}"));
     var decoded = jsonDecode(response.body) as List<dynamic>;
@@ -100,17 +101,57 @@ class _NoticeConsentPageState extends State<NoticeConsentPage> {
                         ),
                         Expanded(
                           child: Container(
-                            height: 750.h,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20.r)),
-                            child: Container(
-                              height: 100,
-                              width: 300,
-                              decoration:
-                                  BoxDecoration(color: Colors.grey.shade800),
-                            ),
-                          ),
+                              height: 750.h,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20.r)),
+                              child: Padding(
+                                padding: EdgeInsets.all(24.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Consents',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 30.sp),
+                                    ),
+                                    Divider(
+                                      color: Colors.grey,
+                                      thickness: 1,
+                                    ),
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
+                                    Flexible(
+                                      child: Container(
+                                        width: double.maxFinite,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20.r),
+                                            color: Colors.black),
+                                        child: Padding(
+                                          padding: EdgeInsets.all(16.0),
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                constraints: BoxConstraints(
+                                                    minWidth: 100.w,
+                                                    maxWidth: 700.w),
+                                                child: Text(
+                                                  "Hello world",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 12.sp),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )),
                         ),
                       ],
                     )
