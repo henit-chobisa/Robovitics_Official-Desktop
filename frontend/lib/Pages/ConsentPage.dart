@@ -100,11 +100,57 @@ class _NoticeConsentPageState extends State<NoticeConsentPage> {
                         ),
                         Expanded(
                           child: Container(
-                            height: 750.h,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20.r)),
-                          ),
+                              height: 750.h,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20.r)),
+                              child: Padding(
+                                padding: EdgeInsets.all(24.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Consents',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 30.sp),
+                                    ),
+                                    Divider(
+                                      color: Colors.grey,
+                                      thickness: 1,
+                                    ),
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
+                                    Flexible(
+                                      child: Container(
+                                        width: double.maxFinite,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20.r),
+                                            color: Colors.black),
+                                        child: Padding(
+                                          padding: EdgeInsets.all(16.0),
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                constraints: BoxConstraints(
+                                                    minWidth: 100.w,
+                                                    maxWidth: 700.w),
+                                                child: Text(
+                                                  "Hello world",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 12.sp),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )),
                         ),
                       ],
                     )
