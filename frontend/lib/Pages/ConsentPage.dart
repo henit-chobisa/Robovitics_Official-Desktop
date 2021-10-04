@@ -104,12 +104,6 @@ class _NoticeConsentPageState extends State<NoticeConsentPage> {
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(20.r)),
-                            child: Container(
-                              height: 100,
-                              width: 300,
-                              decoration:
-                                  BoxDecoration(color: Colors.grey.shade800),
-                            ),
                           ),
                         ),
                       ],
