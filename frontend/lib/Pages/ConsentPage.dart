@@ -36,11 +36,9 @@ class _NoticeConsentPageState extends State<NoticeConsentPage> {
   }
 
   void LoadPreviousConcents() async {
-    print(widget.model.id);
     var response = await http.get(Uri.parse(
         "http://127.0.0.1:1000/api/notice/getConcents?noticeID=${widget.model.id}"));
     var decoded = jsonDecode(response.body) as List<dynamic>;
-    print(decoded);
     var decodedConcents = decoded.map((e) => ConcentModel.fromJson(e)).toList();
     decodedConcents.forEach((element) {
       setState(() {
@@ -56,7 +54,7 @@ class _NoticeConsentPageState extends State<NoticeConsentPage> {
     };
     var headers = {"Content-Type": "application/json"};
     var response = await http.post(
-        Uri.parse("http://127.0.0.1:1000/api/notice/addConcents"),
+        Uri.parse("http://127.0.0.1:1000/api/notice/addConcent"),
         body: jsonEncode(body),
         headers: headers);
     if (response.statusCode == 200) {
@@ -160,48 +158,83 @@ class _NoticeConsentPageState extends State<NoticeConsentPage> {
                                       decoration: BoxDecoration(
                                           color: Colors.black,
                                           borderRadius:
-                                              BorderRadius.circular(20.r)),
+                                              BorderRadius.circular(25.r)),
                                       child: Padding(
                                         padding: EdgeInsets.all(5.sp),
                                         child: Row(
                                           children: [
                                             Expanded(
+                                              flex: 5,
                                               child: Container(
+                                                constraints: BoxConstraints(
+                                                    maxHeight: 100),
                                                 decoration: BoxDecoration(
                                                     color: Colors.white,
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             20.r)),
                                                 child: Padding(
-                                                  padding:
-                                                      EdgeInsets.all(12.sp),
-                                                  child: TextField(
-                                                    maxLines: 1,
-                                                    cursorColor: Colors.black,
-                                                    style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 12.sp),
-                                                    controller:
-                                                        consentController,
-                                                    decoration: InputDecoration(
-                                                        border:
-                                                            InputBorder.none,
-                                                        errorBorder:
-                                                            InputBorder.none,
-                                                        focusedBorder:
-                                                            InputBorder.none,
-                                                        focusedErrorBorder:
-                                                            InputBorder.none,
-                                                        enabledBorder:
-                                                            InputBorder.none,
-                                                        disabledBorder:
-                                                            InputBorder.none,
-                                                        hintText:
-                                                            "Raise your consent here...",
-                                                        hintStyle: TextStyle(
-                                                            color: Colors
-                                                                .grey.shade700,
-                                                            fontSize: 13.sp)),
+                                                  padding: EdgeInsets.only(
+                                                    left: 10.w,
+                                                    right: 10.w,
+                                                  ),
+                                                  child: SingleChildScrollView(
+                                                    child: TextField(
+                                                      maxLines: null,
+                                                      cursorColor: Colors.black,
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 12.sp),
+                                                      controller:
+                                                          consentController,
+                                                      decoration: InputDecoration(
+                                                          border:
+                                                              InputBorder.none,
+                                                          errorBorder:
+                                                              InputBorder.none,
+                                                          focusedBorder:
+                                                              InputBorder.none,
+                                                          focusedErrorBorder:
+                                                              InputBorder.none,
+                                                          enabledBorder:
+                                                              InputBorder.none,
+                                                          disabledBorder:
+                                                              InputBorder.none,
+                                                          hintText:
+                                                              "Raise your consent here...",
+                                                          hintStyle: TextStyle(
+                                                              color: Colors.grey
+                                                                  .shade700,
+                                                              fontSize: 13.sp)),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  addConcent(
+                                                      consentController.text);
+                                                  setState(() {
+                                                    consentController.text = "";
+                                                  });
+                                                },
+                                                child: Container(
+                                                  height: 50.h,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors
+                                                          .blueAccent.shade700,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20.r)),
+                                                  child: Center(
+                                                    child: Text(
+                                                      "Raise!",
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 12.sp),
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -313,75 +346,78 @@ class _ConsentWidgetState extends State<ConsentWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: Container(
-        width: double.maxFinite,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.r), color: Colors.black),
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Row(
-            children: [
-              Container(
-                constraints: BoxConstraints(minWidth: 100.w, maxWidth: 700.w),
-                child: Text(
-                  widget.concentModel.Concent,
-                  style: TextStyle(color: Colors.white, fontSize: 12.sp),
+    return Padding(
+      padding: EdgeInsets.only(top: 5.h, bottom: 5.h),
+      child: Flexible(
+        child: Container(
+          width: double.maxFinite,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.r), color: Colors.black),
+          child: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                Container(
+                  constraints: BoxConstraints(minWidth: 100.w, maxWidth: 700.w),
+                  child: Text(
+                    widget.concentModel.Concent,
+                    style: TextStyle(color: Colors.white, fontSize: 12.sp),
+                  ),
                 ),
-              ),
-              Spacer(),
-              GestureDetector(
-                onTap: () {
-                  addUpvote();
-                },
-                child: Visibility(
-                  visible: upvoteVisible,
-                  child: Container(
-                    child: Icon(
-                      Icons.thumb_up_alt_outlined,
-                      color: upvoteColor,
+                Spacer(),
+                GestureDetector(
+                  onTap: () {
+                    addUpvote();
+                  },
+                  child: Visibility(
+                    visible: upvoteVisible,
+                    child: Container(
+                      child: Icon(
+                        Icons.thumb_up_alt_outlined,
+                        color: upvoteColor,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                width: 5,
-              ),
-              Text(
-                widget.concentModel.Upvotes.toString(),
-                style: TextStyle(
-                    color: Colors.green,
-                    fontSize: 17.sp,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                width: 15.w,
-              ),
-              GestureDetector(
-                onTap: () {
-                  addDownvote();
-                },
-                child: Visibility(
-                  visible: downvoteVisible,
-                  child: Container(
-                    child: Icon(
-                      Icons.thumb_down_alt_outlined,
-                      color: downvoteColor,
+                SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  widget.concentModel.Upvotes.toString(),
+                  style: TextStyle(
+                      color: Colors.green,
+                      fontSize: 17.sp,
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  width: 15.w,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    addDownvote();
+                  },
+                  child: Visibility(
+                    visible: downvoteVisible,
+                    child: Container(
+                      child: Icon(
+                        Icons.thumb_down_alt_outlined,
+                        color: downvoteColor,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                width: 5,
-              ),
-              Text(
-                widget.concentModel.Downvotes.toString(),
-                style: TextStyle(
-                    color: Colors.redAccent,
-                    fontSize: 17.sp,
-                    fontWeight: FontWeight.bold),
-              ),
-            ],
+                SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  widget.concentModel.Downvotes.toString(),
+                  style: TextStyle(
+                      color: Colors.redAccent,
+                      fontSize: 17.sp,
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
           ),
         ),
       ),
