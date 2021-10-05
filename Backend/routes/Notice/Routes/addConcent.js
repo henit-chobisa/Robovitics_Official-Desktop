@@ -12,7 +12,7 @@ Router.post('/', async(req, res) => {
     notice.Concents.push(conc);
     await conc.save();
     await notice.save();
-    res.send("Concent Added");
+    res.json(conc);
 })
 
 module.exports = Router;
