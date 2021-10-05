@@ -1,15 +1,14 @@
 const express = require('express');
 const NoticeModel = require('../../../models/Notice/NoticeModel');
 const Router = express.Router();
+const Concent = require('../../../models/Notice/ConcentModel');
 
 Router.post('/', async (req, res) => {
-    const {noticeID, concentID} = req.body;
-    const concent = await NoticeModel.findById(noticeID).select({Concents : {$elemMatch : {"_id" : concentID}}});
-    const currentUpvotes = concent['Concents'][0]['Downvotes'];
-    concent['Concents'][0]['Downvotes'] = currentUpvotes + 1;
-    concent['Concents'][0].UpvotedBy.push(UserID);
+    const {concentID, UserID} = req.body;
+    const concent = await Concent.findById(concentID);
+    concent.addDownvote(UserID);
     concent.save();
-    res.json("done");
+    res.json("Done");
 })
 
 module.exports = Router;

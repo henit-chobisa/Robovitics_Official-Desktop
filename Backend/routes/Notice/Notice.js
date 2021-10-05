@@ -6,7 +6,7 @@ router.use('/createNotice', require('./Routes/createNotice'));
 router.use('/createAcknow', require("./Routes/createAcknowledgement"));
 router.use('/addConcent', require('./Routes/addConcent'));
 router.use('/addUpvote', require('./Routes/addUpvote'));
-router.use('/addDownvotes', require('./Routes/addDownvotes'));
+router.use('/addDownvote', require('./Routes/addDownvotes'));
 router.use('/getConcents', require('./Routes/getConcents'));
 
 // Get Requests
