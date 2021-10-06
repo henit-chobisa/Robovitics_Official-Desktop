@@ -7,6 +7,7 @@ router.post('/', async (req, res) => {
     const task = await taskSchema.findById(taskID);
     task.addAcknowledgement(userID);
     await task.save();
-})
+    res.json(task);
+});
 
 module.exports = router;
