@@ -15,14 +15,11 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/api/verification', require('./Config/Verification/verification'));
-
 app.use('/api/authentication', require('./Config/Authentication/authentication'));
-
 app.use('/api/events', require('./routes/Events/Event'));
-
 app.use('/api/user', require('./routes/User/user'));
-
 app.use('/api/notice', require('./routes/Notice/Notice'));
+app.use('/api/tasks', require('./routes/Tasks/Tasks'))
 
 app.use(require('./routes/Websockets')(io));
 

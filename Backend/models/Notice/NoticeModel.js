@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-const moment = require("moment")
+const moment = require("moment");
 const userB = require('../UserBasicModel');
 const userBasicSchema = require('../UserBasicModel');
-const DiscussionModel = require('./DiscussionModel');
+const DiscussionModel = require('../DiscussionModel');
 const Concent = require('./ConcentModel');
 
 const NoticeModel = new mongoose.Schema({

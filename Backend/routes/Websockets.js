@@ -1,6 +1,6 @@
 
 const express = require('express');
-const DiscussionModel = require('../models/Notice/DiscussionModel');
+const DiscussionModel = require('../models/DiscussionModel');
 const NoticeModel = require('../models/Notice/NoticeModel');
 module.exports = function(io){
     const router = express.Router();
