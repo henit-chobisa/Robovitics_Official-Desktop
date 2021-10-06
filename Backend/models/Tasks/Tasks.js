@@ -15,6 +15,7 @@ const TaskSchema = mongoose.Schema({
     acknowledgedBy : [{type : mongoose.Schema.Types.ObjectId, ref : "UserB"}],
     qna : [{type : mongoose.Schema.Types.ObjectId, ref : "QNA"}],
     assignedTo : [{type : mongoose.Schema.Types.ObjectId, ref : "UserB"}],
+    core : String,
     isCompleted : false,
     isTeamTask : Boolean,
     discussions : [{type : mongoose.Schema.Types.ObjectId, ref : "DiscussionModel"}],
