@@ -4,8 +4,8 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
     const { title, description, lastDate, referencingDocumentLink, bannerLink, mentor, assignedTo, core, isTeamTask, pointsAlloted } = req.body;
-
-    const task = new taskSchema({title, description, lastDate, referencingDocumentLink, bannerLink, mentor, assignedTo, core, isTeamTask, pointsAlloted});
+    const assignedDate  = moment().format().toString();
+    const task = new taskSchema({title, description, lastDate, referencingDocumentLink, bannerLink, mentor, assignedTo, core, isTeamTask, pointsAlloted, assignedDate});
     await task.save();
     res.json(task);
 });

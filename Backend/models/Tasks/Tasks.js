@@ -7,7 +7,7 @@ const qna = require('./qnaModel');
 const TaskSchema = mongoose.Schema({
     title : String,
     description : String,
-    assignedDate : moment().format(),
+    assignedDate : String,
     lastDate : String,
     refrencingDocumentLink : String,
     bannerLink : String,
@@ -23,6 +23,10 @@ const TaskSchema = mongoose.Schema({
     pointsAlloted : Number,
 
 }, { collection : "Tasks"});
+
+TaskSchema.methods.changeMentor = async function(userID){
+    this.mentor = userID;
+}
 
 TaskSchema.methods.addSubmission = async function(UserID, Comment, docLink){
     const Submission = new Submission({SubmittedBy : UserID, Comment : Comment, docLink : docLink, SubmittedOn : moment().format(), isVerified : false});
@@ -48,8 +52,9 @@ TaskSchema.methods.completed = async function(){
 }
 
 TaskSchema.methods.addQuestion = async function(question, userID){
-    const question = new qna({TaskID : this._id, question : question, raisedBy : userID});
-    this.qna.push(question);
+    const timeStamp = moment().format().toString()
+    const ques = new qna({TaskID : this._id, question : question, raisedBy : userID, timeStamp : timeStamp});
+    this.qna.push(ques);
     await question.save();
 };
 
