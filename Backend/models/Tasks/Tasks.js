@@ -7,6 +7,7 @@ const TaskSchema = mongoose.Schema({
     assignedDate : moment().format(),
     lastDate : String,
     refrencingDocumentLink : String,
+    bannerLink : String,
     mentor : {type : mongoose.Schema.Types.ObjectId, ref : "UserB"},
     acknowledgedBy : [{type : mongoose.Schema.Types.ObjectId, ref : "UserB"}],
     qna : [{String : [String]}],
