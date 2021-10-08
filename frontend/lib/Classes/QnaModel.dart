@@ -1,24 +1,26 @@
 import 'package:frontend/Classes/Comment.dart';
 import 'package:frontend/Classes/UserB.dart';
 import 'package:json_annotation/json_annotation.dart';
-part 'qna.g.dart';
+part 'QnaModel.g.dart';
 
 @JsonSerializable()
 class QnaModel {
   QnaModel(
-      {required this.question,
+      {required this.id,
       required this.TaskID,
+      required this.question,
       required this.comments,
       required this.raisedBy,
       required this.timeStamp});
 
-  factory QnaModel.fromJson(Map<String, dynamic> data) =>
+  factory QnaModel.FromJson(Map<String, dynamic> data) =>
       _$QnaModelFromJson(data);
   Map<String, dynamic> toJson() => _$QnaModelToJson(this);
 
-  final String TaskID;
-  final String question;
-  final List<Comment> comments;
-  final UserB raisedBy;
-  final DateTime timeStamp;
+  String id;
+  String TaskID;
+  String question;
+  List<Comment> comments;
+  UserB raisedBy;
+  DateTime timeStamp;
 }

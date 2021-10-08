@@ -6,7 +6,8 @@ part 'SubmissionModel.g.dart';
 @JsonSerializable()
 class Submission {
   Submission(
-      {required this.SubmittedBy,
+      {required this.id,
+      required this.SubmittedBy,
       required this.Comment,
       required this.TaskID,
       required this.docLink,
@@ -17,6 +18,7 @@ class Submission {
       _$SubmissionFromJson(data);
   Map<String, dynamic> toJson() => _$SubmissionToJson(this);
 
+  final String id;
   final String TaskID;
   final UserB SubmittedBy;
   final String Comment;

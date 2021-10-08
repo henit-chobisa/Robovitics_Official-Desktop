@@ -1,14 +1,15 @@
 import 'package:frontend/Classes/DiscussionModel.dart';
+import 'package:frontend/Classes/QnaModel.dart';
 import 'package:frontend/Classes/SubmissionModel.dart';
 import 'package:frontend/Classes/UserB.dart';
-import 'package:frontend/Classes/qna.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'Task.g.dart';
 
 @JsonSerializable()
 class Task {
   Task(
-      {required this.title,
+      {required this.id,
+      required this.title,
       required this.description,
       required this.assignedDate,
       required this.lastDate,
@@ -28,6 +29,7 @@ class Task {
   factory Task.fromJson(Map<String, dynamic> data) => _$TaskFromJson(data);
   Map<String, dynamic> toJson() => _$TaskToJson(this);
 
+  final String id;
   final String title;
   final String description;
   final DateTime assignedDate;

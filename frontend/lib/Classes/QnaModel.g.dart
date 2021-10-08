@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'qna.dart';
+part of 'QnaModel.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -8,8 +8,9 @@ part of 'qna.dart';
 
 QnaModel _$QnaModelFromJson(Map<String, dynamic> json) {
   return QnaModel(
-    question: json['question'] as String,
+    id: json['_id'] as String,
     TaskID: json['TaskID'] as String,
+    question: json['question'] as String,
     comments: (json['comments'] as List<dynamic>)
         .map((e) => Comment.fromJson(e as Map<String, dynamic>))
         .toList(),
@@ -19,6 +20,7 @@ QnaModel _$QnaModelFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$QnaModelToJson(QnaModel instance) => <String, dynamic>{
+      'id': instance.id,
       'TaskID': instance.TaskID,
       'question': instance.question,
       'comments': instance.comments,

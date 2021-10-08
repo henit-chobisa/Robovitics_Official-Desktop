@@ -8,6 +8,7 @@ part of 'Task.dart';
 
 Task _$TaskFromJson(Map<String, dynamic> json) {
   return Task(
+    id: json['_id'] as String,
     title: json['title'] as String,
     description: json['description'] as String,
     assignedDate: DateTime.parse(json['assignedDate'] as String),
@@ -22,7 +23,7 @@ Task _$TaskFromJson(Map<String, dynamic> json) {
         .map((e) => DiscussionModel.fromJson(e as Map<String, dynamic>))
         .toList(),
     qna: (json['qna'] as List<dynamic>)
-        .map((e) => QnaModel.fromJson(e as Map<String, dynamic>))
+        .map((e) => QnaModel.FromJson(e as Map<String, dynamic>))
         .toList(),
     submissions: (json['submissions'] as List<dynamic>)
         .map((e) => Submission.fromJson(e as Map<String, dynamic>))
@@ -38,6 +39,7 @@ Task _$TaskFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$TaskToJson(Task instance) => <String, dynamic>{
+      'id': instance.id,
       'title': instance.title,
       'description': instance.description,
       'assignedDate': instance.assignedDate.toIso8601String(),
