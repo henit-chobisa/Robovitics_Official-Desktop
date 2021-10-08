@@ -40,7 +40,7 @@ TaskSchema.methods.addDiscussion = async function(userID, payload, messageType){
     await Discussion.save();
 }
 
-TaskSchema.addAcknowledgement = async function(userID){
+TaskSchema.methods.addAcknowledgement = async function(userID){
     this.acknowledgedBy.push(userID);
 }
 
