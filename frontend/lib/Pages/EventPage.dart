@@ -194,77 +194,79 @@ class ContributionTile extends StatelessWidget {
               SizedBox(
                 height: 20.sp,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '+${_contributionModel.points}',
-                    style: TextStyle(
-                        color: Colors.green.shade800, fontSize: 70.sp),
-                  ),
-                  SizedBox(
-                    width: 20.w,
-                  ),
-                  Container(
-                    width: 2.w,
-                    height: 50.h,
-                    color: Colors.black,
-                  ),
-                  SizedBox(
-                    width: 20.w,
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        _contributionModel.type,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 15.sp,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 7.h,
-                      ),
-                      FutureBuilder(
-                          future: getRegistrationDetails(
-                              _contributionModel.registrationDetails),
-                          builder:
-                              (_, AsyncSnapshot<registrationModel> snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return Center(
-                                child: Loading(
-                                  indicator: BallSpinFadeLoaderIndicator(),
-                                  size: 30.sp,
-                                  color: Colors.black,
-                                ),
-                              );
-                            } else {
-                              return Column(
-                                children: [
-                                  Text(
-                                    snapshot.data!.attendeeName,
-                                    style: TextStyle(
-                                        color: Colors.blue.shade800,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15.sp),
+              Flexible(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '+${_contributionModel.points}',
+                      style: TextStyle(
+                          color: Colors.green.shade800, fontSize: 70.sp),
+                    ),
+                    SizedBox(
+                      width: 20.w,
+                    ),
+                    Container(
+                      width: 2.w,
+                      height: 50.h,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      width: 20.w,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          _contributionModel.type,
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 7.h,
+                        ),
+                        FutureBuilder(
+                            future: getRegistrationDetails(
+                                _contributionModel.registrationDetails),
+                            builder:
+                                (_, AsyncSnapshot<registrationModel> snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Center(
+                                  child: Loading(
+                                    indicator: BallSpinFadeLoaderIndicator(),
+                                    size: 30.sp,
+                                    color: Colors.black,
                                   ),
-                                  Text(
-                                    snapshot.data!.platform,
-                                    style: TextStyle(
-                                        color: Colors.pink.shade800,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15.sp,
-                                        letterSpacing: 2),
-                                  ),
-                                ],
-                              );
-                            }
-                          })
-                    ],
-                  )
-                ],
+                                );
+                              } else {
+                                return Column(
+                                  children: [
+                                    Text(
+                                      snapshot.data!.attendeeName,
+                                      style: TextStyle(
+                                          color: Colors.blue.shade800,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15.sp),
+                                    ),
+                                    Text(
+                                      snapshot.data!.platform,
+                                      style: TextStyle(
+                                          color: Colors.pink.shade800,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15.sp,
+                                          letterSpacing: 2),
+                                    ),
+                                  ],
+                                );
+                              }
+                            })
+                      ],
+                    )
+                  ],
+                ),
               ),
             ],
           ),
