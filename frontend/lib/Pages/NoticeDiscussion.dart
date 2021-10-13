@@ -33,7 +33,6 @@ class _NoticeDiscussionState extends State<NoticeDiscussion> {
 
   late io.Socket socket;
   ScrollController scrollController = ScrollController();
-
   List<DiscussionModel> discussions = [];
 
   @override
