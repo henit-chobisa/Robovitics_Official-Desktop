@@ -13,7 +13,7 @@ Task _$TaskFromJson(Map<String, dynamic> json) {
     description: json['description'] as String,
     assignedDate: DateTime.parse(json['assignedDate'] as String),
     lastDate: DateTime.parse(json['lastDate'] as String),
-    referencingDocumentLink: json['referencingDocumentLink'] as String,
+    referencingDocumentLink: json['referencingDocumentLink'] as List<dynamic>,
     bannerLink: json['bannerLink'] as String,
     mentor: UserB.fromJson(json['mentor'] as Map<String, dynamic>),
     core: json['core'] as String,

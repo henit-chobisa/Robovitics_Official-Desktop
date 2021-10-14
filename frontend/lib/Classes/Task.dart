@@ -34,7 +34,7 @@ class Task {
   final String description;
   final DateTime assignedDate;
   final DateTime lastDate;
-  final String referencingDocumentLink;
+  final List<dynamic> referencingDocumentLink;
   final String bannerLink;
   final UserB mentor;
   List<UserB> acknowledgedBy;
