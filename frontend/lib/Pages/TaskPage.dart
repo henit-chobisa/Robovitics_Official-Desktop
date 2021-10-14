@@ -1,6 +1,11 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/Classes/Task.dart';
+import 'package:frontend/Classes/UserB.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TaskPage extends StatefulWidget {
   const TaskPage({Key? key}) : super(key: key);
@@ -10,6 +15,52 @@ class TaskPage extends StatefulWidget {
 }
 
 class _TaskPageState extends State<TaskPage> {
+  Future<UserB> getCurrentUser() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var user = sharedPreferences.get("UserB");
+    var userJson = jsonDecode(user.toString());
+    UserB currentUser = UserB.fromJson(userJson);
+    return currentUser;
+  }
+
+  Future<List<Task>> getUserTask(String userID) async {
+    print(userID);
+    var response = await http.get(Uri.parse(
+        "http://127.0.0.1:1000/api/tasks/getUserTask?userID=${userID}"));
+    List<dynamic> decoded = await jsonDecode(response.body);
+    List<Task> allTasks = decoded.map((data) => Task.fromJson(data)).toList();
+    print(allTasks.length);
+    return allTasks;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  int getCoreTaskCount(List<Task> alltask) {
+    var sum = 0;
+    alltask.forEach((element) {
+      if (element.isTeamTask == false) {
+        sum++;
+      }
+    });
+    print(sum);
+    return sum;
+  }
+
+  int getTeamTaskCount(List<Task> alltask) {
+    var sum = 0;
+    // print(alltask.elementAt(0).isTeamTask);
+    alltask.forEach((element) {
+      if (element.isTeamTask == true) {
+        sum++;
+      }
+    });
+    print(sum);
+    return sum;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -17,64 +68,126 @@ class _TaskPageState extends State<TaskPage> {
       child: Container(
         child: Padding(
           padding: EdgeInsets.all(32.sp),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Assigned Task",
-                style: TextStyle(
-                    color: Colors.white, fontSize: 35.sp, fontFamily: "Futura"),
-              ),
-              Divider(
-                color: Colors.grey,
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              Text(
-                "Core Task",
-                style: TextStyle(
-                    color: Colors.white, fontSize: 30.sp, fontFamily: "Futura"),
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              Container(
-                height: 570.h,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  itemCount: 10,
-                  itemBuilder: (_, index) => TaskTile(
-                    taskModel: null,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10.h,
-              ),
-              Text(
-                "Team Task",
-                style: TextStyle(
-                    color: Colors.white, fontSize: 30.sp, fontFamily: "Futura"),
-              ),
-              SizedBox(
-                height: 10.h,
-              ),
-              Container(
-                height: 570.h,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  itemCount: 10,
-                  itemBuilder: (_, index) => TaskTile(
-                    taskModel: null,
-                  ),
-                ),
-              ),
-            ],
-          ),
+          child: FutureBuilder<UserB>(
+              future: getCurrentUser(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Text(
+                    "Loading",
+                    style:
+                        TextStyle(color: Colors.grey.shade200, fontSize: 15.sp),
+                  );
+                }
+                UserB currentUser = snapshot.data!;
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Assigned Task",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 35.sp,
+                          fontFamily: "Futura"),
+                    ),
+                    Divider(
+                      color: Colors.grey,
+                    ),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    FutureBuilder<List<Task>>(
+                        future: getUserTask(currentUser.id),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Text(
+                              "Loading",
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 15.sp,
+                                  fontStyle: FontStyle.italic),
+                            );
+                          } else {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Core Task",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 30.sp,
+                                      fontFamily: "Futura"),
+                                ),
+                                SizedBox(
+                                  height: 20.h,
+                                ),
+                                Container(
+                                  height: 570.h,
+                                  child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: snapshot.data!.length,
+                                      shrinkWrap: true,
+                                      itemBuilder: (_, index) {
+                                        if (snapshot.data!
+                                                .elementAt(index)
+                                                .isTeamTask ==
+                                            false) {
+                                          return TaskTile(
+                                            taskModel:
+                                                snapshot.data!.elementAt(index),
+                                          );
+                                        } else {
+                                          return SizedBox(
+                                            height: 0,
+                                            width: 0,
+                                          );
+                                        }
+                                      }),
+                                ),
+                                SizedBox(
+                                  height: 10.h,
+                                ),
+                                Text(
+                                  "Team Task",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 30.sp,
+                                      fontFamily: "Futura"),
+                                ),
+                                SizedBox(
+                                  height: 10.h,
+                                ),
+                                Container(
+                                  height: 570.h,
+                                  child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      shrinkWrap: true,
+                                      itemCount: snapshot.data!.length,
+                                      itemBuilder: (_, index) {
+                                        if (snapshot.data!
+                                                .elementAt(index)
+                                                .isTeamTask ==
+                                            false) {
+                                          return TaskTile(
+                                            taskModel:
+                                                snapshot.data!.elementAt(index),
+                                          );
+                                        } else {
+                                          return SizedBox(
+                                            height: 0,
+                                            width: 0,
+                                          );
+                                        }
+                                      }),
+                                ),
+                              ],
+                            );
+                          }
+                        }),
+                  ],
+                );
+              }),
         ),
       ),
     ));
@@ -82,9 +195,9 @@ class _TaskPageState extends State<TaskPage> {
 }
 
 class TaskTile extends StatelessWidget {
-  TaskTile({this.taskModel});
+  TaskTile({required this.taskModel});
 
-  final Task? taskModel;
+  final Task taskModel;
 
   @override
   Widget build(BuildContext context) {
@@ -104,18 +217,23 @@ class TaskTile extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Text(
-                    "Heading",
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 25.sp,
-                        fontWeight: FontWeight.bold),
+                  Flexible(
+                    flex: 6,
+                    child: Container(
+                      child: Text(
+                        taskModel.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
                   ),
                   Spacer(),
                   Text(
-                    "+5",
+                    "+ ${taskModel.pointsAlloted}",
                     style: TextStyle(
                         color: Colors.greenAccent,
                         fontSize: 20.sp,
@@ -124,21 +242,21 @@ class TaskTile extends StatelessWidget {
                   SizedBox(
                     width: 10.w,
                   ),
-                  Flexible(
-                    child: Container(
-                      height: 30.h,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey.shade500),
-                          borderRadius: BorderRadius.circular(20.r)),
-                      child: Center(
-                        child: Text(
-                          "Pending",
-                          style:
-                              TextStyle(color: Colors.white, fontSize: 12.sp),
-                        ),
-                      ),
-                    ),
-                  )
+                  // Flexible(
+                  //   child: Container(
+                  //     height: 30.h,
+                  //     decoration: BoxDecoration(
+                  //         border: Border.all(color: Colors.grey.shade500),
+                  //         borderRadius: BorderRadius.circular(20.r)),
+                  //     child: Center(
+                  //       child: Text(
+                  //         "Pending",
+                  //         style:
+                  //             TextStyle(color: Colors.white, fontSize: 12.sp),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // )
                 ],
               ),
               SizedBox(
@@ -148,7 +266,7 @@ class TaskTile extends StatelessWidget {
                 color: Colors.transparent,
                 height: 50.h,
                 child: Text(
-                  "This is the task provided by robovitics, and on its completion you will get some points",
+                  taskModel.description,
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -161,8 +279,7 @@ class TaskTile extends StatelessWidget {
                 child: Image(
                     width: double.maxFinite,
                     fit: BoxFit.contain,
-                    image: NetworkImage(
-                        "https://res.cloudinary.com/ddglxo0l3/image/upload/v1634223313/ProfileImages/240806882_826048344768127_7284435366260518300_n_ihjkkp.jpg")),
+                    image: NetworkImage(taskModel.bannerLink)),
               ),
               SizedBox(
                 height: 10.h,
