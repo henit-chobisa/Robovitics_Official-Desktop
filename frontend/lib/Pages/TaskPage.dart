@@ -11,6 +11,24 @@ class TaskPage extends StatefulWidget {
 class _TaskPageState extends State<TaskPage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Expanded(
+        child: Container(
+      child: Padding(
+        padding: EdgeInsets.all(32.sp),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Assigned Task",
+              style: TextStyle(color: Colors.white, fontSize: 35.sp),
+            ),
+            Divider(
+              color: Colors.grey,
+            ),
+          ],
+        ),
+      ),
+    ));
   }
 }
