@@ -155,7 +155,12 @@ class _NoticeBoxState extends State<NoticeBox> {
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.r),
                       child: widget.preLoadedFilePath != ""
-                          ? Text("Loaded")
+                          // ? SfPdfViewer.asset(widget.preLoadedFilePath)
+                          ? Center(
+                              child: Text(
+                              "Loaded",
+                              style: TextStyle(color: Colors.black),
+                            ))
                           : Center(
                               child: Text("Loading",
                                   style: TextStyle(

@@ -89,24 +89,26 @@ class _NoticePageState extends State<NoticePage> {
                               ],
                             );
                           } else {
-                            return Container(
-                              height: 750.h,
-                              width: double.maxFinite,
-                              child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  shrinkWrap: true,
-                                  itemCount: snapshot.data!.length,
-                                  itemBuilder: (_, index) {
-                                    return NoticeBox(
-                                      currentUser: currentUser,
-                                      model: snapshot.data!.elementAt(index),
-                                      isRowVisible: true,
-                                      preLoadedFilePath: "",
-                                      docLink: snapshot.data!
-                                          .elementAt(index)
-                                          .docLink,
-                                    );
-                                  }),
+                            return Flexible(
+                              child: Container(
+                                height: 750.h,
+                                width: double.maxFinite,
+                                child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    shrinkWrap: true,
+                                    itemCount: snapshot.data!.length,
+                                    itemBuilder: (_, index) {
+                                      return NoticeBox(
+                                        currentUser: currentUser,
+                                        model: snapshot.data!.elementAt(index),
+                                        isRowVisible: true,
+                                        preLoadedFilePath: "",
+                                        docLink: snapshot.data!
+                                            .elementAt(index)
+                                            .docLink,
+                                      );
+                                    }),
+                              ),
                             );
                           }
                         })
