@@ -7,8 +7,8 @@ import 'package:window_size/window_size.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-    setWindowTitle("Robovitics Official");
     setWindowMinSize(Size(1300, 750));
+    setWindowFrame(Rect.largest);
   }
   runApp(RoboviticsOfficial());
 }

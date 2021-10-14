@@ -13,45 +13,68 @@ class _TaskPageState extends State<TaskPage> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        child: Container(
-      child: Padding(
-        padding: EdgeInsets.all(32.sp),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Assigned Task",
-              style: TextStyle(
-                  color: Colors.white, fontSize: 35.sp, fontFamily: "Futura"),
-            ),
-            Divider(
-              color: Colors.grey,
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Core Task",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 25.sp,
-                        fontFamily: "Futura"),
-                  ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  TaskTile(
-                    taskModel: null,
-                  )
-                ],
+        child: SingleChildScrollView(
+      child: Container(
+        child: Padding(
+          padding: EdgeInsets.all(32.sp),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Assigned Task",
+                style: TextStyle(
+                    color: Colors.white, fontSize: 35.sp, fontFamily: "Futura"),
               ),
-            ),
-          ],
+              Divider(
+                color: Colors.grey,
+              ),
+              SizedBox(
+                height: 20.h,
+              ),
+              Text(
+                "Core Task",
+                style: TextStyle(
+                    color: Colors.white, fontSize: 30.sp, fontFamily: "Futura"),
+              ),
+              SizedBox(
+                height: 20.h,
+              ),
+              Container(
+                height: 570.h,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  itemCount: 10,
+                  itemBuilder: (_, index) => TaskTile(
+                    taskModel: null,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              Text(
+                "Team Task",
+                style: TextStyle(
+                    color: Colors.white, fontSize: 30.sp, fontFamily: "Futura"),
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              Container(
+                height: 570.h,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  itemCount: 10,
+                  itemBuilder: (_, index) => TaskTile(
+                    taskModel: null,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     ));
@@ -66,9 +89,9 @@ class TaskTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: EdgeInsets.only(top: 8.h, bottom: 8.h, right: 8.w),
       child: Container(
-        height: 400.h,
+        height: 450.h,
         width: 400.w,
         decoration: BoxDecoration(
             color: Colors.transparent,
@@ -79,14 +102,44 @@ class TaskTile extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Heading",
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25.sp,
-                    fontWeight: FontWeight.bold),
+              Row(
+                children: [
+                  Text(
+                    "Heading",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 25.sp,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Spacer(),
+                  Text(
+                    "+5",
+                    style: TextStyle(
+                        color: Colors.greenAccent,
+                        fontSize: 20.sp,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  SizedBox(
+                    width: 10.w,
+                  ),
+                  Flexible(
+                    child: Container(
+                      height: 30.h,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade500),
+                          borderRadius: BorderRadius.circular(20.r)),
+                      child: Center(
+                        child: Text(
+                          "Pending",
+                          style:
+                              TextStyle(color: Colors.white, fontSize: 12.sp),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
               SizedBox(
                 height: 10.h,
@@ -107,9 +160,9 @@ class TaskTile extends StatelessWidget {
               Flexible(
                 child: Image(
                     width: double.maxFinite,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.contain,
                     image: NetworkImage(
-                        "https://res.cloudinary.com/ddglxo0l3/image/upload/v1628838502/sample.jpg")),
+                        "https://res.cloudinary.com/ddglxo0l3/image/upload/v1634223313/ProfileImages/240806882_826048344768127_7284435366260518300_n_ihjkkp.jpg")),
               ),
               SizedBox(
                 height: 10.h,
