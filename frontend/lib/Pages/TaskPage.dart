@@ -168,7 +168,7 @@ class _TaskPageState extends State<TaskPage> {
                                         if (snapshot.data!
                                                 .elementAt(index)
                                                 .isTeamTask ==
-                                            false) {
+                                            true) {
                                           return TaskTile(
                                             taskModel:
                                                 snapshot.data!.elementAt(index),
@@ -217,8 +217,7 @@ class TaskTile extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Flexible(
-                    flex: 6,
+                  Expanded(
                     child: Container(
                       child: Text(
                         taskModel.title,
@@ -231,7 +230,6 @@ class TaskTile extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Spacer(),
                   Text(
                     "+ ${taskModel.pointsAlloted}",
                     style: TextStyle(
