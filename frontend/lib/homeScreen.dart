@@ -80,8 +80,8 @@ class _homePageState extends State<homePage> {
         isPressed: false,
         associatedPage: landingPage()),
     RadioButton(
-        title: "Appliers",
-        icon: CupertinoIcons.person_add,
+        title: "Forms",
+        icon: Icons.featured_play_list_outlined,
         isPressed: false,
         associatedPage: landingPage()),
     RadioButton(
