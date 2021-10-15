@@ -15,14 +15,21 @@ class _TaskViewState extends State<TaskView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
-          Image(
-            image: NetworkImage(widget.model.bannerLink),
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            fit: BoxFit.fill,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Image(
+                image: NetworkImage(widget.model.bannerLink),
+                height: 500.h,
+                width: 500.w,
+                fit: BoxFit.contain,
+              ),
+              Image(image: AssetImage("images/brandLogoBlack.png"))
+            ],
           ),
           SingleChildScrollView(
             child: Padding(
@@ -87,154 +94,141 @@ class _TaskViewState extends State<TaskView> {
                         ],
                       ),
                       SizedBox(
-                        height: 30.h,
+                        height: 20.h,
                       ),
-                      Flexible(
-                        fit: FlexFit.loose,
-                        child: Container(
-                          width: 1400.w,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(left: 40.w),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      widget.model.title,
-                                      style: TextStyle(
-                                          color: Colors.blue.shade300,
-                                          fontSize: 30.sp,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Flexible(
-                                      fit: FlexFit.loose,
-                                      child: Container(
-                                        child: Text(
-                                          widget.model.description,
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 5,
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 15.sp),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 30.sp,
-                                    ),
-                                    Text(
-                                      "Assigned To",
-                                      style: TextStyle(
-                                          color: Colors.blue.shade200,
-                                          fontSize: 20.sp),
-                                    ),
-                                    SizedBox(
-                                      height: 10.h,
-                                    ),
-                                    Expanded(
-                                      child: ListView.builder(
-                                          itemCount:
-                                              widget.model.assignedTo.length,
-                                          shrinkWrap: true,
-                                          scrollDirection: Axis.horizontal,
-                                          itemBuilder: (_, index) {
-                                            return Padding(
-                                              padding: EdgeInsets.all(8.sp),
-                                              child: Container(
-                                                child: Column(
-                                                  children: [
-                                                    ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50.r),
-                                                      child: Image(
-                                                        image: NetworkImage(
-                                                            widget.model
-                                                                .assignedTo
-                                                                .elementAt(
-                                                                    index)
-                                                                .photoURL),
-                                                        height: 100.h,
-                                                        width: 100.h,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 10.h,
-                                                    ),
-                                                    Text(
-                                                      widget.model.assignedTo
-                                                          .elementAt(index)
-                                                          .userName,
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            );
-                                          }),
-                                    )
-                                  ],
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.model.title,
+                                  style: TextStyle(
+                                      color: Colors.blue.shade100,
+                                      fontSize: 30.sp,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                              ),
-                              Spacer(),
-                              Padding(
-                                padding: EdgeInsets.all(16.sp),
-                                child: Container(
-                                  height: 300.h,
-                                  width: 400.w,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20.r),
-                                      border: Border.all(
-                                          color: Colors.white, width: 1.sp)),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(8.sp),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          "Mentored By",
-                                          style: TextStyle(
-                                              color: Colors.blue.shade800,
-                                              fontSize: 20.sp),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.all(8.sp),
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(100.r),
-                                            child: Image(
-                                                height: 200.h,
-                                                width: 200.h,
-                                                fit: BoxFit.cover,
-                                                image: NetworkImage(widget
-                                                    .model.mentor.photoURL)),
-                                          ),
-                                        ),
-                                        Text(
-                                          widget.model.mentor.userName,
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 20.sp),
-                                        ),
-                                        Text(
-                                          widget.model.mentor.email,
-                                          style: TextStyle(
-                                              color: Colors.grey.shade200,
-                                              fontSize: 13.sp,
-                                              letterSpacing: 1),
-                                        )
-                                      ],
-                                    ),
+                                SizedBox(
+                                  height: 10.h,
+                                ),
+                                Text(
+                                  widget.model.description,
+                                  maxLines: 5,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16.sp,
                                   ),
                                 ),
-                              )
-                            ],
+                                SizedBox(
+                                  height: 20.sp,
+                                ),
+                                Text(
+                                  "Assigned To",
+                                  style: TextStyle(
+                                      color: Colors.blue.shade200,
+                                      fontSize: 20.sp),
+                                ),
+                                Container(
+                                  height: 200.h,
+                                  width: double.maxFinite,
+                                  child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      shrinkWrap: true,
+                                      itemCount: 10,
+                                      itemBuilder: (_, index) {
+                                        return Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 20.w, right: 20.w),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          50.r),
+                                                  child: Image(
+                                                      image: NetworkImage(widget
+                                                          .model.assignedTo
+                                                          .elementAt(0)
+                                                          .photoURL),
+                                                      fit: BoxFit.cover,
+                                                      height: 100.h,
+                                                      width: 100.w)),
+                                              Text(
+                                                widget.model.assignedTo
+                                                    .elementAt(0)
+                                                    .userName,
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 13.sp),
+                                              )
+                                            ],
+                                          ),
+                                        );
+                                      }),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
+                          Expanded(
+                            flex: 1,
+                            child: Padding(
+                              padding: EdgeInsets.all(16.sp),
+                              child: Container(
+                                height: 300.h,
+                                width: 400.w,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20.r),
+                                    border: Border.all(
+                                        color: Colors.white, width: 1.sp)),
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.sp),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        "Mentored By",
+                                        style: TextStyle(
+                                            color: Colors.blue.shade300,
+                                            fontSize: 20.sp),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.all(8.sp),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(100.r),
+                                          child: Image(
+                                              height: 200.h,
+                                              width: 200.h,
+                                              fit: BoxFit.cover,
+                                              image: NetworkImage(widget
+                                                  .model.mentor.photoURL)),
+                                        ),
+                                      ),
+                                      Text(
+                                        widget.model.mentor.userName,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20.sp),
+                                      ),
+                                      Text(
+                                        widget.model.mentor.email,
+                                        style: TextStyle(
+                                            color: Colors.grey.shade200,
+                                            fontSize: 13.sp,
+                                            letterSpacing: 1),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
                       )
                     ],
                   ),
@@ -247,3 +241,63 @@ class _TaskViewState extends State<TaskView> {
     );
   }
 }
+
+// class MentorTile extends StatelessWidget {
+//   const MentorTile({
+//     Key? key,
+//     required this.widget,
+//     required this.widget,
+//     required this.widget,
+//   }) : super(key: key);
+//
+//   final TaskView widget;
+//   final TaskView widget;
+//   final TaskView widget;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: EdgeInsets.all(16.sp),
+//       child: Container(
+//         height: 300.h,
+//         width: 400.w,
+//         decoration: BoxDecoration(
+//             borderRadius: BorderRadius.circular(20.r),
+//             border: Border.all(color: Colors.white, width: 1.sp)),
+//         child: Padding(
+//           padding: EdgeInsets.all(8.sp),
+//           child: Column(
+//             children: [
+//               Text(
+//                 "Mentored By",
+//                 style: TextStyle(color: Colors.blue.shade300, fontSize: 20.sp),
+//               ),
+//               Padding(
+//                 padding: EdgeInsets.all(8.sp),
+//                 child: ClipRRect(
+//                   borderRadius: BorderRadius.circular(100.r),
+//                   child: Image(
+//                       height: 200.h,
+//                       width: 200.h,
+//                       fit: BoxFit.cover,
+//                       image: NetworkImage(widget.model.mentor.photoURL)),
+//                 ),
+//               ),
+//               Text(
+//                 widget.model.mentor.userName,
+//                 style: TextStyle(color: Colors.white, fontSize: 20.sp),
+//               ),
+//               Text(
+//                 widget.model.mentor.email,
+//                 style: TextStyle(
+//                     color: Colors.grey.shade200,
+//                     fontSize: 13.sp,
+//                     letterSpacing: 1),
+//               )
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
