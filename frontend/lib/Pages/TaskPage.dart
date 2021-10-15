@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:frontend/Pages/TaskView.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -282,19 +283,25 @@ class TaskTile extends StatelessWidget {
               SizedBox(
                 height: 10.h,
               ),
-              Container(
-                height: 50.h,
-                width: double.maxFinite,
-                decoration: BoxDecoration(
-                    color: Colors.blue.shade700,
-                    borderRadius: BorderRadius.circular(10.r)),
-                child: Center(
-                  child: Text(
-                    "View Task",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15.sp,
-                        fontWeight: FontWeight.bold),
+              GestureDetector(
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => TaskView(model: taskModel))),
+                child: Container(
+                  height: 50.h,
+                  width: double.maxFinite,
+                  decoration: BoxDecoration(
+                      color: Colors.blue.shade700,
+                      borderRadius: BorderRadius.circular(10.r)),
+                  child: Center(
+                    child: Text(
+                      "View Task",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
               )
