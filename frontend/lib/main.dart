@@ -8,7 +8,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     setWindowMinSize(Size(1300, 750));
-    setWindowFrame(Rect.largest);
+    setWindowTitle("Robovitics");
   }
   runApp(RoboviticsOfficial());
 }
