@@ -6,6 +6,7 @@ router.post('/', async (req, res) => {
     const { questionID, comment, userID } = req.body;
     const question = await qna.findById(questionID);
     question.addComment(comment, userID);
+    await question.save();
     res.send(question);
 })
 

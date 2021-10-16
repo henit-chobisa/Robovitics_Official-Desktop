@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const moment = require("moment");
-const comment = require('./CommentModel');
+const Comment = require('./CommentModel');
 const { Timestamp } = require('bson');
 
 const qnaSchema = mongoose.Schema({
@@ -13,10 +13,10 @@ const qnaSchema = mongoose.Schema({
 
 qnaSchema.methods.addComment = async function(comment, userID){
     const timeStamp = moment().format().toString();
-    const com = new comment({comment : comment, 
+    const com = new Comment({ comment : comment, 
         commentedBy : userID, timeStamp : timeStamp});
     this.comments.push(com);
-    await comment.save();
+    await com.save();
 }
 
 const qna = mongoose.model("QNA", qnaSchema);

@@ -34,18 +34,17 @@ class _TaskViewState extends State<TaskView> {
           SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.only(top: 550.h),
-              child: Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(50.r),
-                      topRight: Radius.circular(50.r)),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(20.sp),
-                  child: SingleChildScrollView(
+              child: Flexible(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(50.r),
+                        topRight: Radius.circular(50.r)),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(20.sp),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -62,8 +61,7 @@ class _TaskViewState extends State<TaskView> {
                             Text(
                               "Last Date : ${widget.model.lastDate.day} / ${widget.model.lastDate.month} / ${widget.model.lastDate.year}",
                               style: TextStyle(
-                                  color: Colors.redAccent.shade100,
-                                  fontSize: 25.sp),
+                                  color: Colors.redAccent, fontSize: 25.sp),
                             ),
                             Spacer(),
                             Container(
@@ -110,9 +108,10 @@ class _TaskViewState extends State<TaskView> {
                                   Text(
                                     widget.model.title,
                                     style: TextStyle(
-                                        color: Colors.blue.shade100,
-                                        fontSize: 30.sp,
-                                        fontWeight: FontWeight.bold),
+                                      color: Colors.yellowAccent,
+                                      fontSize: 30.sp,
+                                      // fontWeight: FontWeight.bold
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 10.h,
@@ -269,7 +268,7 @@ class _TaskViewState extends State<TaskView> {
                                       borderRadius:
                                           BorderRadius.circular(225.r),
                                       border: Border.all(
-                                          color: Colors.white, width: 1.sp)),
+                                          color: Colors.white, width: 3.sp)),
                                   child: Padding(
                                     padding: EdgeInsets.all(8.sp),
                                     child: Column(
@@ -319,12 +318,34 @@ class _TaskViewState extends State<TaskView> {
                         Divider(
                           color: Colors.grey,
                         ),
-                        Text(
-                          "Ask your mentor!",
-                          style: TextStyle(
-                              color: Colors.blue.shade100,
+                        Center(
+                          child: Text(
+                            "Ask your mentor!",
+                            style: TextStyle(
+                              color: Colors.white,
                               fontSize: 30.sp,
-                              fontWeight: FontWeight.bold),
+                              // fontWeight: FontWeight.bold
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20.sp,
+                        ),
+                        Container(
+                          height: 700.h,
+                          width: double.maxFinite,
+                          decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(20.r),
+                              border: Border.all(
+                                color: Colors.blue.shade200,
+                              )),
+                          child: Padding(
+                            padding: EdgeInsets.all(20.0),
+                            child: ListView.builder(itemBuilder: (_, index) {
+                              return QuestionTile();
+                            }),
+                          ),
                         ),
                       ],
                     ),
@@ -334,6 +355,118 @@ class _TaskViewState extends State<TaskView> {
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class QuestionTile extends StatelessWidget {
+  const QuestionTile({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 20.h),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Question 1 -> How can we be able to do this task it is literally very very hard and the duration of completion is also very low",
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 22.sp,
+                fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            height: 10.h,
+          ),
+          Row(
+            children: [
+              Expanded(flex: 2, child: Container()),
+              Container(
+                height: 300.h,
+                width: 1.w,
+                color: Colors.white,
+              ),
+              Expanded(
+                flex: 20,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 20.sp, right: 20.sp),
+                  child: Container(
+                      height: 300.h,
+                      width: double.maxFinite,
+                      child: ListView.builder(
+                          itemCount: 5,
+                          itemBuilder: (_, index) {
+                            return CommentTile();
+                          })),
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class CommentTile extends StatelessWidget {
+  const CommentTile({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(8.sp),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.r),
+          color: Colors.grey.shade800,
+        ),
+        child: Padding(
+          padding:
+              EdgeInsets.only(left: 16.w, right: 16.w, top: 12.h, bottom: 12.h),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12.r),
+                    child: Image(
+                      image: NetworkImage(
+                          "https://res.cloudinary.com/ddglxo0l3/image/upload/v1631262965/ProfileImages/opaarbwrc6qg7pdifxwz.png"),
+                      height: 24.h,
+                      width: 24.h,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.w,
+                  ),
+                  Text(
+                    "Henit Chobisa",
+                    style: TextStyle(color: Colors.white, fontSize: 14.sp),
+                  ),
+                  Spacer(),
+                  Text(
+                    "henitchobisa0885@gmail.com",
+                    style: TextStyle(color: Colors.white, fontSize: 14.sp),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 15.h,
+              ),
+              Text(
+                "I believe in infinite energy and I beileve in a broader vision to change the world. Hence I believe that every thing can be achieved with patience and strength and You guys have enough time for this, you can do it!, Believe in yourself guys I have a lots of expectations from you guys, You guys will be the next board members and if you are not able to handle such small problems how will you handle the club",
+                style: TextStyle(color: Colors.white, fontSize: 15.sp),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
