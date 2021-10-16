@@ -25,12 +25,10 @@ class _TaskPageState extends State<TaskPage> {
   }
 
   Future<List<Task>> getUserTask(String userID) async {
-    print(userID);
     var response = await http.get(Uri.parse(
         "http://127.0.0.1:1000/api/tasks/getUserTask?userID=${userID}"));
     List<dynamic> decoded = await jsonDecode(response.body);
     List<Task> allTasks = decoded.map((data) => Task.fromJson(data)).toList();
-    print(allTasks.length);
     return allTasks;
   }
 
@@ -78,6 +76,12 @@ class _TaskPageState extends State<TaskPage> {
                     style:
                         TextStyle(color: Colors.grey.shade200, fontSize: 15.sp),
                   );
+                } else if (snapshot.connectionState == ConnectionState.none) {
+                  return Text(
+                    "No Response from backend, Sorry!",
+                    style:
+                        TextStyle(color: Colors.grey.shade200, fontSize: 15.sp),
+                  );
                 }
                 UserB currentUser = snapshot.data!;
                 return Column(
@@ -109,7 +113,23 @@ class _TaskPageState extends State<TaskPage> {
                                   fontSize: 15.sp,
                                   fontStyle: FontStyle.italic),
                             );
+                          } else if (snapshot.connectionState ==
+                              ConnectionState.none) {
+                            return Text(
+                              "No Response from backend, Sorry!",
+                              style: TextStyle(
+                                  color: Colors.grey.shade200, fontSize: 15.sp),
+                            );
                           } else {
+                            /*if (!snapshot.hasData) {
+                              return Text(
+                                "Sorry, error fetching data!",
+                                style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 15.sp,
+                                    fontStyle: FontStyle.italic),
+                              );
+                            }*/
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [

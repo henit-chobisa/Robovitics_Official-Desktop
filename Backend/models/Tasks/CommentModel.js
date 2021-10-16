@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 const moment = require("moment");
+const userBasicSchema = require('../UserBasicModel');
 
 const commentSchema = mongoose.Schema({
     comment : String,
     timeStamp : String,
-    commentedBy : {type : mongoose.Schema.Types.ObjectId, ref : "UserB"},
+    commentedBy : userBasicSchema.schema,
 })
 
 const comment = mongoose.model("Comment", commentSchema);
