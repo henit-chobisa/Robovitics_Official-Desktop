@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const moment = require("moment");
 const Comment = require('./CommentModel');
 const { Timestamp } = require('bson');
+const userBasicSchema = require('../UserBasicModel');
 
 const qnaSchema = mongoose.Schema({
     TaskID : {type : mongoose.Schema.Types.ObjectId, ref : "Task"},
@@ -13,8 +14,9 @@ const qnaSchema = mongoose.Schema({
 
 qnaSchema.methods.addComment = async function(comment, userID){
     const timeStamp = moment().format().toString();
+    const user = await userBasicSchema.findById(userID)
     const com = new Comment({ comment : comment, 
-        commentedBy : userID, timeStamp : timeStamp});
+        commentedBy : user, timeStamp : timeStamp});
     this.comments.push(com);
     await com.save();
 }
