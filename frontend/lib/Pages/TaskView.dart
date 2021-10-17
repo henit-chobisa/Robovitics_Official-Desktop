@@ -1,10 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/Classes/Comment.dart';
 import 'package:frontend/Classes/QnaModel.dart';
 import 'package:frontend/Classes/Task.dart';
 import 'package:frontend/Classes/UserB.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 
 class TaskView extends StatefulWidget {
   TaskView({required this.model, required this.currentUser});
@@ -16,6 +18,8 @@ class TaskView extends StatefulWidget {
 }
 
 class _TaskViewState extends State<TaskView> {
+  Future<void> askQuestion() async {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -358,6 +362,56 @@ class _TaskViewState extends State<TaskView> {
                                 }),
                           ),
                         ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Container(
+                            height: 50.h,
+                            decoration: BoxDecoration(
+                                color: Colors.grey.shade800,
+                                borderRadius: BorderRadius.circular(10.r)),
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 15.w),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 8,
+                                    child: TextField(
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 13.sp),
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: "Add a comment...",
+                                          hintStyle: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 13.sp)),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10.w,
+                                  ),
+                                  Expanded(
+                                      child: GestureDetector(
+                                    onTap: () {},
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(10.r)),
+                                      child: Center(
+                                        child: Text(
+                                          "Ask Question",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 12.sp),
+                                        ),
+                                      ),
+                                    ),
+                                  ))
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -371,13 +425,51 @@ class _TaskViewState extends State<TaskView> {
   }
 }
 
-class QuestionTile extends StatelessWidget {
+class QuestionTile extends StatefulWidget {
   QuestionTile(
       {required this.index, required this.model, required this.currentUser});
 
   final int index;
-  final QnaModel model;
+  QnaModel model;
   final UserB currentUser;
+
+  @override
+  _QuestionTileState createState() => _QuestionTileState();
+}
+
+class _QuestionTileState extends State<QuestionTile> {
+  String status = "Comment";
+
+  TextEditingController commentController = TextEditingController();
+
+  Future<void> shareComment() async {
+    if (commentController.text.isNotEmpty && status == "Comment") {
+      setState(() {
+        status = "On it...";
+      });
+      var body = {
+        "questionID": widget.model.id,
+        "comment": commentController.text,
+        "userID": widget.currentUser.id
+      };
+      var header = {"Content-Type": "application/json"};
+      var response = await http.post(
+          Uri.parse("http://127.0.0.1:1000/api/tasks/addComment"),
+          body: jsonEncode(body),
+          headers: header);
+      if (response.statusCode == 200) {
+        var comment = new Comment(
+            comment: commentController.text,
+            commentedBy: widget.currentUser,
+            timeStamp: DateTime.now());
+        setState(() {
+          widget.model.comments.add(comment);
+          status = "Comment";
+          commentController.text = "";
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -388,7 +480,7 @@ class QuestionTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Question ${index + 1} -> ${model.question}",
+            "Question ${widget.index + 1} -> ${widget.model.question}",
             style: TextStyle(
                 color: Colors.white,
                 fontSize: 22.sp,
@@ -416,12 +508,12 @@ class QuestionTile extends StatelessWidget {
                               maxHeight: 300.h, minHeight: 100.h),
                           width: double.maxFinite,
                           child: ListView.builder(
-                              itemCount: model.comments.length,
+                              itemCount: widget.model.comments.length,
                               itemBuilder: (_, index) {
                                 return CommentTile(
-                                  userID: currentUser.id,
-                                  questionID: model.id,
-                                  model: model.comments.elementAt(index),
+                                  userID: widget.currentUser.id,
+                                  questionID: widget.model.id,
+                                  model: widget.model.comments.elementAt(index),
                                 );
                               })),
                       SizedBox(
@@ -441,6 +533,7 @@ class QuestionTile extends StatelessWidget {
                                 Expanded(
                                   flex: 8,
                                   child: TextField(
+                                    controller: commentController,
                                     style: TextStyle(
                                         color: Colors.white, fontSize: 13.sp),
                                     decoration: InputDecoration(
@@ -455,16 +548,22 @@ class QuestionTile extends StatelessWidget {
                                   width: 10.w,
                                 ),
                                 Expanded(
-                                    child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius:
-                                          BorderRadius.circular(10.r)),
-                                  child: Center(
-                                    child: Text(
-                                      "Comment",
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 12.sp),
+                                    child: GestureDetector(
+                                  onTap: () {
+                                    shareComment();
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(10.r)),
+                                    child: Center(
+                                      child: Text(
+                                        status,
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 12.sp),
+                                      ),
                                     ),
                                   ),
                                 ))
