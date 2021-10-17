@@ -12,13 +12,45 @@ class TaskView extends StatefulWidget {
   TaskView({required this.model, required this.currentUser});
 
   final UserB currentUser;
-  final Task model;
+  Task model;
   @override
   _TaskViewState createState() => _TaskViewState();
 }
 
 class _TaskViewState extends State<TaskView> {
-  Future<void> askQuestion() async {}
+  TextEditingController questionController = TextEditingController();
+  var status = "Ask Query!";
+
+  Future<void> askQuestion() async {
+    if (questionController.text.isNotEmpty) {
+      setState(() {
+        status = "On it...";
+      });
+      var body = {
+        "taskID": widget.model.id,
+        "question": questionController.text,
+        "userID": widget.currentUser.id
+      };
+      var headers = {"Content-Type": "application/json"};
+      var response = await http.post(
+          Uri.parse("http://127.0.0.1:1000/api/tasks/askQuestion"),
+          body: jsonEncode(body),
+          headers: headers);
+      if (response.statusCode == 200) {
+        var question = QnaModel(
+            id: response.body.toString(),
+            TaskID: widget.model.id,
+            question: questionController.text,
+            comments: [],
+            raisedBy: widget.currentUser,
+            timeStamp: DateTime.now());
+        setState(() {
+          widget.model.qna.add(question);
+          status = "Ask Query!";
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -376,11 +408,12 @@ class _TaskViewState extends State<TaskView> {
                                   Expanded(
                                     flex: 8,
                                     child: TextField(
+                                      controller: questionController,
                                       style: TextStyle(
                                           color: Colors.white, fontSize: 13.sp),
                                       decoration: InputDecoration(
                                           border: InputBorder.none,
-                                          hintText: "Add a comment...",
+                                          hintText: "Add your doubt here!",
                                           hintStyle: TextStyle(
                                               color: Colors.grey,
                                               fontSize: 13.sp)),
@@ -391,7 +424,9 @@ class _TaskViewState extends State<TaskView> {
                                   ),
                                   Expanded(
                                       child: GestureDetector(
-                                    onTap: () {},
+                                    onTap: () {
+                                      askQuestion();
+                                    },
                                     child: Container(
                                       decoration: BoxDecoration(
                                           color: Colors.white,
@@ -399,7 +434,7 @@ class _TaskViewState extends State<TaskView> {
                                               BorderRadius.circular(10.r)),
                                       child: Center(
                                         child: Text(
-                                          "Ask Question",
+                                          status,
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 12.sp),
