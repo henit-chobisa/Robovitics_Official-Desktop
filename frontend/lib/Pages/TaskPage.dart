@@ -121,7 +121,7 @@ class _TaskPageState extends State<TaskPage> {
                                   color: Colors.grey.shade200, fontSize: 15.sp),
                             );
                           } else {
-                            /*if (!snapshot.hasData) {
+                            if (!snapshot.hasData) {
                               return Text(
                                 "Sorry, error fetching data!",
                                 style: TextStyle(
@@ -129,7 +129,7 @@ class _TaskPageState extends State<TaskPage> {
                                     fontSize: 15.sp,
                                     fontStyle: FontStyle.italic),
                               );
-                            }*/
+                            }
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -155,6 +155,7 @@ class _TaskPageState extends State<TaskPage> {
                                                 .isTeamTask ==
                                             false) {
                                           return TaskTile(
+                                            currentUser: currentUser,
                                             taskModel:
                                                 snapshot.data!.elementAt(index),
                                           );
@@ -191,6 +192,7 @@ class _TaskPageState extends State<TaskPage> {
                                                 .isTeamTask ==
                                             true) {
                                           return TaskTile(
+                                            currentUser: currentUser,
                                             taskModel:
                                                 snapshot.data!.elementAt(index),
                                           );
@@ -216,8 +218,9 @@ class _TaskPageState extends State<TaskPage> {
 }
 
 class TaskTile extends StatelessWidget {
-  TaskTile({required this.taskModel});
+  TaskTile({required this.taskModel, required this.currentUser});
 
+  final UserB currentUser;
   final Task taskModel;
 
   @override
@@ -307,7 +310,10 @@ class TaskTile extends StatelessWidget {
                 onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => TaskView(model: taskModel))),
+                        builder: (_) => TaskView(
+                              model: taskModel,
+                              currentUser: currentUser,
+                            ))),
                 child: Container(
                   height: 50.h,
                   width: double.maxFinite,

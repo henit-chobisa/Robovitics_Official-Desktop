@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/Classes/Comment.dart';
+import 'package:frontend/Classes/QnaModel.dart';
 import 'package:frontend/Classes/Task.dart';
+import 'package:frontend/Classes/UserB.dart';
 import 'package:http/http.dart';
 
 class TaskView extends StatefulWidget {
-  TaskView({required this.model});
+  TaskView({required this.model, required this.currentUser});
 
+  final UserB currentUser;
   final Task model;
   @override
   _TaskViewState createState() => _TaskViewState();
@@ -332,7 +336,8 @@ class _TaskViewState extends State<TaskView> {
                           height: 20.sp,
                         ),
                         Container(
-                          height: 700.h,
+                          constraints: BoxConstraints(
+                              maxHeight: 700.h, minHeight: 100.h),
                           width: double.maxFinite,
                           decoration: BoxDecoration(
                               color: Colors.black,
@@ -342,9 +347,15 @@ class _TaskViewState extends State<TaskView> {
                               )),
                           child: Padding(
                             padding: EdgeInsets.all(20.0),
-                            child: ListView.builder(itemBuilder: (_, index) {
-                              return QuestionTile();
-                            }),
+                            child: ListView.builder(
+                                itemCount: widget.model.qna.length,
+                                itemBuilder: (_, index) {
+                                  return QuestionTile(
+                                    currentUser: widget.currentUser,
+                                    index: index,
+                                    model: widget.model.qna.elementAt(index),
+                                  );
+                                }),
                           ),
                         ),
                       ],
@@ -361,9 +372,12 @@ class _TaskViewState extends State<TaskView> {
 }
 
 class QuestionTile extends StatelessWidget {
-  const QuestionTile({
-    Key? key,
-  }) : super(key: key);
+  QuestionTile(
+      {required this.index, required this.model, required this.currentUser});
+
+  final int index;
+  final QnaModel model;
+  final UserB currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -374,7 +388,7 @@ class QuestionTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Question 1 -> How can we be able to do this task it is literally very very hard and the duration of completion is also very low",
+            "Question ${index + 1} -> ${model.question}",
             style: TextStyle(
                 color: Colors.white,
                 fontSize: 22.sp,
@@ -385,28 +399,86 @@ class QuestionTile extends StatelessWidget {
           ),
           Row(
             children: [
-              Expanded(flex: 2, child: Container()),
+              Flexible(flex: 2, child: Container()),
               Container(
-                height: 300.h,
+                constraints: BoxConstraints(maxHeight: 380.h, minHeight: 100.h),
                 width: 1.w,
                 color: Colors.white,
               ),
-              Expanded(
+              Flexible(
                 flex: 20,
                 child: Padding(
                   padding: EdgeInsets.only(left: 20.sp, right: 20.sp),
-                  child: Container(
-                      height: 300.h,
-                      width: double.maxFinite,
-                      child: ListView.builder(
-                          itemCount: 5,
-                          itemBuilder: (_, index) {
-                            return CommentTile();
-                          })),
+                  child: Column(
+                    children: [
+                      Container(
+                          constraints: BoxConstraints(
+                              maxHeight: 300.h, minHeight: 100.h),
+                          width: double.maxFinite,
+                          child: ListView.builder(
+                              itemCount: model.comments.length,
+                              itemBuilder: (_, index) {
+                                return CommentTile(
+                                  userID: currentUser.id,
+                                  questionID: model.id,
+                                  model: model.comments.elementAt(index),
+                                );
+                              })),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Container(
+                          height: 50.h,
+                          decoration: BoxDecoration(
+                              color: Colors.grey.shade800,
+                              borderRadius: BorderRadius.circular(10.r)),
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 15.w),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 8,
+                                  child: TextField(
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 13.sp),
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: "Add a comment...",
+                                        hintStyle: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 13.sp)),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 10.w,
+                                ),
+                                Expanded(
+                                    child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius:
+                                          BorderRadius.circular(10.r)),
+                                  child: Center(
+                                    child: Text(
+                                      "Comment",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 12.sp),
+                                    ),
+                                  ),
+                                ))
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               )
             ],
-          )
+          ),
         ],
       ),
     );
@@ -414,9 +486,12 @@ class QuestionTile extends StatelessWidget {
 }
 
 class CommentTile extends StatelessWidget {
-  const CommentTile({
-    Key? key,
-  }) : super(key: key);
+  CommentTile(
+      {required this.model, required this.questionID, required this.userID});
+
+  final String userID;
+  final String questionID;
+  final Comment model;
 
   @override
   Widget build(BuildContext context) {
@@ -431,14 +506,14 @@ class CommentTile extends StatelessWidget {
           padding:
               EdgeInsets.only(left: 16.w, right: 16.w, top: 12.h, bottom: 12.h),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12.r),
                     child: Image(
-                      image: NetworkImage(
-                          "https://res.cloudinary.com/ddglxo0l3/image/upload/v1631262965/ProfileImages/opaarbwrc6qg7pdifxwz.png"),
+                      image: NetworkImage(model.commentedBy.photoURL),
                       height: 24.h,
                       width: 24.h,
                     ),
@@ -447,12 +522,12 @@ class CommentTile extends StatelessWidget {
                     width: 10.w,
                   ),
                   Text(
-                    "Henit Chobisa",
+                    model.commentedBy.userName,
                     style: TextStyle(color: Colors.white, fontSize: 14.sp),
                   ),
                   Spacer(),
                   Text(
-                    "henitchobisa0885@gmail.com",
+                    model.commentedBy.email,
                     style: TextStyle(color: Colors.white, fontSize: 14.sp),
                   ),
                 ],
@@ -461,7 +536,7 @@ class CommentTile extends StatelessWidget {
                 height: 15.h,
               ),
               Text(
-                "I believe in infinite energy and I beileve in a broader vision to change the world. Hence I believe that every thing can be achieved with patience and strength and You guys have enough time for this, you can do it!, Believe in yourself guys I have a lots of expectations from you guys, You guys will be the next board members and if you are not able to handle such small problems how will you handle the club",
+                model.comment,
                 style: TextStyle(color: Colors.white, fontSize: 15.sp),
               ),
             ],
