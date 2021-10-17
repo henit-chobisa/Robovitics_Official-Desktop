@@ -526,13 +526,58 @@ class _QuestionTileState extends State<QuestionTile> {
           ),
           Row(
             children: [
-              Flexible(flex: 2, child: Container()),
+              Expanded(
+                flex: 3,
+                child: Container(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.w),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Center(
+                          child: Text(
+                            "Raised By",
+                            style: TextStyle(
+                                color: Colors.blue.shade200, fontSize: 20.sp),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        Image(
+                          image: NetworkImage(widget.model.raisedBy.photoURL),
+                          height: 100.h,
+                          width: 100.w,
+                          fit: BoxFit.cover,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Center(
+                          child: Text(
+                            widget.model.raisedBy.userName,
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 15.sp),
+                          ),
+                        ),
+                        Center(
+                          child: Text(
+                            widget.model.raisedBy.email,
+                            style:
+                                TextStyle(color: Colors.grey, fontSize: 12.sp),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
               Container(
                 constraints: BoxConstraints(maxHeight: 380.h, minHeight: 100.h),
                 width: 1.w,
                 color: Colors.white,
               ),
-              Flexible(
+              Expanded(
                 flex: 20,
                 child: Padding(
                   padding: EdgeInsets.only(left: 20.sp, right: 20.sp),
