@@ -56,6 +56,7 @@ TaskSchema.methods.addQuestion = async function(question, userID){
     const ques = new qna({TaskID : this._id, question : question, raisedBy : userID, timeStamp : timeStamp});
     this.qna.push(ques);
     await ques.save();
+    return ques.id;
 };
 
 const taskSchema = mongoose.model("Task", TaskSchema);
