@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:frontend/Classes/DiscussionModel.dart';
+import 'package:frontend/homeScreen.dart';
 import 'package:intl/intl.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:flutter/material.dart';
@@ -129,7 +130,10 @@ class _NoticeDiscussionState extends State<NoticeDiscussion> {
               ),
               leading: GestureDetector(
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => homePage(currentPageIndex: 5)));
                 },
                 child: Icon(
                   Icons.arrow_back_ios,

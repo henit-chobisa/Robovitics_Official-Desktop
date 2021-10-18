@@ -181,7 +181,7 @@ class _NoticeBoxState extends State<NoticeBox> {
                       buttonTitle: "Raise Concent",
                       titleColor: Colors.white,
                       onTap: () {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (_) => NoticeConsentPage(

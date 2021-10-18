@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:frontend/Widgets/NoticeBox.dart';
+import 'package:frontend/homeScreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:frontend/Classes/ConcentModel.dart';
@@ -93,7 +94,10 @@ class _NoticeConsentPageState extends State<NoticeConsentPage> {
                 ),
                 leading: GestureDetector(
                   onTap: () {
-                    Navigator.pop(context);
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => homePage(currentPageIndex: 5)));
                   },
                   child: Icon(
                     Icons.arrow_back_ios,

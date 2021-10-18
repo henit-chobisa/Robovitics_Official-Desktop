@@ -307,7 +307,7 @@ class TaskTile extends StatelessWidget {
                 height: 10.h,
               ),
               GestureDetector(
-                onTap: () => Navigator.push(
+                onTap: () => Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (_) => TaskView(
