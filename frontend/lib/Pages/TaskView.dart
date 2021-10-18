@@ -6,6 +6,7 @@ import 'package:frontend/Classes/Comment.dart';
 import 'package:frontend/Classes/QnaModel.dart';
 import 'package:frontend/Classes/Task.dart';
 import 'package:frontend/Classes/UserB.dart';
+import 'package:frontend/homeScreen.dart';
 import 'package:http/http.dart' as http;
 
 class TaskView extends StatefulWidget {
@@ -92,7 +93,11 @@ class _TaskViewState extends State<TaskView> {
                           children: [
                             IconButton(
                                 onPressed: () {
-                                  Navigator.pop(context);
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) =>
+                                              homePage(currentPageIndex: 1)));
                                 },
                                 icon: Icon(
                                   Icons.arrow_back_ios,

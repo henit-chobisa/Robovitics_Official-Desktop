@@ -335,7 +335,11 @@ class _loginPageState extends State<loginPage> {
             title: "Take me => Workstation",
             ontap: () {
               Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (_) => homePage()));
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => homePage(
+                            currentPageIndex: 0,
+                          )));
             },
             fillColor: Colors.white,
             borderColor: Colors.blue.shade800,

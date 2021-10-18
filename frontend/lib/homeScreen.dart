@@ -16,8 +16,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Classes/User.dart';
 
 class homePage extends StatefulWidget {
-  const homePage({Key? key}) : super(key: key);
+  homePage({required this.currentPageIndex});
 
+  var currentPageIndex;
   @override
   _homePageState createState() => _homePageState();
 }
@@ -97,7 +98,7 @@ class _homePageState extends State<homePage> {
   ];
 
   var user;
-  var currentPageIndex = 0;
+
   List<Widget> pages = [
     landingPage(),
     TaskPage(),
@@ -116,7 +117,7 @@ class _homePageState extends State<homePage> {
   }
 
   bool getPressedStatus(int index) {
-    if (currentPageIndex == index) {
+    if (widget.currentPageIndex == index) {
       return true;
     } else {
       return false;
@@ -226,7 +227,7 @@ class _homePageState extends State<homePage> {
                                 associatedPage: landingPage(),
                                 ontap: () {
                                   setState(() {
-                                    currentPageIndex = index;
+                                    widget.currentPageIndex = index;
                                   });
                                 },
                               );
@@ -259,7 +260,7 @@ class _homePageState extends State<homePage> {
                   ),
                 ),
               ),
-              pages[currentPageIndex],
+              pages[widget.currentPageIndex],
               // KeyBoardShortcuts(
               //
               // )
