@@ -6,6 +6,7 @@ import 'package:frontend/Classes/Comment.dart';
 import 'package:frontend/Classes/QnaModel.dart';
 import 'package:frontend/Classes/Task.dart';
 import 'package:frontend/Classes/UserB.dart';
+import 'package:frontend/Pages/SubmissionPage.dart';
 import 'package:frontend/homeScreen.dart';
 import 'package:http/http.dart' as http;
 
@@ -124,17 +125,31 @@ class _TaskViewState extends State<TaskView> {
                             SizedBox(
                               width: 20.w,
                             ),
-                            Container(
-                              width: 200.w,
-                              height: 50.h,
-                              decoration: BoxDecoration(
-                                  color: Colors.green.shade800,
-                                  borderRadius: BorderRadius.circular(20.r)),
-                              child: Center(
-                                  child: Text(
-                                "Add Submission",
-                                style: TextStyle(color: Colors.white),
-                              )),
+                            GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (_) => AlertDialog(
+                                          backgroundColor: Colors.black12,
+                                          title: Text(
+                                            "Submission",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ));
+                              },
+                              child: Container(
+                                width: 200.w,
+                                height: 50.h,
+                                decoration: BoxDecoration(
+                                    color: Colors.green.shade800,
+                                    borderRadius: BorderRadius.circular(20.r)),
+                                child: Center(
+                                    child: Text(
+                                  "Add Submission",
+                                  style: TextStyle(color: Colors.white),
+                                )),
+                              ),
                             ),
                           ],
                         ),
