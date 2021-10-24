@@ -1,5 +1,7 @@
 import 'dart:convert';
-
+import 'dart:io';
+import 'package:cloudinary_sdk/cloudinary_sdk.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/Classes/Comment.dart';
@@ -9,7 +11,6 @@ import 'package:frontend/Classes/UserB.dart';
 import 'package:frontend/Pages/SubmissionPage.dart';
 import 'package:frontend/homeScreen.dart';
 import 'package:http/http.dart' as http;
-import 'package:popup_window/popup_window.dart';
 
 class TaskView extends StatefulWidget {
   TaskView({required this.model, required this.currentUser});
@@ -23,6 +24,49 @@ class TaskView extends StatefulWidget {
 class _TaskViewState extends State<TaskView> {
   TextEditingController questionController = TextEditingController();
   var status = "Ask Query!";
+  final cloudinary =
+      Cloudinary("146921317957316", "dMy6eCEsZ0YpupA_FoMaR_z_sEo", "ddglxo0l3");
+  var file = null;
+  var filePath = "";
+  String submissionStatus = "Uploading your document";
+  String submissionButtonText = "Click to add your pdf";
+
+  void getFile() async {
+    try {
+      final xtypegroup = XTypeGroup(label: 'document', extensions: ['pdf']);
+      final imageFile = await openFile(acceptedTypeGroups: [xtypegroup]);
+      var data = await imageFile?.readAsBytes();
+      if (data != null) {
+        var completedFile = File.fromRawPath(data);
+        setState(() {
+          filePath = imageFile!.path;
+          file = completedFile;
+          submissionButtonText = filePath;
+        });
+      }
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  Future<String?> uploadProfileImage() async {
+    if (file == null) {
+      return "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-High-Quality-Image.png";
+    } else {
+      final response = await cloudinary.uploadFile(
+          fileName:
+              "${widget.currentUser.email}-${widget.currentUser.userName}",
+          filePath: filePath,
+          resourceType: CloudinaryResourceType.auto,
+          folder: "${widget.model.title}-Submissions");
+      if (response.isSuccessful) {
+        var imageURL = response.secureUrl;
+        return imageURL;
+      } else {
+        setState(() {});
+      }
+    }
+  }
 
   Future<void> askQuestion() async {
     if (questionController.text.isNotEmpty) {
@@ -126,17 +170,22 @@ class _TaskViewState extends State<TaskView> {
                             SizedBox(
                               width: 20.w,
                             ),
-                            Container(
-                              width: 200.w,
-                              height: 50.h,
-                              decoration: BoxDecoration(
-                                  color: Colors.green.shade800,
-                                  borderRadius: BorderRadius.circular(20.r)),
-                              child: Center(
-                                  child: Text(
-                                "Add Submission",
-                                style: TextStyle(color: Colors.white),
-                              )),
+                            GestureDetector(
+                              onTap: () {
+
+                              },
+                              child: Container(
+                                width: 200.w,
+                                height: 50.h,
+                                decoration: BoxDecoration(
+                                    color: Colors.green.shade800,
+                                    borderRadius: BorderRadius.circular(20.r)),
+                                child: Center(
+                                    child: Text(
+                                  "Add Submission",
+                                  style: TextStyle(color: Colors.white),
+                                )),
+                              ),
                             ),
                           ],
                         ),
