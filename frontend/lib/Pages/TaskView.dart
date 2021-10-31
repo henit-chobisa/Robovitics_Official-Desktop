@@ -9,6 +9,7 @@ import 'package:frontend/Classes/QnaModel.dart';
 import 'package:frontend/Classes/Task.dart';
 import 'package:frontend/Classes/UserB.dart';
 import 'package:frontend/Pages/SubmissionPage.dart';
+import 'package:frontend/Pages/docSubmissionPage.dart';
 import 'package:frontend/homeScreen.dart';
 import 'package:http/http.dart' as http;
 
@@ -172,7 +173,10 @@ class _TaskViewState extends State<TaskView> {
                             ),
                             GestureDetector(
                               onTap: () {
-
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => docSubmissionPage()));
                               },
                               child: Container(
                                 width: 200.w,
