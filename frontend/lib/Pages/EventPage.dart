@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:frontend/Classes/Event.dart';
 import 'package:frontend/Classes/contributionModel.dart';
 import 'package:frontend/Classes/registrationModel.dart';
 import 'package:http/http.dart' as http;
@@ -21,7 +20,6 @@ class _eventPageState extends State<eventPage> {
     var response = await http.get(Uri.parse(
         "http://127.0.0.1:1000/api/events/getUserContributions?userID=61471e22ef7cc52173e32dc4"));
     List<dynamic> data = await jsonDecode(response.body);
-    // print(data.elementAt(0)['contributors']);
     List<ContributionModel> contributions =
         data.map((data) => ContributionModel.fromJson(data)).toList();
     return contributions;
@@ -133,7 +131,6 @@ class _eventPageState extends State<eventPage> {
 
 class ContributionTile extends StatelessWidget {
   ContributionTile(this._contributionModel);
-
   final ContributionModel _contributionModel;
 
   @override
