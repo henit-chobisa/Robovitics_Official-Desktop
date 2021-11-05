@@ -29,9 +29,9 @@ TaskSchema.methods.changeMentor = async function(userID){
 }
 
 TaskSchema.methods.addSubmission = async function(UserID, Comment, docLink){
-    const Submission = new Submission({SubmittedBy : UserID, Comment : Comment, docLink : docLink, SubmittedOn : moment().format(), isVerified : false});
+    const submission = new Submission({SubmittedBy : UserID, Comment : Comment, docLink : docLink, SubmittedOn : moment().format(), isVerified : false});
     this.submissions.push(Submission);
-    await Submission.save();
+    await submission.save();
 };
 
 TaskSchema.methods.addDiscussion = async function(userID, payload, messageType){
