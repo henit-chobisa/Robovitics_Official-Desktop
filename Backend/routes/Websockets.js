@@ -20,7 +20,6 @@ module.exports = function(io){
             notice.Discussions.push(discussion);
             await notice.save();
         });
-        
-    })
+    });
     return router;
 };

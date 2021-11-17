@@ -2,7 +2,26 @@
 <module type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/frontend/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/build" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/macos/Flutter/ephemeral/.symlinks/plugins/file_selector_macos/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/macos/Flutter/ephemeral/.symlinks/plugins/file_selector_macos/build" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/macos/Flutter/ephemeral/.symlinks/plugins/path_provider_macos/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/macos/Flutter/ephemeral/.symlinks/plugins/path_provider_macos/build" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/macos/Flutter/ephemeral/.symlinks/plugins/path_provider_macos/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/macos/Flutter/ephemeral/.symlinks/plugins/path_provider_macos/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/macos/Flutter/ephemeral/.symlinks/plugins/shared_preferences_macos/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/macos/Flutter/ephemeral/.symlinks/plugins/shared_preferences_macos/build" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/macos/Flutter/ephemeral/.symlinks/plugins/shared_preferences_macos/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/macos/Flutter/ephemeral/.symlinks/plugins/shared_preferences_macos/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/macos/Flutter/ephemeral/.symlinks/plugins/syncfusion_flutter_pdfviewer_macos/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/macos/Flutter/ephemeral/.symlinks/plugins/syncfusion_flutter_pdfviewer_macos/build" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/macos/Flutter/ephemeral/.symlinks/plugins/syncfusion_flutter_pdfviewer_macos/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/macos/Flutter/ephemeral/.symlinks/plugins/syncfusion_flutter_pdfviewer_macos/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/macos/Flutter/ephemeral/.symlinks/plugins/window_size/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/macos/Flutter/ephemeral/.symlinks/plugins/window_size/build" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

@@ -8,6 +8,4 @@ router.get('/', async (req, res) => {
     const userID = query.userID;
     const tasks = await taskSchema.find({assignedTo : { $eq: userID }}).populate('mentor qna discussions submissions assignedTo').populate({path : 'qna', populate : 'comments raisedBy'}).populate({path : "discussions", populate :"userInfo"}).populate({path : 'submissions', populate : "SubmittedBy"}).exec();
     res.json(tasks);
-})
-
-module.exports = router;
+});
